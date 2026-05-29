@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Minimalist 3D Shelf</title>
+  <style>
+    :root {
+      --cube-size: 100px;
+      --half-size: 50px; /* Crucial for the new center-origin math */
+      
+      /* Minimalist white/grey palette */
+      --shelf-base: #ffffff;
+      --shelf-back: #f0f0f0;
+      --shelf-floor: #e8e8e8;
+      --shelf-wall-left: #fdfdfd;
+      --shelf-wall-right: #f6f6f6;
+      --border-color: rgba(0, 0, 0, 0.04);
+      --shadow-color: rgba(0, 0, 0, 0.08);
+    }
+
+    body, html {
+      margin: 0;
+      height: 100%;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #ffffff;
+      overflow: hidden; 
+      /* Establishes the 3D camera lens */
+      perspective: 1200px; 
+    }
+
+    /* The main wrapper that receives mouse rotation */
+    .scene {
+      width: calc(var(--cube-size) * 4);
+      height: calc(var(--cube-size) * 4);
+      transform-style: preserve-3d;
+      transform: rotateX(-20deg) rotateY(45deg);
+      cursor: grab;
+      transition: transform 0.1s cubic-bezier(0.25, 1, 0.5, 1); 
+    }
+    
+    .scene:active {
+      cursor: grabbing;
+    }
+
+    /* The 4x4 Grid Container */
+    .shelf {
+      display: grid;
+      grid-template-columns: repeat(4, var(--cube-size));
+      grid-template-rows: repeat(4, var(--cube-size));
+      transform-style: preserve-3d;
+      width: 100%;
+      height: 100%;
+    }
+
+    .cubby {
+      position: relative;
+      width: var(--cube-size);
+      height: var(--cube-size);
+      transform-style: preserve-3d;
+    }
+
+    .face {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border: 1px solid var(--border-color);
+      box-sizing: border-box;
+      user-select: none; 
+    }
+
+    /* Stable Center-Origin 3D Math */
+    .back   { transform: translateZ(calc(var(--half-size) * -1)); background-color: var(--shelf-back); }
+    .top    { transform: rotateX(90deg) translateZ(var(--half-size)); background-color: var(--shelf-base); }
+    .bottom { transform: rotateX(-90deg) translateZ(var(--half-size)); background-color: var(--shelf-floor); }
+    .left   { transform: rotateY(-90deg) translateZ(var(--half-size)); background-color: var(--shelf-wall-left); }
+    .right  { transform: rotateY(90deg) translateZ(var(--half-size)); background-color: var(--shelf-wall-right); }
+
+    /* The Drop Zone for DOM Objects */
+    .content {
+      position: absolute;
+      width: 80%;
+      height: 80%;
+      top: 10%;
+      left: 10%;
+      /* Z=0 places this perfectly in the dead center of the 3D cubby */
+      transform: translateZ(0px); 
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      font-size: 0.8rem;
+      background: white;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+      pointer-events: none; 
+    }
+
+    .content img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+  </style>
+</head>
+<body>
+
+<div class="scene" id="scene">
+  <div class="shelf" id="shelf">
+    </div>
+</div>
+
+<script>
+  const shelf = document.getElementById('shelf');
+  
+  // Dummy data array mimicking an indexed list
+  const dummyRecords = [
+    "Item 01", "", "<img src='https://picsum.photos/80/80?1' alt='thumb'/>", "Item 02",
+    "", "<strong>Featured</strong>", "", "",
+    "Item 03", "", "<img src='https://picsum.photos/80/80?2' alt='thumb'/>", "",
+    "", "", "", "Item 04"
+  ];
+
+  for (let i = 0; i < 16; i++) {
+    const cubby = document.createElement('div');
+    cubby.className = 'cubby';
+    
+    let innerContent = '';
+    if (dummyRecords[i]) {
+        // Clean template literals with no backslashes
+        innerContent = `<div class="content">${dummyRecords[i]}</div>`;
+    }
+
+    cubby.innerHTML = `
+      <div class="face back"></div>
+      <div class="face top"></div>
+      <div class="face bottom"></div>
+      <div class="face left"></div>
+      <div class="face right"></div>
+      ${innerContent}
+    `;
+    shelf.appendChild(cubby);
+  }
+
+  // Mouse & Touch Rotation Logic
+  const scene = document.getElementById('scene');
+  let isDragging = false;
+  let startX, startY;
+  
+  let rotX = -20; 
+  let rotY = 45;  
+
+  const handleDragStart = (x, y) => {
+    isDragging = true;
+    startX = x;
+    startY = y;
+  };
+
+  const handleDragMove = (x, y) => {
+    if (!isDragging) return;
+    
+    const deltaX = x - startX;
+    const deltaY = y - startY;
+    
+    rotY += deltaX * 0.4;
+    rotX -= deltaY * 0.4;
+    
+    rotX = Math.max(-80, Math.min(80, rotX));
+    
+    requestAnimationFrame(() => {
+        // Clean JS syntax applied here
+        scene.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+    });
+    
+    startX = x;
+    startY = y;
+  };
+
+  const handleDragEnd = () => {
+    isDragging = false;
+  };
+
+  document.addEventListener('mousedown', (e) => handleDragStart(e.clientX, e.clientY));
+  document.addEventListener('mousemove', (e) => handleDragMove(e.clientX, e.clientY));
+  document.addEventListener('mouseup', handleDragEnd);
+  
+  document.addEventListener('touchstart', (e) => handleDragStart(e.touches[0].clientX, e.touches[0].clientY));
+  document.addEventListener('touchmove', (e) => handleDragMove(e.touches[0].clientX, e.touches[0].clientY));
+  document.addEventListener('touchend', handleDragEnd);
+</script>
+
+</body>
+</html>
