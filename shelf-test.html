@@ -2,57 +2,109 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Minimalist 3D Shelf</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3D Shelf - Seamless Fog Reveal</title>
   <style>
     :root {
-      --cube-size: 100px;
-      --half-size: 50px; /* Crucial for the new center-origin math */
+      --cols: 4;
+      --rows: 4;
+      --cube-size: min(calc(100vw / var(--cols)), calc(100vh / var(--rows)));
+      --half-size: calc(var(--cube-size) / 2);
+      --rim-thickness: calc(var(--cube-size) * 0.06);
+      --track-size: calc(var(--cube-size) - var(--rim-thickness));
       
-      /* Minimalist white/grey palette */
-      --shelf-base: #ffffff;
-      --shelf-back: #f0f0f0;
-      --shelf-floor: #e8e8e8;
-      --shelf-wall-left: #fdfdfd;
-      --shelf-wall-right: #f6f6f6;
-      --border-color: rgba(0, 0, 0, 0.04);
-      --shadow-color: rgba(0, 0, 0, 0.08);
+      --shelf-base: #b8b8b8;
+      --shelf-back: #f2f2f2;
+      --shelf-floor: #e0e0e0;
+      --shelf-wall-left: #f9f9f9;
+      --shelf-wall-right: #ececec;
+      --rim-color: #d1d1d1; 
+      --border-color: rgba(0, 0, 0, 0);
     }
+
+
+@media (max-width: 600px) {
+  :root {
+    --cols: 3;
+    --rows: 6; 
+  }
+
+  /* 1. Stretch the container */
+  .shelf .cubby:last-child {
+    grid-column: 1 / -1; 
+    width: calc(100% + var(--rim-thickness)); 
+    height: var(--cube-size); /* Ensure height stays consistent */
+  }
+
+  /* 2. Fix the Top and Bottom faces */
+  /* These faces rotate on the X axis, so their CSS 'height' becomes the 3D 'depth' */
+  .shelf .cubby:last-child .top,
+  .shelf .cubby:last-child .bottom {
+    height: var(--cube-size) !important; 
+    width: 100%;
+  }
+
+  /* 3. Fix the Side faces */
+  /* These faces rotate on the Y axis, so their CSS 'width' becomes the 3D 'depth' */
+  .shelf .cubby:last-child .left,
+  .shelf .cubby:last-child .right {
+    width: var(--cube-size) !important;
+    height: 100%;
+  }
+  .shelf .cubby:last-child .right {
+  /* 1. Pin to the far right edge of the spanning cubby */
+  right: 0;
+  left: auto; /* Override any left: 0 from general styles */
+
+  /* 2. Set width to the depth of the shelf */
+  width: var(--cube-size); 
+
+  /* 3. Rotate it 90 degrees inward */
+  /* We use the right edge as the 'hinge' so it stays put */
+  transform-origin: right;
+  transform: rotateY(90deg) translateX(50%);
+}
+  /* 4. Correct the Front and Back */
+  /* These just need to span the full new width */
+  .shelf .cubby:last-child .front,
+  .shelf .cubby:last-child .back {
+    width: 100%;
+    height: 100%;
+  }
+}
 
     body, html {
-      margin: 0;
-      height: 100%;
-      width: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      margin: 0; height: 100%; width: 100%;
+      display: flex; justify-content: center;
       background-color: #ffffff;
-      overflow: hidden; 
-      /* Establishes the 3D camera lens */
-      perspective: 1200px; 
+      perspective: calc(var(--cube-size) * 12); 
+      overflow: hidden;
     }
 
-    /* The main wrapper that receives mouse rotation */
+    /* The Overlay Canvas */
+    #erase-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 10; /* Above shelf */
+      cursor: crosshair;
+      touch-action: none; /* Prevents scroll while scratching */
+    }
+
     .scene {
-      width: calc(var(--cube-size) * 4);
-      height: calc(var(--cube-size) * 4);
+      width: calc(var(--track-size) * var(--cols));
+      height: calc(var(--track-size) * var(--rows));
       transform-style: preserve-3d;
-      transform: rotateX(-20deg) rotateY(45deg);
-      cursor: grab;
-      transition: transform 0.1s cubic-bezier(0.25, 1, 0.5, 1); 
-    }
-    
-    .scene:active {
-      cursor: grabbing;
+      transition: transform 0.1s ease-out;
+      z-index: 1; /* Below canvas */
     }
 
-    /* The 4x4 Grid Container */
     .shelf {
       display: grid;
-      grid-template-columns: repeat(4, var(--cube-size));
-      grid-template-rows: repeat(4, var(--cube-size));
+      grid-template-columns: repeat(var(--cols), var(--track-size));
+      grid-template-rows: repeat(var(--rows), var(--track-size));
       transform-style: preserve-3d;
-      width: 100%;
-      height: 100%;
+      margin-top: 2em;
     }
 
     .cubby {
@@ -64,130 +116,166 @@
 
     .face {
       position: absolute;
-      width: 100%;
-      height: 100%;
-      border: 1px solid var(--border-color);
+      width: 100%; height: 100%;
       box-sizing: border-box;
-      user-select: none; 
+      border: 1px solid var(--border-color);
     }
 
-    /* Stable Center-Origin 3D Math */
     .back   { transform: translateZ(calc(var(--half-size) * -1)); background-color: var(--shelf-back); }
     .top    { transform: rotateX(90deg) translateZ(var(--half-size)); background-color: var(--shelf-base); }
     .bottom { transform: rotateX(-90deg) translateZ(var(--half-size)); background-color: var(--shelf-floor); }
     .left   { transform: rotateY(-90deg) translateZ(var(--half-size)); background-color: var(--shelf-wall-left); }
     .right  { transform: rotateY(90deg) translateZ(var(--half-size)); background-color: var(--shelf-wall-right); }
+    .front  { transform: translateZ(var(--half-size)); background: none; border: var(--rim-thickness) solid var(--rim-color); pointer-events: none; }
 
-    /* The Drop Zone for DOM Objects */
     .content {
       position: absolute;
-      width: 80%;
-      height: 80%;
-      top: 10%;
-      left: 10%;
-      /* Z=0 places this perfectly in the dead center of the 3D cubby */
-      transform: translateZ(0px); 
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      font-size: 0.8rem;
+      width: 60%; height: 60%;
+      top: 20%; left: 20%;
+      transform: translateZ(2px);
+      display: flex; justify-content: center; align-items: center;
       background: white;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.06);
-      pointer-events: none; 
-    }
-
-    .content img {
-      max-width: 100%;
-      max-height: 100%;
-      object-fit: contain;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      font-size: calc(var(--cube-size) * 0.12);
+      font-family: system-ui, sans-serif;
     }
   </style>
 </head>
 <body>
 
+<canvas id="erase-canvas"></canvas>
+
 <div class="scene" id="scene">
-  <div class="shelf" id="shelf">
-    </div>
+  <div class="shelf" id="shelf"></div>
 </div>
 
 <script>
+  // -- 1. Populate Shelf --
   const shelf = document.getElementById('shelf');
-  
-  // Dummy data array mimicking an indexed list
-  const dummyRecords = [
-    "Item 01", "", "<img src='https://picsum.photos/80/80?1' alt='thumb'/>", "Item 02",
-    "", "<strong>Featured</strong>", "", "",
-    "Item 03", "", "<img src='https://picsum.photos/80/80?2' alt='thumb'/>", "",
-    "", "", "", "Item 04"
-  ];
-
   for (let i = 0; i < 16; i++) {
     const cubby = document.createElement('div');
     cubby.className = 'cubby';
-    
-    let innerContent = '';
-    if (dummyRecords[i]) {
-        // Clean template literals with no backslashes
-        innerContent = `<div class="content">${dummyRecords[i]}</div>`;
-    }
-
-    cubby.innerHTML = `
-      <div class="face back"></div>
-      <div class="face top"></div>
-      <div class="face bottom"></div>
-      <div class="face left"></div>
-      <div class="face right"></div>
-      ${innerContent}
-    `;
+    cubby.innerHTML = `<div class="face back"></div><div class="face top"></div><div class="face bottom"></div><div class="face left"></div><div class="face right"></div><div class="face front"></div><div class="content">${i + 1}</div>`;
     shelf.appendChild(cubby);
   }
 
-  // Mouse & Touch Rotation Logic
+  // -- 2. Canvas Setup --
+  const canvas = document.getElementById('erase-canvas');
+  const ctx = canvas.getContext('2d');
+
+  // Definitions for "Soft Seamless Eraser"
+  const ERASE_SIZE = 100; // Diameter of the reveal path
+  const ERASE_SOFTNESS = 10; // How foggy/blurry the edges are
+
+  // Track cursor for continuous drawing
+  let prevX = null, prevY = null;
+
+  function initCtx() {
+    // Reset canvas dimensions
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    // Fill the hidden layer
+    ctx.fillStyle = '#1a1a1a'; // Darker "fog"
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // --- Seamless Eraser Config ---
+    ctx.globalCompositeOperation = 'destination-out'; // Erase mode
+    
+    // Smooth continuous path settings
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.lineWidth = ERASE_SIZE;
+    
+    // Soft blur settings (This makes it "seamless fog" not hard circles)
+    ctx.shadowBlur = ERASE_SOFTNESS;
+    ctx.shadowColor = 'black'; // Needed to trigger shadow rendering
+    ctx.strokeStyle = 'black'; // The drawn line color doesn't matter in 'destination-out'
+  }
+
+  // Handle Resizing
+  window.addEventListener('resize', initCtx);
+  initCtx(); // Initial load
+
+  // -- 3. Core Seamless Erasing Function --
+  function erase(currX, currY) {
+    if (prevX === null) {
+      // Start of a new seamless stroke
+      prevX = currX; prevY = currY; return;
+    }
+
+    ctx.beginPath();
+    ctx.moveTo(prevX, prevY); // Start path at last point
+    ctx.lineTo(currX, currY); // Draw line to new point
+    ctx.stroke(); // Draw the soft, blurry path
+
+    // Update tracking
+    prevX = currX;
+    prevY = currY;
+  }
+
+  // Helper to break the seamless path (used when mouse re-enters)
+  function stopErasingPath() {
+    prevX = null;
+    prevY = null;
+  }
+
+
+  // -- 4. Interaction Logic --
   const scene = document.getElementById('scene');
-  let isDragging = false;
-  let startX, startY;
-  
-  let rotX = -20; 
-  let rotY = 45;  
+  let rotX = -15, rotY = 30, startX, startY, isMouseDown = false;
 
-  const handleDragStart = (x, y) => {
-    isDragging = true;
-    startX = x;
-    startY = y;
-  };
-
-  const handleDragMove = (x, y) => {
-    if (!isDragging) return;
-    
-    const deltaX = x - startX;
-    const deltaY = y - startY;
-    
-    rotY += deltaX * 0.4;
-    rotX -= deltaY * 0.4;
-    
+  function rotateShelf(x, y) {
+    rotY += (x - startX) * 0.4;
+    rotX -= (y - startY) * 0.4;
     rotX = Math.max(-80, Math.min(80, rotX));
-    
-    requestAnimationFrame(() => {
-        // Clean JS syntax applied here
-        scene.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg)`;
-    });
-    
-    startX = x;
-    startY = y;
-  };
+    scene.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+    startX = x; startY = y;
+  }
 
-  const handleDragEnd = () => {
-    isDragging = false;
-  };
+  // --- MOUSE LISTENERS ---
 
-  document.addEventListener('mousedown', (e) => handleDragStart(e.clientX, e.clientY));
-  document.addEventListener('mousemove', (e) => handleDragMove(e.clientX, e.clientY));
-  document.addEventListener('mouseup', handleDragEnd);
-  
-  document.addEventListener('touchstart', (e) => handleDragStart(e.touches[0].clientX, e.touches[0].clientY));
-  document.addEventListener('touchmove', (e) => handleDragMove(e.touches[0].clientX, e.touches[0].clientY));
-  document.addEventListener('touchend', handleDragEnd);
+  // Seamless path needs reset when cursor jumps onto the page
+  canvas.addEventListener('mouseenter', (e) => {
+    prevX = e.clientX;
+    prevY = e.clientY;
+  });
+  canvas.addEventListener('mouseleave', stopErasingPath);
+
+  canvas.addEventListener('mousemove', (e) => {
+    // 1. Erase on hover (always)
+    erase(e.clientX, e.clientY);
+
+    // 2. Rotate only if mouse is down
+    if (isMouseDown) {
+      rotateShelf(e.clientX, e.clientY);
+    }
+  });
+
+  canvas.addEventListener('mousedown', (e) => {
+    isMouseDown = true;
+    startX = e.clientX;
+    startY = e.clientY;
+  });
+
+  window.addEventListener('mouseup', () => isMouseDown = false);
+
+
+  // --- TOUCH LISTENERS ---
+
+  // Erase only, No shelf movement
+  canvas.addEventListener('touchstart', (e) => {
+    const t = e.touches[0];
+    prevX = t.clientX; prevY = t.clientY; // Start touch path
+  });
+
+  canvas.addEventListener('touchmove', (e) => {
+    const t = e.touches[0];
+    erase(t.clientX, t.clientY);
+  }, { passive: false });
+
+  canvas.addEventListener('touchend', stopErasingPath);
+
 </script>
 
 </body>
