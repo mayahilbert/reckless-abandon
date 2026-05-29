@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>3D Shelf - Seamless Fog Reveal</title>
+  <title>3D Shelf - Glass Texture Reveal</title>
   <style>
     :root {
       --cols: 4;
@@ -12,83 +13,78 @@
       --half-size: calc(var(--cube-size) / 2);
       --rim-thickness: calc(var(--cube-size) * 0.06);
       --track-size: calc(var(--cube-size) - var(--rim-thickness));
-      
-      --shelf-base: #b8b8b8;
-      --shelf-back: #f2f2f2;
-      --shelf-floor: #e0e0e0;
-      --shelf-wall-left: #f9f9f9;
-      --shelf-wall-right: #ececec;
-      --rim-color: #d1d1d1; 
+
+      --shelf-base: #bbb4ae;
+      --shelf-back: #f3efe6;
+      --shelf-floor: #dfdbd3;
+      --shelf-wall-left: #faf7e8;
+      --shelf-wall-right: #ebe6dc;
+      --rim-color: #d1cdc2;
       --border-color: rgba(0, 0, 0, 0);
     }
 
+    @media (max-width: 600px) {
+      :root {
+        --cols: 3;
+        --rows: 6;
+      }
 
-@media (max-width: 600px) {
-  :root {
-    --cols: 3;
-    --rows: 6; 
-  }
+      .shelf .cubby:last-child {
+        grid-column: 1 / -1;
+        width: calc(100% + var(--rim-thickness));
+        height: var(--cube-size);
+      }
 
-  /* 1. Stretch the container */
-  .shelf .cubby:last-child {
-    grid-column: 1 / -1; 
-    width: calc(100% + var(--rim-thickness)); 
-    height: var(--cube-size); /* Ensure height stays consistent */
-  }
+      .shelf .cubby:last-child .top,
+      .shelf .cubby:last-child .bottom {
+        height: var(--cube-size) !important;
+        width: 100%;
+      }
 
-  /* 2. Fix the Top and Bottom faces */
-  /* These faces rotate on the X axis, so their CSS 'height' becomes the 3D 'depth' */
-  .shelf .cubby:last-child .top,
-  .shelf .cubby:last-child .bottom {
-    height: var(--cube-size) !important; 
-    width: 100%;
-  }
+      .shelf .cubby:last-child .left,
+      .shelf .cubby:last-child .right {
+        width: var(--cube-size) !important;
+        height: 100%;
+      }
 
-  /* 3. Fix the Side faces */
-  /* These faces rotate on the Y axis, so their CSS 'width' becomes the 3D 'depth' */
-  .shelf .cubby:last-child .left,
-  .shelf .cubby:last-child .right {
-    width: var(--cube-size) !important;
-    height: 100%;
-  }
-  .shelf .cubby:last-child .right {
-  /* 1. Pin to the far right edge of the spanning cubby */
-  right: 0;
-  left: auto; /* Override any left: 0 from general styles */
+      .shelf .cubby:last-child .right {
+        right: 0;
+        left: auto;
+        transform-origin: right;
+        transform: rotateY(90deg) translateX(50%);
+      }
 
-  /* 2. Set width to the depth of the shelf */
-  width: var(--cube-size); 
+      .shelf .cubby:last-child .front,
+      .shelf .cubby:last-child .back {
+        width: 100%;
+        height: 100%;
+      }
+    }
 
-  /* 3. Rotate it 90 degrees inward */
-  /* We use the right edge as the 'hinge' so it stays put */
-  transform-origin: right;
-  transform: rotateY(90deg) translateX(50%);
-}
-  /* 4. Correct the Front and Back */
-  /* These just need to span the full new width */
-  .shelf .cubby:last-child .front,
-  .shelf .cubby:last-child .back {
-    width: 100%;
-    height: 100%;
-  }
-}
-
-    body, html {
-      margin: 0; height: 100%; width: 100%;
-      display: flex; justify-content: center;
-      background-color: #ffffff;
-      perspective: calc(var(--cube-size) * 12); 
+    body,
+    html {
+      margin: 0;
+      height: 100%;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      background-color: #efe7eb;
+      perspective: calc(var(--cube-size) * 12);
       overflow: hidden;
     }
 
     /* The Overlay Canvas */
     #erase-canvas {
       position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      z-index: 10; /* Above shelf */
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 10;
       cursor: crosshair;
-      touch-action: none; /* Prevents scroll while scratching */
+      touch-action: none;
+      /* DELETE OR COMMENT OUT THE LINE BELOW */
+      /* backdrop-filter: blur(4px); */
     }
 
     .scene {
@@ -96,7 +92,7 @@
       height: calc(var(--track-size) * var(--rows));
       transform-style: preserve-3d;
       transition: transform 0.1s ease-out;
-      z-index: 1; /* Below canvas */
+      z-index: 1;
     }
 
     .shelf {
@@ -116,167 +112,194 @@
 
     .face {
       position: absolute;
-      width: 100%; height: 100%;
+      width: 100%;
+      height: 100%;
       box-sizing: border-box;
       border: 1px solid var(--border-color);
     }
 
-    .back   { transform: translateZ(calc(var(--half-size) * -1)); background-color: var(--shelf-back); }
-    .top    { transform: rotateX(90deg) translateZ(var(--half-size)); background-color: var(--shelf-base); }
-    .bottom { transform: rotateX(-90deg) translateZ(var(--half-size)); background-color: var(--shelf-floor); }
-    .left   { transform: rotateY(-90deg) translateZ(var(--half-size)); background-color: var(--shelf-wall-left); }
-    .right  { transform: rotateY(90deg) translateZ(var(--half-size)); background-color: var(--shelf-wall-right); }
-    .front  { transform: translateZ(var(--half-size)); background: none; border: var(--rim-thickness) solid var(--rim-color); pointer-events: none; }
+    .back {
+      transform: translateZ(calc(var(--half-size) * -1));
+      background-color: var(--shelf-back);
+    }
+
+    .top {
+      transform: rotateX(90deg) translateZ(var(--half-size));
+      background-color: var(--shelf-base);
+    }
+
+    .bottom {
+      transform: rotateX(-90deg) translateZ(var(--half-size));
+      background-color: var(--shelf-floor);
+    }
+
+    .left {
+      transform: rotateY(-90deg) translateZ(var(--half-size));
+      background-color: var(--shelf-wall-left);
+    }
+
+    .right {
+      transform: rotateY(90deg) translateZ(var(--half-size));
+      background-color: var(--shelf-wall-right);
+    }
+
+    .front {
+      transform: translateZ(var(--half-size));
+      background: none;
+      border: var(--rim-thickness) solid var(--rim-color);
+      pointer-events: none;
+    }
 
     .content {
       position: absolute;
-      width: 60%; height: 60%;
-      top: 20%; left: 20%;
+      width: 60%;
+      height: 60%;
+      top: 20%;
+      left: 20%;
       transform: translateZ(2px);
-      display: flex; justify-content: center; align-items: center;
-      background: white;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: rgb(0, 0, 0);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       font-size: calc(var(--cube-size) * 0.12);
       font-family: system-ui, sans-serif;
     }
   </style>
 </head>
+
 <body>
 
-<canvas id="erase-canvas"></canvas>
+  <canvas id="erase-canvas"></canvas>
 
-<div class="scene" id="scene">
-  <div class="shelf" id="shelf"></div>
-</div>
+  <div class="scene" id="scene">
+    <div class="shelf" id="shelf"></div>
+  </div>
 
-<script>
-  // -- 1. Populate Shelf --
-  const shelf = document.getElementById('shelf');
-  for (let i = 0; i < 16; i++) {
-    const cubby = document.createElement('div');
-    cubby.className = 'cubby';
-    cubby.innerHTML = `<div class="face back"></div><div class="face top"></div><div class="face bottom"></div><div class="face left"></div><div class="face right"></div><div class="face front"></div><div class="content">${i + 1}</div>`;
-    shelf.appendChild(cubby);
-  }
+  <script>
+    // --- CONFIGURATION ---
+    const TEXTURE_URL = 'https://plus.unsplash.com/premium_photo-1675186945483-9aec9059686d?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'; // Add your image URL here
+    const GLASS_COLOR = 'rgba(255, 255, 255, 0.4)'; // Slightly white transparent glass
+    const ERASE_SIZE = 100;
+    const ERASE_SOFTNESS = 10;
+    const ERASE_STRENGTH = 0.1; // 0.1 is faint, 1.0 is instant clear
 
-  // -- 2. Canvas Setup --
-  const canvas = document.getElementById('erase-canvas');
-  const ctx = canvas.getContext('2d');
-
-  // Definitions for "Soft Seamless Eraser"
-  const ERASE_SIZE = 100; // Diameter of the reveal path
-  const ERASE_SOFTNESS = 10; // How foggy/blurry the edges are
-
-  // Track cursor for continuous drawing
-  let prevX = null, prevY = null;
-
-  function initCtx() {
-    // Reset canvas dimensions
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
-    // Fill the hidden layer
-    ctx.fillStyle = '#1a1a1a'; // Darker "fog"
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    // --- Seamless Eraser Config ---
-    ctx.globalCompositeOperation = 'destination-out'; // Erase mode
-    
-    // Smooth continuous path settings
-    ctx.lineCap = 'round';
-    ctx.lineJoin = 'round';
-    ctx.lineWidth = ERASE_SIZE;
-    
-    // Soft blur settings (This makes it "seamless fog" not hard circles)
-    ctx.shadowBlur = ERASE_SOFTNESS;
-    ctx.shadowColor = 'black'; // Needed to trigger shadow rendering
-    ctx.strokeStyle = 'black'; // The drawn line color doesn't matter in 'destination-out'
-  }
-
-  // Handle Resizing
-  window.addEventListener('resize', initCtx);
-  initCtx(); // Initial load
-
-  // -- 3. Core Seamless Erasing Function --
-  function erase(currX, currY) {
-    if (prevX === null) {
-      // Start of a new seamless stroke
-      prevX = currX; prevY = currY; return;
+    // -- 1. Populate Shelf --
+    const shelf = document.getElementById('shelf');
+    for (let i = 0; i < 16; i++) {
+      const cubby = document.createElement('div');
+      cubby.className = 'cubby';
+      cubby.innerHTML = `<div class="face back"></div><div class="face top"></div><div class="face bottom"></div><div class="face left"></div><div class="face right"></div><div class="face front"></div><div class="content">${i + 1}</div>`;
+      shelf.appendChild(cubby);
     }
 
-    ctx.beginPath();
-    ctx.moveTo(prevX, prevY); // Start path at last point
-    ctx.lineTo(currX, currY); // Draw line to new point
-    ctx.stroke(); // Draw the soft, blurry path
+    // -- 2. Canvas Setup --
+    const canvas = document.getElementById('erase-canvas');
+    const ctx = canvas.getContext('2d');
+    const textureImg = new Image();
+    textureImg.src = TEXTURE_URL;
+    textureImg.crossOrigin = "anonymous";
 
-    // Update tracking
-    prevX = currX;
-    prevY = currY;
-  }
+    function initCtx() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
 
-  // Helper to break the seamless path (used when mouse re-enters)
-  function stopErasingPath() {
-    prevX = null;
-    prevY = null;
-  }
+      // 1. Draw Glass & Texture
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.globalAlpha = 1.0;
+      ctx.filter = 'none'; // Ensure no blur on the glass itself
+      ctx.fillStyle = 'rgba(11, 1, 41, 0.97)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+      if (textureImg.complete) {
+        const pattern = ctx.createPattern(textureImg, 'repeat');
+        if (pattern) {
+          ctx.fillStyle = pattern;
+          ctx.globalAlpha = 0.4;
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+      }
 
-  // -- 4. Interaction Logic --
-  const scene = document.getElementById('scene');
-  let rotX = -15, rotY = 30, startX, startY, isMouseDown = false;
+      // 2. The Soft Accumulative Eraser
+      ctx.globalCompositeOperation = 'destination-out';
 
-  function rotateShelf(x, y) {
-    rotY += (x - startX) * 0.4;
-    rotX -= (y - startY) * 0.4;
-    rotX = Math.max(-80, Math.min(80, rotX));
-    scene.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg)`;
-    startX = x; startY = y;
-  }
+      // Controls the overall speed of the reveal
+      ctx.globalAlpha = 0.15;
 
-  // --- MOUSE LISTENERS ---
+      ctx.lineWidth = 100; // The core width
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
 
-  // Seamless path needs reset when cursor jumps onto the page
-  canvas.addEventListener('mouseenter', (e) => {
-    prevX = e.clientX;
-    prevY = e.clientY;
-  });
-  canvas.addEventListener('mouseleave', stopErasingPath);
-
-  canvas.addEventListener('mousemove', (e) => {
-    // 1. Erase on hover (always)
-    erase(e.clientX, e.clientY);
-
-    // 2. Rotate only if mouse is down
-    if (isMouseDown) {
-      rotateShelf(e.clientX, e.clientY);
+      // --- BLUR SETTINGS ---
+      // Increase this number for foggier edges (try 20 to 50)
+      ctx.shadowBlur = 30;
+      // IMPORTANT: shadowColor must be set for the blur to render
+      ctx.shadowColor = 'black';
+      ctx.filter = 'blur(5px)'; // Use filter for a true airbrush feel
+      ctx.strokeStyle = 'black';
     }
-  });
 
-  canvas.addEventListener('mousedown', (e) => {
-    isMouseDown = true;
-    startX = e.clientX;
-    startY = e.clientY;
-  });
+    textureImg.onload = initCtx;
+    window.addEventListener('resize', initCtx);
+    initCtx();
 
-  window.addEventListener('mouseup', () => isMouseDown = false);
+    // -- 3. Erasing Logic --
+    let prevX = null, prevY = null;
 
+    function erase(currX, currY) {
+      if (prevX === null) {
+        prevX = currX; prevY = currY; return;
+      }
+      ctx.beginPath();
+      ctx.moveTo(prevX, prevY);
+      ctx.lineTo(currX, currY);
+      ctx.stroke();
+      prevX = currX;
+      prevY = currY;
+    }
 
-  // --- TOUCH LISTENERS ---
+    function stopErasingPath() { prevX = null; prevY = null; }
 
-  // Erase only, No shelf movement
-  canvas.addEventListener('touchstart', (e) => {
-    const t = e.touches[0];
-    prevX = t.clientX; prevY = t.clientY; // Start touch path
-  });
+    // -- 4. Interaction Logic --
+    const scene = document.getElementById('scene');
+    let rotX = -15, rotY = 30, startX, startY, isMouseDown = false;
 
-  canvas.addEventListener('touchmove', (e) => {
-    const t = e.touches[0];
-    erase(t.clientX, t.clientY);
-  }, { passive: false });
+    function rotateShelf(x, y) {
+      rotY += (x - startX) * 0.4;
+      rotX -= (y - startY) * 0.4;
+      rotX = Math.max(-80, Math.min(80, rotX));
+      scene.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+      startX = x; startY = y;
+    }
 
-  canvas.addEventListener('touchend', stopErasingPath);
+    canvas.addEventListener('mouseenter', (e) => { prevX = e.clientX; prevY = e.clientY; });
+    canvas.addEventListener('mouseleave', stopErasingPath);
+    canvas.addEventListener('mousemove', (e) => {
+      erase(e.clientX, e.clientY);
+      if (isMouseDown) rotateShelf(e.clientX, e.clientY);
+    });
 
-</script>
+    canvas.addEventListener('mousedown', (e) => {
+      isMouseDown = true;
+      startX = e.clientX; startY = e.clientY;
+    });
+
+    window.addEventListener('mouseup', () => isMouseDown = false);
+
+    canvas.addEventListener('touchstart', (e) => {
+      const t = e.touches[0];
+      prevX = t.clientX; prevY = t.clientY;
+    });
+
+    canvas.addEventListener('touchmove', (e) => {
+      const t = e.touches[0];
+      erase(t.clientX, t.clientY);
+    }, { passive: false });
+
+    canvas.addEventListener('touchend', stopErasingPath);
+
+  </script>
 
 </body>
+
 </html>
