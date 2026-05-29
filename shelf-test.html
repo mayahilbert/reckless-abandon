@@ -6,6 +6,63 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>3D Shelf - Glass Texture Reveal</title>
   <style>
+    @font-face {
+      font-family: 'Rubik Spray Paint';
+      src: url('fonts/RubikSprayPaint-Regular.woff2') format('woff2');
+      font-weight: normal;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Rosario';
+      src: url('fonts/Rosario-Light.woff2') format('woff2');
+      font-weight: 300;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Rosario';
+      src: url('fonts/Rosario-LightItalic.woff2') format('woff2');
+      font-weight: 300;
+      font-style: italic;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Rosario';
+      src: url('fonts/Rosario-Regular.woff2') format('woff2');
+      font-weight: normal;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Rosario';
+      src: url('fonts/Rosario-SemiBold.woff2') format('woff2');
+      font-weight: 600;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Rosario';
+      src: url('fonts/Rosario-SemiBoldItalic.woff2') format('woff2');
+      font-weight: 600;
+      font-style: italic;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Rosario';
+      src: url('fonts/Rosario-Italic.woff2') format('woff2');
+      font-weight: normal;
+      font-style: italic;
+      font-display: swap;
+    }
+
+
     :root {
       --cols: 4;
       --rows: 4;
@@ -19,8 +76,11 @@
       --shelf-floor: #dfdbd3;
       --shelf-wall-left: #faf7e8;
       --shelf-wall-right: #ebe6dc;
-      --rim-color: #d1cdc2;
+      --rim-color: #fffdf5;
       --border-color: rgba(0, 0, 0, 0);
+
+      --base-font: 'Rosario', sans-serif;
+      --title-font: 'Rubik Spray Paint', sans-serif;
     }
 
     @media (max-width: 600px) {
@@ -68,9 +128,14 @@
       width: 100%;
       display: flex;
       justify-content: center;
-      background-color: #efe7eb;
+      background-color: #f6f2f2;
       perspective: calc(var(--cube-size) * 12);
       overflow: hidden;
+      font-family: var(--base-font);
+    }
+
+    h1 {
+      font-family: var(--title-font);
     }
 
     /* The Overlay Canvas */
@@ -83,8 +148,6 @@
       z-index: 10;
       cursor: crosshair;
       touch-action: none;
-      /* DELETE OR COMMENT OUT THE LINE BELOW */
-      /* backdrop-filter: blur(4px); */
     }
 
     .scene {
@@ -165,12 +228,86 @@
       font-size: calc(var(--cube-size) * 0.12);
       font-family: system-ui, sans-serif;
     }
+
+    /* Magic 8 Ball Container */
+    .magic-8-ball {
+      width: 80%;
+      height: 80%;
+      background: radial-gradient(circle at 30% 30%, #444, #000);
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      cursor: pointer;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+      transition: transform 0.2s ease;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .magic-8-ball:active {
+      transform: scale(0.9) rotate(10deg);
+    }
+
+    /* The white circle / blue window */
+    .ball-window {
+      width: 45%;
+      height: 45%;
+      background: #111;
+      border: 4px solid #222;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: #55aaff;
+      font-family: 'Georgia', serif;
+      font-size: 0.4em;
+      /* Relative to cubby size */
+      padding: 5px;
+      overflow: hidden;
+      text-shadow: 0 0 5px #55aaff;
+    }
+
+    /* The number 8 (visible initially) */
+    .number-8 {
+      font-size: 2em;
+      color: white;
+      font-family: sans-serif;
+      font-weight: bold;
+    }
+
+    @keyframes float {
+
+      0%,
+      100% {
+        transform: translateY(0px);
+      }
+
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
   </style>
 </head>
 
 <body>
 
-  <canvas id="erase-canvas"></canvas>
+  <canvas id="erase-canvas">
+  </canvas>
+  <h1 class="sr-only">Reckless Abandon</h1>
 
   <div class="scene" id="scene">
     <div class="shelf" id="shelf"></div>
@@ -178,19 +315,65 @@
 
   <script>
     // --- CONFIGURATION ---
-    const TEXTURE_URL = 'https://plus.unsplash.com/premium_photo-1675186945483-9aec9059686d?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'; // Add your image URL here
+    const TEXTURE_URL = 'Texturelabs_Glass_135S.jpg';
     const GLASS_COLOR = 'rgba(255, 255, 255, 0.4)'; // Slightly white transparent glass
     const ERASE_SIZE = 100;
     const ERASE_SOFTNESS = 10;
     const ERASE_STRENGTH = 0.1; // 0.1 is faint, 1.0 is instant clear
 
     // -- 1. Populate Shelf --
+    const answers = [
+      "IT IS\nCERTAIN", "DECIDEDLY\nSO", "WITHOUT\nA DOUBT",
+      "YES\nDEFINITELY", "YOU MAY\nRELY ON IT", "AS I\nSEE IT, YES",
+      "MOST\nLIKELY", "OUTLOOK\nGOOD", "YES", "SIGNS POINT\nTO YES",
+      "REPLY HAZY\nTRY AGAIN", "ASK AGAIN\nLATER", "BETTER NOT\nTELL YOU",
+      "CANNOT\nPREDICT", "CONCENTRATE\nAND ASK", "DON'T\nCOUNT ON IT",
+      "MY REPLY\nIS NO", "MY SOURCES\nSAY NO", "OUTLOOK\nNOT SO GOOD",
+      "VERY\nDOUBTFUL"
+    ];
+
     const shelf = document.getElementById('shelf');
+
     for (let i = 0; i < 16; i++) {
       const cubby = document.createElement('div');
       cubby.className = 'cubby';
-      cubby.innerHTML = `<div class="face back"></div><div class="face top"></div><div class="face bottom"></div><div class="face left"></div><div class="face right"></div><div class="face front"></div><div class="content">${i + 1}</div>`;
+
+      // Base faces
+      let contentHtml = `<div class="face back"></div><div class="face top"></div><div class="face bottom"></div><div class="face left"></div><div class="face right"></div><div class="face front"></div>`;
+
+      if (i === 15) {
+        // Inject the Magic 8 Ball into the last cubby
+        cubby.innerHTML = contentHtml + `
+      <div class="content" style="background:none; box-shadow:none;">
+        <div class="magic-8-ball" id="eight-ball">
+          <div class="ball-window" id="ball-answer">
+            <span class="number-8">8</span>
+          </div>
+        </div>
+      </div>`;
+      } else {
+        // Normal content for other cubbies
+        cubby.innerHTML = contentHtml + `<div class="content">${i + 1}</div>`;
+      }
+
       shelf.appendChild(cubby);
+    }
+
+    // Logic for clicking the 8 ball
+    const ball = document.getElementById('eight-ball');
+    const display = document.getElementById('ball-answer');
+
+    if (ball) {
+      ball.addEventListener('click', () => {
+        // Shake effect (CSS class could be added here)
+        display.style.opacity = '0';
+
+        setTimeout(() => {
+          const randomAnswer = answers[Math.floor(Math.random() * answers.length)];
+          display.innerHTML = randomAnswer.replace('\n', '<br>');
+          display.style.opacity = '1';
+        }, 300);
+      });
     }
 
     // -- 2. Canvas Setup --
@@ -204,61 +387,80 @@
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
 
-      // 1. Draw Glass & Texture
+      // 1. Draw the "Glass" Background
       ctx.globalCompositeOperation = 'source-over';
-      ctx.globalAlpha = 1.0;
-      ctx.filter = 'none'; // Ensure no blur on the glass itself
-      ctx.fillStyle = 'rgba(11, 1, 41, 0.97)';
+      ctx.globalAlpha = 0.98;
+      ctx.fillStyle = 'rgba(255,255, 255, 1)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+      // 2. Draw the Texture Pattern
       if (textureImg.complete) {
         const pattern = ctx.createPattern(textureImg, 'repeat');
         if (pattern) {
           ctx.fillStyle = pattern;
-          ctx.globalAlpha = 0.4;
+          ctx.globalAlpha = 0.3;
           ctx.fillRect(0, 0, canvas.width, canvas.height);
         }
       }
 
-      // 2. The Soft Accumulative Eraser
+      // 3. Draw the ERASEABLE TITLE
+      ctx.globalAlpha = 1.0;
+      ctx.fillStyle = "black";
+      // Responsive font size: 8% of the window width
+      const fontSize = Math.max(40, canvas.width * 0.14);
+      const fontFamily = "'Rubik Spray Paint', sans-serif";
+      ctx.font = `bold ${fontSize}px ${fontFamily}`;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+
+      // Draw the text in the center
+      ctx.fillText("Reckless", canvas.width / 2, canvas.height / 2.8);
+      ctx.fillText("Abandon", canvas.width / 2, canvas.height / 1.4);
+
+      // 4. Set up the Eraser Mode
+      // From here on, everything we draw "cuts holes" in what we just painted
       ctx.globalCompositeOperation = 'destination-out';
-
-      // Controls the overall speed of the reveal
-      ctx.globalAlpha = 0.15;
-
-      ctx.lineWidth = 100; // The core width
-      ctx.lineCap = 'round';
-      ctx.lineJoin = 'round';
-
-      // --- BLUR SETTINGS ---
-      // Increase this number for foggier edges (try 20 to 50)
-      ctx.shadowBlur = 30;
-      // IMPORTANT: shadowColor must be set for the blur to render
-      ctx.shadowColor = 'black';
-      ctx.filter = 'blur(5px)'; // Use filter for a true airbrush feel
-      ctx.strokeStyle = 'black';
+      ctx.globalAlpha = 1.0;
     }
 
-    textureImg.onload = initCtx;
-    window.addEventListener('resize', initCtx);
-    initCtx();
 
-    // -- 3. Erasing Logic --
-    let prevX = null, prevY = null;
+    Promise.all([
+      textureImg.decode(), // Ensures image is ready
+      document.fonts.ready // Ensures all CSS fonts are ready
+    ]).then(() => {
+      initCtx();
+    });
+    window.addEventListener('resize', initCtx);
+
+    // -- 3. Optimized Erasing Logic --
+    let lastPoint = null;
 
     function erase(currX, currY) {
-      if (prevX === null) {
-        prevX = currX; prevY = currY; return;
+      if (!lastPoint) {
+        lastPoint = { x: currX, y: currY };
+        return;
       }
-      ctx.beginPath();
-      ctx.moveTo(prevX, prevY);
-      ctx.lineTo(currX, currY);
-      ctx.stroke();
-      prevX = currX;
-      prevY = currY;
-    }
 
-    function stopErasingPath() { prevX = null; prevY = null; }
+      // Calculate distance between points to fill gaps
+      const dist = Math.hypot(currX - lastPoint.x, currY - lastPoint.y);
+      const angle = Math.atan2(currX - lastPoint.x, currY - lastPoint.y);
+
+      // Draw stamps along the line so there are no "dots" when moving fast
+      for (let i = 0; i < dist; i += 5) { // Step every 5px
+        const x = lastPoint.x + (Math.sin(angle) * i);
+        const y = lastPoint.y + (Math.cos(angle) * i);
+
+        // Create a radial gradient to act as a "soft brush"
+        const gradient = ctx.createRadialGradient(x, y, 0, x, y, ERASE_SIZE / 2);
+        gradient.addColorStop(0, 'rgba(0, 0, 0, 0.2)'); // Center (erasing)
+        gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');   // Edge (fading out)
+
+        ctx.fillStyle = gradient;
+        ctx.fillRect(x - ERASE_SIZE / 2, y - ERASE_SIZE / 2, ERASE_SIZE, ERASE_SIZE);
+      }
+
+      lastPoint = { x: currX, y: currY };
+    }
 
     // -- 4. Interaction Logic --
     const scene = document.getElementById('scene');
@@ -272,23 +474,29 @@
       startX = x; startY = y;
     }
 
-    canvas.addEventListener('mouseenter', (e) => { prevX = e.clientX; prevY = e.clientY; });
-    canvas.addEventListener('mouseleave', stopErasingPath);
+    // Throttling the move event can also help performance
     canvas.addEventListener('mousemove', (e) => {
-      erase(e.clientX, e.clientY);
+      requestAnimationFrame(() => {
+        erase(e.clientX, e.clientY);
+      });
       if (isMouseDown) rotateShelf(e.clientX, e.clientY);
     });
 
     canvas.addEventListener('mousedown', (e) => {
       isMouseDown = true;
       startX = e.clientX; startY = e.clientY;
+      lastPoint = { x: e.clientX, y: e.clientY };
     });
 
-    window.addEventListener('mouseup', () => isMouseDown = false);
+    window.addEventListener('mouseup', () => {
+      isMouseDown = false;
+      lastPoint = null;
+    });
 
+    // Touch Support
     canvas.addEventListener('touchstart', (e) => {
       const t = e.touches[0];
-      prevX = t.clientX; prevY = t.clientY;
+      lastPoint = { x: t.clientX, y: t.clientY };
     });
 
     canvas.addEventListener('touchmove', (e) => {
@@ -296,8 +504,7 @@
       erase(t.clientX, t.clientY);
     }, { passive: false });
 
-    canvas.addEventListener('touchend', stopErasingPath);
-
+    canvas.addEventListener('touchend', () => lastPoint = null);
   </script>
 
 </body>
