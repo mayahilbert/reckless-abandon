@@ -494,35 +494,67 @@
     window.addEventListener('resize', initCtx);
 
     // -- 3. Optimized Erasing Logic --
-    let lastPoint = null;
+// --- CONFIG FOR SPIKEY BRUSH ---
+const CORE_SIZE = 50;      // Solid center
+const MAX_SPIKE_LEN = 4;  // How far spikes can shoot out
+const SPIKE_DENSITY = 50;   // Number of spikes per stamp (keep lower for "sharpness")
 
-    function erase(currX, currY) {
-      if (!lastPoint) {
+let lastPoint = null;
+
+function erase(currX, currY) {
+    if (!lastPoint) {
         lastPoint = { x: currX, y: currY };
         return;
-      }
-
-      // Calculate distance between points to fill gaps
-      const dist = Math.hypot(currX - lastPoint.x, currY - lastPoint.y);
-      const angle = Math.atan2(currX - lastPoint.x, currY - lastPoint.y);
-
-      // Draw stamps along the line so there are no "dots" when moving fast
-      for (let i = 0; i < dist; i += 5) { // Step every 5px
-        const x = lastPoint.x + (Math.sin(angle) * i);
-        const y = lastPoint.y + (Math.cos(angle) * i);
-
-        // Create a radial gradient to act as a "soft brush"
-        const gradient = ctx.createRadialGradient(x, y, 0, x, y, ERASE_SIZE / 2);
-        gradient.addColorStop(0.5, 'rgba(0, 0, 0, 0.8)'); // Center (erasing)
-        gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');   // Edge (fading out)
-
-        ctx.fillStyle = gradient;
-        ctx.fillRect(x - ERASE_SIZE / 2, y - ERASE_SIZE / 2, ERASE_SIZE, ERASE_SIZE);
-      }
-
-      lastPoint = { x: currX, y: currY };
     }
 
+    const dist = Math.hypot(currX - lastPoint.x, currY - lastPoint.y);
+    const angle = Math.atan2(currY - lastPoint.y, currX - lastPoint.x);
+    
+    ctx.globalCompositeOperation = 'destination-out';
+    
+    // --- 1. THE SOLID CORE ---
+    ctx.globalAlpha = 1.0;
+    ctx.lineWidth = CORE_SIZE;
+    ctx.lineCap = 'round';
+    
+    ctx.beginPath();
+    ctx.moveTo(lastPoint.x, lastPoint.y);
+    ctx.lineTo(currX, currY);
+    ctx.stroke();
+
+    // --- 2. THE SPIKES ---
+    // We only need to draw spikes every 5 pixels to keep them looking sharp/distinct
+    for (let i = 0; i < dist; i += 5) { 
+        const x = lastPoint.x + (Math.cos(angle) * i);
+        const y = lastPoint.y + (Math.sin(angle) * i);
+        
+        for (let j = 0; j < SPIKE_DENSITY; j++) {
+            // Pick a random angle around the brush
+            const theta = Math.random() * 2 * Math.PI;
+            
+            // Random spike length
+            const spikeLen = Math.random() * MAX_SPIKE_LEN;
+            
+            // Start at the edge of the core
+            const startX = x + (CORE_SIZE / 2) * Math.cos(theta);
+            const startY = y + (CORE_SIZE / 2) * Math.sin(theta);
+            
+            // End at the outer spike tip
+            const endX = x + (CORE_SIZE / 2 + spikeLen) * Math.cos(theta);
+            const endY = y + (CORE_SIZE / 2 + spikeLen) * Math.sin(theta);
+
+            ctx.globalAlpha = 1.0; 
+            ctx.lineWidth = Math.random() * 3; // Varying thickness for "sharpness"
+            
+            ctx.beginPath();
+            ctx.moveTo(startX, startY);
+            ctx.lineTo(endX, endY);
+            ctx.stroke();
+        }
+    }
+
+    lastPoint = { x: currX, y: currY };
+}
     // -- 4. Interaction Logic --
     const scene = document.getElementById('scene');
     let rotX = -15, rotY = 30, startX, startY, isMouseDown = false;
