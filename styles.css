@@ -1,0 +1,474 @@
+@font-face {
+  font-family: 'Rubik Spray Paint';
+  src: url('fonts/RubikSprayPaint-Regular.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Rosario';
+  src: url('fonts/Rosario-Light.woff2') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Rosario';
+  src: url('fonts/Rosario-LightItalic.woff2') format('woff2');
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Rosario';
+  src: url('fonts/Rosario-Regular.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Rosario';
+  src: url('fonts/Rosario-SemiBold.woff2') format('woff2');
+  font-weight: 600;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Rosario';
+  src: url('fonts/Rosario-SemiBoldItalic.woff2') format('woff2');
+  font-weight: 600;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Rosario';
+  src: url('fonts/Rosario-Italic.woff2') format('woff2');
+  font-weight: normal;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Rosario';
+  src: url('fonts/Rosario-Bold.woff2') format('woff2');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Rosario';
+  src: url('fonts/Rosario-BoldItalic.woff2') format('woff2');
+  font-weight: bold;
+  font-style: italic;
+  font-display: swap;
+}
+
+:root {
+  --cols: 4;
+  --rows: 4;
+  --cube-size: min(calc(100vw / var(--cols)), calc(100vh / var(--rows)));
+  --half-size: calc(var(--cube-size) / 2);
+  --rim-thickness: calc(var(--cube-size) * 0.06);
+  --track-size: calc(var(--cube-size) - var(--rim-thickness));
+
+  --shelf-base: #bbb4ae;
+  --shelf-back: #f3efe6;
+  --shelf-floor: #dfdbd3;
+  --shelf-wall-left: #faf7e8;
+  --shelf-wall-right: #ebe6dc;
+  --rim-color: #fffdf5;
+  --border-color: rgba(0, 0, 0, 0);
+
+  --base-font: 'Rosario', sans-serif;
+  --title-font: 'Rubik Spray Paint', sans-serif;
+
+  --blue: #0375d8;
+  --pink: #e7378c;
+  --gold: #f18b39;
+  --red: #eb3c2b;
+  --yellow: #fef73c;
+}
+
+
+
+body,
+html {
+  margin: 0;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  background-color: #000000;
+  perspective: calc(var(--cube-size) * 12);
+  overflow-x: hidden;
+  overflow-y: auto;
+  height: auto;
+  /* Allow body to grow with content */
+  min-height: 100%;
+  font-family: var(--base-font);
+}
+
+h1 {
+  font-family: var(--title-font);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Navigation Bar */
+nav {
+  position: absolute;
+  z-index: 100;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+nav ul {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  width: 100%;
+  padding: 0;
+}
+
+nav ul li::marker {
+  content: none;
+}
+
+nav a {
+  text-transform: uppercase;
+  font-weight: bold;
+  text-decoration: none;
+  letter-spacing: 0.04em;
+  padding: 1em;
+}
+
+nav ul li a {
+  color: var(--blue);
+
+}
+
+nav ul li:nth-of-type(1) a {
+  color: var(--pink);
+}
+
+/* Modal */
+#overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  z-index: 100;
+  /* Above the canvas */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  padding: 20px;
+  /* Space for mobile */
+  overflow-y: auto;
+}
+
+#overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+body.modal-open {
+  overflow: hidden;
+  /* Stops background scrolling */
+  height: 100vh;
+  /* Keeps the viewport locked */
+}
+
+.modal {
+  background: var(--shelf-back);
+  padding: 2em;
+  max-width: 90vw;
+  width: 90%;
+  position: relative;
+  max-height: 95vh;
+  display: flex;
+  flex-direction: column;
+}
+
+#modal-body {
+  overflow-y: auto;
+  padding-right: 10px;
+  /* Space for scrollbar */
+  overscroll-behavior: contain;
+  /* Prevents "scroll chaining" to background */
+}
+
+#close-btn {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 30px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* The Overlay Canvas */
+#erase-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  cursor: crosshair;
+  touch-action: none;
+}
+
+.scene {
+  width: calc(var(--track-size) * var(--cols));
+  height: calc(var(--track-size) * var(--rows));
+  transform-style: preserve-3d;
+  transition: transform 0.1s ease-out;
+  z-index: 1;
+  margin-bottom: 100px;
+}
+
+.shelf {
+  display: grid;
+  grid-template-columns: repeat(var(--cols), var(--track-size));
+  grid-template-rows: repeat(var(--rows), var(--track-size));
+  transform-style: preserve-3d;
+  margin-top: 2em;
+}
+
+.cubby {
+  position: relative;
+  width: var(--cube-size);
+  height: var(--cube-size);
+  transform-style: preserve-3d;
+}
+
+/* Ensure users can see which cubby they've tabbed to */
+.cubby:focus-visible {
+  outline: 4px solid #55aaff;
+  outline-offset: 10px;
+  transform: translateZ(20px);
+  /* Bring it forward slightly when focused */
+}
+
+/* Reset button styles to look like your original cubbies */
+/* Shared layout for both the container and the button */
+.cubby,
+button.cubby {
+  all: unset;
+  /* Clear the slate */
+  display: block;
+  position: relative;
+  width: var(--track-size);
+  /* Use track-size for the grid footprint */
+  height: var(--track-size);
+  transform-style: preserve-3d;
+  box-sizing: border-box;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  margin: 0;
+  padding: 0;
+}
+
+/* Specific button overrides to ensure it fills the grid cell */
+button.cubby {
+  appearance: none;
+  background: none;
+  border: none;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: normal;
+}
+
+/* Ensure the focus ring doesn't look broken in 3D space */
+button.cubby:focus-visible {
+  outline: 3px solid #55aaff;
+  outline-offset: 5px;
+}
+
+.face {
+  position: absolute;
+  width: var(--cube-size);
+  height: var(--cube-size);
+  box-sizing: border-box;
+  border: 1px solid var(--border-color);
+  /* Center the face in case of track-size mismatch */
+  top: 50%;
+  left: 50%;
+  transform-origin: center;
+}
+
+
+.back {
+  transform: translate(-50%, -50%) translateZ(calc(var(--half-size) * -1));
+  background-color: var(--shelf-back);
+}
+
+.top {
+  transform: translate(-50%, -50%) rotateX(90deg) translateZ(var(--half-size));
+  background-color: var(--shelf-base);
+}
+
+.bottom {
+  transform: translate(-50%, -50%) rotateX(-90deg) translateZ(var(--half-size));
+  background-color: var(--shelf-floor);
+}
+
+.left {
+  transform: translate(-50%, -50%) rotateY(-90deg) translateZ(var(--half-size));
+  background-color: var(--shelf-wall-left);
+}
+
+.right {
+  transform: translate(-50%, -50%) rotateY(90deg) translateZ(var(--half-size));
+  background-color: var(--shelf-wall-right);
+}
+
+.front {
+  transform: translate(-50%, -50%) translateZ(var(--half-size));
+  background: none;
+  border: var(--rim-thickness) solid var(--rim-color);
+  pointer-events: none;
+}
+
+@media (max-width: 600px) {
+  :root {
+    --cols: 3;
+    --rows: 6;
+  }
+
+  .shelf .cubby:last-child {
+    grid-column: 1 / -1;
+    width: calc(100% + var(--rim-thickness));
+    height: var(--cube-size);
+    right: calc(var(--rim-thickness) / 2);
+  }
+
+  .shelf .cubby:last-child .top,
+  .shelf .cubby:last-child .bottom {
+    height: var(--cube-size) !important;
+    width: 100%;
+  }
+
+  .shelf .cubby:last-child .left,
+  .shelf .cubby:last-child .right {
+    width: var(--cube-size) !important;
+    height: 100%;
+  }
+
+  .shelf .cubby:last-child .right {
+    right: 0;
+    left: auto;
+    transform-origin: right;
+    transform: rotateY(90deg) translate(50%, -50%);
+  }
+
+  .shelf .cubby:last-child .left {
+    left: 0;
+    right: auto;
+    transform-origin: left;
+    transform: rotateY(-90deg) translate(-50%, -50%);
+  }
+
+  .shelf .cubby:last-child .front,
+  .shelf .cubby:last-child .back {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.content {
+  position: absolute;
+  width: 60%;
+  height: 60%;
+  top: 20%;
+  left: 20%;
+  transform: translateZ(2px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgb(0, 0, 0);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  font-size: calc(var(--cube-size) * 0.12);
+  font-family: system-ui, sans-serif;
+}
+
+/* Magic 8 Ball Container */
+.magic-8-ball {
+  width: calc(var(--cube-size) / 2);
+  height: calc(var(--cube-size) / 2);
+  background: radial-gradient(circle at 30% 30%, #444, #000);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+  transition: transform 0.2s ease;
+  animation: float 3s ease-in-out infinite;
+}
+
+.magic-8-ball:active {
+  transform: scale(0.9) rotate(10deg);
+}
+
+/* The white circle / blue window */
+.ball-window {
+  width: 45%;
+  height: 45%;
+  background: #111;
+  border: 4px solid #222;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: #55aaff;
+  font-family: 'Georgia', serif;
+  font-size: 0.4em;
+  /* Relative to cubby size */
+  padding: 5px;
+  overflow: hidden;
+  text-shadow: 0 0 5px #55aaff;
+}
+
+/* The number 8 (visible initially) */
+.number-8 {
+  font-size: 2em;
+  color: white;
+  font-family: sans-serif;
+  font-weight: bold;
+}
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+}
