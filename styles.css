@@ -69,10 +69,15 @@
   font-display: swap;
 }
 
+@view-transition {
+  navigation: auto;
+}
+
+
 :root {
   --cols: 4;
   --rows: 4;
-  --cube-size: min(calc(100vw / var(--cols)), calc(100vh / var(--rows)));
+  --cube-size: min(calc(90vw / var(--cols)), calc(90vh / var(--rows)));
   --half-size: calc(var(--cube-size) / 2);
   --rim-thickness: calc(var(--cube-size) * 0.06);
   --track-size: calc(var(--cube-size) - var(--rim-thickness));
@@ -84,6 +89,7 @@
   --shelf-wall-right: #ebe6dc;
   --rim-color: #fffdf5;
   --border-color: rgba(0, 0, 0, 0);
+  --proj-image: url('/images/placeholder.jpg');
 
   --base-font: 'Rosario', sans-serif;
   --title-font: 'Rubik Spray Paint', sans-serif;
@@ -116,6 +122,11 @@ html {
 
 h1 {
   font-family: var(--title-font);
+}
+
+p {
+  font-size: 1.1em;
+  line-height: 1.5;
 }
 
 .sr-only {
@@ -151,7 +162,8 @@ nav ul li::marker {
   content: none;
 }
 
-nav a {
+nav a,
+#close-btn, #curatorial-close-btn {
   text-transform: uppercase;
   font-weight: bold;
   text-decoration: none;
@@ -165,25 +177,32 @@ nav ul li a {
 }
 
 nav ul li:nth-of-type(1) a {
-  color: var(--pink);
+  color: var(--red);
 }
 
 /* Modal */
+body.no-scroll {
+  overflow: hidden;
+}
+
 #overlay {
   position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   inset: 0;
   background: rgba(0, 0, 0, 0.85);
   z-index: 100;
   /* Above the canvas */
   display: flex;
-  justify-content: center;
-  align-items: center;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s ease;
-  padding: 20px;
   /* Space for mobile */
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  /* Smooth scrolling on iOS */
 }
 
 #overlay.active {
@@ -200,13 +219,19 @@ body.modal-open {
 
 .modal {
   background: var(--shelf-back);
-  padding: 2em;
-  max-width: 90vw;
-  width: 90%;
+  padding: 1em;
+  width: 100%;
   position: relative;
-  max-height: 95vh;
-  display: flex;
-  flex-direction: column;
+  max-height: 99vh;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 2em;
+}
+
+@media (max-width: 600px) {
+  .modal {
+    grid-template-columns: 1fr;
+  }
 }
 
 #modal-body {
@@ -215,16 +240,89 @@ body.modal-open {
   /* Space for scrollbar */
   overscroll-behavior: contain;
   /* Prevents "scroll chaining" to background */
+  margin-bottom: 2em;
+  display: flex;
+  flex-direction: column;
+  gap: 2em;
 }
 
-#close-btn {
-  position: absolute;
-  top: 10px;
-  right: 15px;
-  font-size: 30px;
+#modal-title {
+  font-family: var(--base-font);
+}
+
+#proj-info {
+  display: flex;
+  flex-direction: column;
+  max-width: 30ch;
+}
+
+.proj-artist {
+  font-size: 1.2em;
+  margin-bottom: 0.5em;
+}
+
+.modal-desc {
+  align-self: flex-end;
+  background-color: var(--gold);
+  padding: 2em 2.4em 2.4em 2.4em;
+}
+
+#modal-body p {
+  max-width: 70ch;
+}
+
+.modal-bio {
+  margin-top: 3em;
+  background-color: var(--yellow);
+  padding: 2em 2.4em 2.4em 2.4em;
+  max-width: 70ch;
+}
+
+#socials {
+  display: flex;
+  gap: 2em;
+}
+
+.social {
+  background-color: var(--blue);
+  color: white;
+  padding: 1em;
+  max-width: 20ch;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+}
+
+.social.website:before {
+  content: "🌐";
+  font-size: 2em;
+  margin-right: 0.5em;
+}
+
+.social.ig:before {
+  content: "📷";
+  font-size: 2em;
+  margin-right: 0.5em;
+}
+
+#close-btn, #curatorial-close-btn {
   background: none;
   border: none;
   cursor: pointer;
+  color: var(--blue);
+  font-size: 1rem;
+  padding: 0;
+}
+
+#close-btn:before, #curatorial-close-btn:before {
+  content: '⇜';
+  font-weight: bold;
+  font-size: 2em;
+  margin-right: 0.5em;
+  color: var(--blue);
 }
 
 /* The Overlay Canvas */
@@ -253,7 +351,8 @@ body.modal-open {
   grid-template-columns: repeat(var(--cols), var(--track-size));
   grid-template-rows: repeat(var(--rows), var(--track-size));
   transform-style: preserve-3d;
-  margin-top: 2em;
+  margin-top: 3em;
+  transform: rotateX(-8deg);
 }
 
 .cubby {
@@ -271,10 +370,8 @@ body.modal-open {
   /* Bring it forward slightly when focused */
 }
 
-/* Reset button styles to look like your original cubbies */
-/* Shared layout for both the container and the button */
 .cubby,
-button.cubby {
+a.cubby {
   all: unset;
   /* Clear the slate */
   display: block;
@@ -290,18 +387,8 @@ button.cubby {
   padding: 0;
 }
 
-/* Specific button overrides to ensure it fills the grid cell */
-button.cubby {
-  appearance: none;
-  background: none;
-  border: none;
-  font-family: inherit;
-  font-size: inherit;
-  line-height: normal;
-}
-
 /* Ensure the focus ring doesn't look broken in 3D space */
-button.cubby:focus-visible {
+a.cubby:focus-visible {
   outline: 3px solid #55aaff;
   outline-offset: 5px;
 }
@@ -401,19 +488,154 @@ button.cubby:focus-visible {
   position: absolute;
   width: 60%;
   height: 60%;
-  top: 20%;
-  left: 20%;
-  transform: translateZ(2px);
+  top: 10%;
+  left: 10%;
+  transform: translateZ(10px);
   display: flex;
   justify-content: center;
   align-items: center;
   background: rgb(0, 0, 0);
+  background-image: var(--proj-image);
+  background-size: cover;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  font-size: calc(var(--cube-size) * 0.12);
-  font-family: system-ui, sans-serif;
+  font-size: calc(var(--cube-size) * 0.084);
+  text-transform: uppercase;
+  padding: 1em;
+  transition: transform 0.3s ease, filter 0.3s ease;
+  filter: brightness(0.5);
+}
+
+.cubby.hovered .content {
+  transform: translateZ(20px);
+  filter: none;
+
 }
 
 /* Magic 8 Ball Container */
+/* --- MAGIC 8-BALL OVERLAY & INTERACTION STYLES --- */
+#eight-ball-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(8, 8, 8, 0.97);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  z-index: 2000; /* High index to cover everything including the shelf canvas */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+#eight-ball-overlay.hidden {
+  display: none;
+  opacity: 0;
+}
+
+.eight-ball-container {
+  text-align: center;
+  color: #ffffff;
+}
+
+.eight-ball-container h2 {
+  font-family: 'Rubik Spray Paint', sans-serif;
+  font-size: 2.5rem;
+  margin-bottom: 8px;
+}
+
+.eight-ball-sub {
+  font-family: 'Rosario', sans-serif;
+  color: #888888;
+  margin-bottom: 40px;
+  font-size: 1.1rem;
+}
+
+/* The 3D Rendered Sphere Body */
+.oracle-sphere {
+  width: 320px;
+  height: 320px;
+  background: radial-gradient(circle at 30% 30%, #3a3a3a 0%, #080808 70%, #000000 100%);
+  border-radius: 50%;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8), inset -10px -10px 30px rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.oracle-sphere:hover {
+  transform: scale(1.03);
+}
+
+/* The Classic Blue Liquid Oracle Window Window */
+.oracle-window {
+  width: 150px;
+  height: 150px;
+  background: radial-gradient(circle at center, #001133 0%, #000511 100%);
+  border: 8px solid #141414;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: inset 0 5px 15px rgba(0,0,0,0.9);
+}
+
+/* The Floating Glowing Prediction Text Element */
+.oracle-text {
+  width: 100px;
+  height: 100px;
+  font-family: system-ui, sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #4da6ff;
+  text-shadow: 0 0 8px rgba(77, 166, 255, 0.6);
+  text-align: center;
+  text-transform: uppercase;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  line-height: 1.4;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+/* Exit Button Component */
+#eight-ball-close {
+  position: absolute;
+  top: 40px;
+  right: 50px;
+  background: none;
+  border: none;
+  color: #ffffff;
+  font-size: 3rem;
+  cursor: pointer;
+  opacity: 0.5;
+  transition: opacity 0.2s;
+}
+
+#eight-ball-close:hover {
+  opacity: 1;
+}
+
+/* Physical Shaking Animation Loop */
+.oracle-sphere.shaking {
+  animation: shakeBall 0.4s ease-in-out infinite alternate;
+}
+
+@keyframes shakeBall {
+  0% { transform: translate(4px, 4px) rotate(3deg); }
+  25% { transform: translate(-4px, -2px) rotate(-4deg); }
+  50% { transform: translate(3px, -3px) rotate(5deg); }
+  75% { transform: translate(-3px, 3px) rotate(-2deg); }
+  100% { transform: translate(2px, -1px) rotate(3deg); }
+}
+
 .magic-8-ball {
   width: calc(var(--cube-size) / 2);
   height: calc(var(--cube-size) / 2);
@@ -427,6 +649,7 @@ button.cubby:focus-visible {
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
   transition: transform 0.2s ease;
   animation: float 3s ease-in-out infinite;
+  pointer-events: none;
 }
 
 .magic-8-ball:active {
@@ -471,4 +694,181 @@ button.cubby:focus-visible {
   50% {
     transform: translateY(-10px);
   }
+}
+
+/* Page transition for project */
+.proj-expand {
+  view-transition-name: proj-expand;
+}
+
+::view-transition-old(proj-expand),
+::view-transition-new(proj-expand) {
+  object-fit: cover;
+}
+
+/* Video */
+
+.vid-container iframe {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  /* Sets the proportional width-to-height ratio */
+
+}
+
+.vid-container {
+  view-transition-name: proj-expand;
+  display: flex;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 2em;
+  opacity: 1;
+  transition: 0.3s;
+  z-index: 5;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+}
+
+.link-container {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  opacity: 0.8;
+  transition: opacity 0.3s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  text-transform: uppercase;
+  color: black;
+  letter-spacing: 0.04em;
+}
+
+
+  .highlight {
+    background: var(--yellow);
+    padding: 0.5em 1em;
+    font-size: 1.5em;
+    font-weight: bold;
+  }
+
+  .link-note {
+    background: var(--yellow);
+    padding: 0.5em 1em;
+    margin-top: 1em;
+  }
+
+  a.work-link {
+    text-decoration: none;
+  }
+
+  .link-container:hover {
+    opacity: 1;
+  }
+
+  @media (min-width: 600px) {
+  .link-container {
+    width: 70%;
+  }
+}
+
+/* Curatorial */
+
+#curatorial-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 100vw;         
+  height: 100vh;
+  background: var(--shelf-back);
+  transform: translateX(100%); 
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 1500;
+  display: flex;
+}
+
+#curatorial-panel.peek {
+  background: var(--gold);
+  transform: translateX(calc(85%));
+  cursor: pointer;
+}
+
+#curatorial-panel.open {
+  transform: translateX(0);
+  cursor: default;
+}
+
+.curatorial-peek-handle {
+  width: 15%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+}
+
+.curatorial-peek-handle span {
+  transform: rotate(-90deg);
+  white-space: nowrap;
+  transition: color 0.3s ease;
+}
+
+#curatorial-panel.peek:hover {
+  background-color: var(--blue);
+}
+
+/* Smoothly collapse the vertical handle strip once fully opened */
+#curatorial-panel.open .curatorial-peek-handle {
+  width: 0;
+  border-left: none;
+  overflow: hidden;
+}
+
+/* Main Text Container Layout */
+.curatorial-content {
+  flex: 1;
+  padding: 80px 10%;
+  overflow-y: auto;    /* Allows the statement to scroll if reading on mobile */
+  position: relative;
+  box-sizing: border-box;
+}
+
+.curatorial-content h2 {
+  font-family: 'Rubik Spray Paint', sans-serif;
+  font-size: 2.5rem;
+  margin-top: 0;
+  margin-bottom: 30px;
+}
+
+#curatorial-close-btn {
+  margin-bottom: 1em;
+}
+
+/* --- DRAGGABLE EXTENSIONS --- */
+
+/* Changes cursor to a grab hand when hovering over the peek strip */
+.curatorial-peek-handle {
+  touch-action: none; /* Prevents mobile browsers from triggering history-swiping gestures */
+  cursor: grab;
+}
+
+/* Switches to a active clenching hand while dragging is occurring */
+#curatorial-panel.dragging .curatorial-peek-handle {
+  cursor: grabbing;
+}
+
+/* Temporarily kills the 0.5s CSS animation timeline so the panel tracks the cursor instantly */
+#curatorial-panel.dragging {
+  transition: none !important;
+}
+
+/* Restores default arrow pointer once the panel is fully locked open */
+#curatorial-panel.open .curatorial-peek-handle {
+  cursor: default;
 }
