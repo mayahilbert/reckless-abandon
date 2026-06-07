@@ -24,11 +24,11 @@ const cubbyData = [
   { slug: "i-thought-it-would-be-funny", image: "/images/key/JPEG/mcdermott.jpg", title: "I Thought it Would Be Funny (Death Shrouds)", artist: "Kathleen McDermott", medium: "Fabric, LEDs, blinking circuit, GIF", year: "2016", description: "<p><em>I Thought it Would be Funny (Death Shrouds)</em> is an exploration of a wearable epitaph, or death shroud. It may also be an apology. I hand-soldered an LED sign that reads \"I thought it would be funny\" and hooked it up to a blinking circuit. I then wore it and documented it in a series of videos that became gifs, which became progressively more other-worldly. I still have this textile, and inspired by the invitation to revisit old works, unfinished thoughts, intuition, and letting go—I am considering making images with it again, perhaps at 10 year intervals.</p>", bio: "<p>Kathleen McDermott is an interdisciplinary artist with a background in installation, prop-making and sculpture, based in Brooklyn, NY. She combines her knowledge of fabrication with open source hardware to build a language of absurdity that merges new media, design, performance, and video. She is interested in unproductive technologies that extend and highlight embodied knowledge, and that resist control. Her work has been exhibited internationally, including at the Museum of Arts and Design in New York, The Tides Institute and Museum of Art in Maine, the Wende Museum in LA, and Ars Electronica in Linz, Austria; and has been featured in publications such as The Wall Street Journal, Huffington Post, Fast Company, and Dezeen.</p>", ig: "https://www.instagram.com/kit_the_robot", website: "https://kthartic.com/" },
   { slug: "hello-its-you", worklink: "https://mitraavrs.neocities.org", image: "/images/key/JPEG/mitra.jpg", title: "Hello - It's You", artist: "Mitra", medium: "Website (Neocities)", year: "2025", description: "<p><em>Hello – It’s You</em> is an immersive exploration of memory and self-discovery, merging illustrations and text in the form of an ARG-like hypertext adventure. This project invites the viewer to navigate a dynamic, nonlinear journey, where fragments of the past and present interact, revealing the complexities of personal identity. Through this fusion of visual storytelling and textual exploration, ‘Hello – It’s You’ engages the audience in a dialogue about how memory shapes who we are, and how the act of revisiting those memories becomes a path to understanding the self.</p>", bio: "<p>MITRAAVRS is a multimedia artist and educator exploring memory, identity disturbance and nonlinear narratives through hypertext and experimental web-based formats. Born in India and raised across Oman and Dubai before relocating to the United States at twenty-three, their transnational upbringing shapes an interest in shifting selves and unstable temporalities within narrative form. Holding a BFA in 3D Modeling and Animation from SAE Institute Dubai, they merge illustration and creative coding to build hybrid narrative spaces and interactive systems. They have exhibited work with New Bedford Arts Illuminated and Hatch Street Studios.</p><p>MITRAAVRS has also worked as a Gallery Assistant and currently servers as a Teaching Fellow at UMass Dartmouth, suporting students in developing foundational digital media skills.</p>", ig: "https://www.instagram.com/mitraavrs", website: "https://mitraavrs.carrd.co" },
   { slug: "a-stabilizing-loop", vimeo: "https://itch.io/embed/1038681", worklink: "https://aaronoldenburg.itch.io/loop", image: "/images/key/JPEG/oldenburg.jpg", title: "A Stabilizing Loop", artist: "Aaron Oldenburg", medium: "Software (web-based or local application download)", year: "2023", description: "<p>Layers of hand-drawn images taken from my own past photography of anonymized friends and family and images of extinct animal and plant species are given chance combinations via autonomous real-time software. The environments created in these vignettes are unpredictable and often chaotic. The figures are both overwhelmed by this and participate in it.</p><p>The elements that make up the collage were chosen as they aligned with a sense of uncertainty and loss. There is a feeling for me, in the collision of the semi-random images, of the chaos of earth in a period of late humankind. It is the momentum of natural disasters birthed from our energy usage. It is a constant state of rupture interspersed with moments of new equilibria.</p><p>My mediums tend to be videogames, interactive and non-interactive procedural software, and video, with the latter often using the former as material.  Simulations of instability, the overwhelming power of nature, post-human worlds and dissociation are themes I lean toward. They all come from a similar place, even if they produce different results. All of them can be seen as a form of rupture with our assumed control over our world and reality. There’s a spiritual element of letting go or riding the discomfort.</p>", bio: "<p>Aaron Oldenburg is a Baltimore-based game, interactive and video artist. His work has exhibited in festivals and galleries in New York, Johannesburg, London, Buenos Aires, São Paulo and Los Angeles, including SIGGRAPH, A MAZE. International Games and Playful Media Festival, the LeftField Collection at EGX Rezzed, Slamdance DIG, Game On! - El arte en el juego, and FILE Electronic Language International Festival. His games have been written about in Kill Screen, Baltimore City Paper, BmoreArt, and Rock, Paper, Shotgun.</p><p>He teaches game design as a professor in The University of Baltimore's Simulation and Game Design program and has an MFA from the University of Maryland, Baltimore County. His writing on games has been published in Game Studies, Journal of Gaming and Virtual Worlds, Hyperrhiz, Acta Ludologica, and the proceedings of the International Symposium on Electronic Art (ISEA). In October 2003 he finished two years as an HIV Health Extension Agent for the Peace Corps in Mali.</p>", website: "https://aaronoldenburg.itch.io" },
-  { slug: "desire-paths-for-wikipedia", worklink: "https://greasyfork.org/en/scripts/565058-desire-paths-for-wikipedia", image: "/images/key/JPEG/pipkin.jpg", title: "Desire Paths for Wikipedia", artist: "Everest Pipkin", medium: "Browser extension userscript", year: "2026", description: "<p><em>Desire Paths for Wikipedia</em> is a browser userscript that remembers the path of a cursor over the linked pages of Wikipedia.org. It averages these paths and “wears” them into the page, showing your browsing history over time. Return to a page months or years later and find not just that you had been there before, but exactly how you wandered.</p><p>With thanks to Kate Compton and Christina Cuneo, with whom this idea emerged in conversation.</p>", bio: "<p>Everest Pipkin is a game developer, artist, and educator who works in games and software tools across the handmade web– as well as on paper through books, zines and drawings. They have shown and spoken at The Design Museum of London, The Texas Biennial, The XXI Triennale of Milan, The Photographers Gallery of London, Center for Land Use Interpretation, and currently teach game design at the Pratt Institute. They believe the internet is a public good, and the post office should operate it.</p>", ig: "https://www.instagram.com/everestpipkin/", website: "https://everest-pipkin.com/" },
+  { slug: "desire-paths-for-wikipedia", worklink: "https://greasyfork.org/en/scripts/565058-desire-paths-for-wikipedia", image: "/images/key/JPEG/pipkin.jpg", title: "Desire Paths for Wikipedia", artist: "Everest Pipkin", medium: "Browser extension userscript", year: "2026", description: "<p><em>Desire Paths for Wikipedia</em> is a browser userscript that remembers the path of a cursor over the linked pages of Wikipedia.org. It averages these paths and “wears” them into the page, showing your browsing history over time. Return to a page months or years later and find not just that you had been there before, but exactly how you wandered.</p><p>With thanks to Kate Compton and Christina Cuneo, with whom this idea emerged in conversation.</p>", bio: "<p>Everest Pipkin is a game developer, artist, and educator who works in games and software tools across the handmade web—as well as on paper through books, zines and drawings. They have shown and spoken at The Design Museum of London, The Texas Biennial, The XXI Triennale of Milan, The Photographers Gallery of London, Center for Land Use Interpretation, and currently teach game design at the Pratt Institute. They believe the internet is a public good, and the post office should operate it.</p>", ig: "https://www.instagram.com/everestpipkin/", website: "https://everest-pipkin.com/" },
   { slug: "www-blairs-computer", worklink: "https://www.blairs.computer", image: "/images/key/JPEG/simmons.jpg", title: "www.blairs.computer", artist: "Blair Simmons", medium: "Website", year: "2025", description: "<p>So I have decided I want my computer to forget, to delete, like I do. I want to move on. In this series of work, I utilize my personal digital archive to explore the relationship between my human and digital memories –  digital memory as a prosthetic extension of my human memory. www.blairs.computer is a website that asks visitors of the site to take and hold onto my files, so that I can delete them from my drive. <a href=\"https://www.blairsimmons.com/portraits\">Archive of Digital Portraits Cast in Concrete</a> is an ongoing series of sculptures made of discarded personal computing devices from myself and people in my life. These sculptures are cast in concrete, making the data permanently inaccessible.</p>", bio: "<p>I am a queer and anxious artist, curator, researcher, storyteller, and technician working in as many mediums as will have me. I enjoy exploring themes of technology, labor, bodies, and pain. My physical process of making mimics the daily pain of working and labor: warping, distorting, grinding and wearing down. My pieces are both critical of and dependent on technology, mirroring the ways technology can be a solution to my chronic pain, and the source of the pain itself.</p><p>I am currently teaching at the Interactive Media Arts and Interactive Telecommunications Program at New York University. My research often materializes as objects and performances which have been performed at the likes of Pioneer Works, La Mama’s CultureHub, Wordhack at Babycastles, theBlanc and the Edinburgh Fringe Festival. I have been mentioned in publications like PARtake, The Scotsman, USA Today, The Guardian, NYTimes, etc.</p>", website: "https://www.blairsimmons.com" },
   { slug: "photo-news", vimeo: "https://player.vimeo.com/video/967244235?h=8d82c6d042", image: "/images/key/JPEG/zellen.jpg", title: "Photo News", artist: "Jody Zellen", medium: "Video", year: "2019-2026", description: "<p><em>Photo News</em>, January 1, 2019 – present, is an ongoing project consisting of daily Instagram posts of digital collages that combine news images from lead stories, juxtaposed with excerpts from the headline that accompanies each chosen photograph. This ever changing but always familiar cacophony of headlines and images gives voice to the uniquely fragmented realities we now inhabit. The project can be viewed daily on <a href=\"www.instagram.com/photonews5\">Instagram</a>. At the end of each year, Zellen compiles a film containing that years collages. She has completed a composite film that presents the first six years of the project.</p>", bio: "<p>Jody Zellen is a Los Angeles based artist who works in many media simultaneously. She makes animations, interactive installations, app art, net art, drawings, paintings, photographs, public art, and artists' books. She constantly thinks about ways to use new technologies and to integrate interactivity into her artworks.</p><p>Zellen received a BA from Wesleyan University (1983), a MFA from CalArts (1989) and a MPS from NYU's Interactive Telecommunications Program (2009). </p><p>Her work has been included in more than 500 group exhibitions and festivals since the late 1980s and is in the collections of the Los Angeles County Museum of Art, The Whitney Museum of Art, The Getty Museum, The Museum of Modern Art, New York, The San Francisco Museum of Art, The Laguna Art Museum, The Orange County Museum of Art as well as in numerous private collections.</p>", ig: "https://instagram.com/photonews5", website: "https://www.jodyzellen.com" },
-  { slug: "curatorial-statement", image: "/images/blue.png", title: "Curatorial Statement", description: "Statement" },
-  { slug: "random", image: "/images/Texturelabs_Glass_135Sd.png", title: "Magic 8 Ball", description: "The future is cloudy." }
+  { slug: "random", image: "/images/blue.png" },
+  { slug: "random" }
 ];
 
 // Generate the 16 cubbies
@@ -47,11 +47,12 @@ for (let i = 0; i < 16; i++) {
   if (i === 15) {
     cubby.innerHTML = contentHtml + `
       <div class="content" style="background:none; box-shadow:none;">
-        <div class="magic-8-ball" id="eight-ball">
-          <div class="ball-window" id="ball-answer">
-            <span class="number-8">8</span>
-          </div>
-        </div>
+        <model-viewer class="magic-8-ball"
+  src="images/8ball.glb" 
+  alt="3D 8 Pool Ball" 
+  id="shelf-eight-ball"
+>
+</model-viewer>
       </div>`;
   } else {
     cubby.innerHTML = contentHtml + `<div class="content"></div>`;
@@ -140,6 +141,8 @@ function rotateShelf(x, y) {
   rotX = Math.max(-80, Math.min(80, rotX));
   scene.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg)`;
   startX = x; startY = y;
+
+  const shelfAngleY = rotY; // Replace with your exact shelf angle variable name
 }
 
 let mouseX = 0, mouseY = 0;
@@ -163,17 +166,34 @@ canvas.addEventListener('mousemove', (e) => {
     const elementUnderMouse = document.elementFromPoint(mouseX, mouseY);
     canvas.style.pointerEvents = 'auto';
 
-    // Find the closest cubby element
-    const cubby = elementUnderMouse ? elementUnderMouse.closest('.cubby') : null;
+    let cubby = null;
+    if (elementUnderMouse) {
+      cubby = elementUnderMouse.closest('.cubby');
+    }
 
-    // If the hovered cubby changed, update the classes
+    // FALLBACK GEOMETRY SCAN: If elementFromPoint misses due to 3D matrix depth distortions
+    if (!cubby) {
+      const allCubbies = document.querySelectorAll('.cubby');
+      for (let c of allCubbies) {
+        const rect = c.getBoundingClientRect();
+        if (
+          mouseX >= rect.left &&
+          mouseX <= rect.right &&
+          mouseY >= rect.top &&
+          mouseY <= rect.bottom
+        ) {
+          cubby = c;
+          break;
+        }
+      }
+    }
+
+    // Update layout classes cleanly
     if (cubby !== currentHoveredCubby) {
-      // Remove hover class from the previous cubby
       if (currentHoveredCubby) {
         currentHoveredCubby.classList.remove('hovered');
       }
 
-      // Add hover class to the new cubby
       if (cubby) {
         cubby.classList.add('hovered');
       }
@@ -200,7 +220,24 @@ canvas.addEventListener('mousedown', (e) => {
   const clickedElement = document.elementFromPoint(e.clientX, e.clientY);
   canvas.style.pointerEvents = 'auto';
 
-  const cubby = clickedElement.closest('.cubby');
+  // Safely look up the tree even if they click structural decoration fragments
+  let cubby = clickedElement ? clickedElement.closest('.cubby') : null;
+  if (!cubby) {
+    const allCubbies = document.querySelectorAll('.cubby');
+    for (let c of allCubbies) {
+      const rect = c.getBoundingClientRect();
+      if (
+        e.clientX >= rect.left &&
+        e.clientX <= rect.right &&
+        e.clientY >= rect.top &&
+        e.clientY <= rect.bottom
+      ) {
+        cubby = c;
+        break;
+      }
+    }
+  }
+
   if (cubby) {
     const index = parseInt(cubby.dataset.index, 10);
 
@@ -250,13 +287,14 @@ canvas.addEventListener('touchend', () => lastPoint = null);
 
 function openProjectOverlay(index, pushToHistory = true) {
   const data = cubbyData[index] || { title: `Project ${index + 1}`, description: "Details about this project...", image: "" };
-
   const cubby = document.querySelector(`.cubby[data-index="${index}"]`);
   const contentDiv = cubby ? cubby.querySelector('.content') : null;
 
-  document.querySelectorAll('.content').forEach(el => {
+  // Clean slate any unexpected view transition remnants
+  document.querySelectorAll('.content, #eight-ball-overlay').forEach(el => {
     el.style.viewTransitionName = '';
   });
+
 
   if (contentDiv) {
     contentDiv.style.viewTransitionName = 'proj-expand';
@@ -276,7 +314,7 @@ function openProjectOverlay(index, pushToHistory = true) {
     if (projInfo) projInfo.innerHTML = `<p class="proj-artist">${data.artist}</p>
             <p class="proj-medium-year">${data.medium}, ${data.year}</p>`;
     if (data.worklink && modalBody) {
-modalBody.innerHTML = `
+      modalBody.innerHTML = `
         <a class="work-link" target="_blank" href="${data.worklink}"><div class="link-container proj-expand" style="background-image: url('${data.image}"><span class="highlight">Click to visit the work</span><br><span class="link-note">Opens in new tab</span>
         </div></a>
         <div class="modal-desc">
@@ -290,8 +328,8 @@ modalBody.innerHTML = `
         <div id="socials"></div>
       `;
     }
-    if (data.slug === "i-thought-it-would-be-funny" && modalBody) {
-modalBody.innerHTML = `
+    else if (data.slug === "i-thought-it-would-be-funny" && modalBody) {
+      modalBody.innerHTML = `
         <img src="/images/ithought.gif">
         <img src="/images/ithought2.gif">
         <img src="/images/ithought3.gif">
@@ -334,29 +372,28 @@ modalBody.innerHTML = `
     }
 
     if (overlay) overlay.classList.add('active');
-
-    // Lock the background scroll
     document.body.classList.add('no-scroll');
   };
 
-  if (document.visibilityState === 'visible' && document.startViewTransition) {
-    document.startViewTransition(updateDOM);
+  if (document.visibilityState === 'visible' && document.startViewTransition && !document.activeTransition) {
+    const transition = document.startViewTransition(updateDOM);
+    transition.finished.then(() => {
+      if (contentDiv) contentDiv.style.viewTransitionName = '';
+    });
   } else {
     updateDOM();
   }
 
   if (pushToHistory) {
-    history.pushState({ projectIndex: index }, "", `?${data.slug}`);
+    history.pushState(null, "", window.location.search ? window.location.pathname : window.location.pathname);
   }
 }
 
 function closeProjectOverlay(pushToHistory = true) {
-  // Grab the entire query string after the '?' (e.g., "virtual-discussion")
   const projectParam = window.location.search.substring(1);
   let contentDiv = null;
 
   if (projectParam) {
-    // Find index by matching the slug directly
     const index = cubbyData.findIndex(item => item.slug === projectParam);
     if (index !== -1) {
       const cubby = document.querySelector(`.cubby[data-index="${index}"]`);
@@ -364,28 +401,36 @@ function closeProjectOverlay(pushToHistory = true) {
     }
   }
 
+  // Strip transition classes from the modal elements BEFORE capturing state
+  document.querySelectorAll('.proj-expand').forEach(el => el.classList.remove('proj-expand'));
   document.querySelectorAll('.content').forEach(el => el.style.viewTransitionName = '');
+
+  if (contentDiv) {
+    contentDiv.style.viewTransitionName = 'proj-expand';
+  }
 
   const updateDOM = () => {
     const overlay = document.getElementById('overlay');
     if (overlay) overlay.classList.remove('active');
-
-    if (contentDiv) {
-      contentDiv.style.viewTransitionName = 'proj-expand';
-    }
-
-    // Unlock the background scroll
     document.body.classList.remove('no-scroll');
   };
 
   if (document.visibilityState === 'visible' && document.startViewTransition) {
     const transition = document.startViewTransition(updateDOM);
 
-    transition.finished.then(() => {
-      if (contentDiv) contentDiv.style.viewTransitionName = '';
-      const modalBody = document.getElementById('modal-body');
-      if (modalBody) modalBody.innerHTML = '';
-    });
+    // FIX: Catch the rejection on the 'finished' promise to suppress the error,
+    // then run the cleanup logic regardless of whether it finished or skipped.
+    transition.finished
+      .catch(() => {
+        // Silently catch the DOMException if the transition is skipped
+      })
+      .finally(() => {
+        // Cleanup always runs
+        if (contentDiv) contentDiv.style.viewTransitionName = '';
+        const modalBody = document.getElementById('modal-body');
+        if (modalBody) modalBody.innerHTML = '';
+      });
+
   } else {
     updateDOM();
   }
@@ -395,16 +440,44 @@ function closeProjectOverlay(pushToHistory = true) {
   }
 }
 
-window.addEventListener('DOMContentLoaded', () => {
-  // Grab the slug directly from the query string
-  const projectParam = window.location.search.substring(1);
+function handleGlobalAppRouting(pushToHistory = false) {
+  const queryParam = window.location.search.substring(1);
 
-  if (projectParam) {
-    const index = cubbyData.findIndex(item => item.slug === projectParam);
-    if (index >= 0 && index < 15) {
-      setTimeout(() => openProjectOverlay(index, false), 150);
+  // Wrap the state switches inside a view transition frame block
+  const updateDOM = () => {
+    if (eBallOverlay) eBallOverlay.classList.add('hidden');
+    document.documentElement.classList.remove('no-scroll');
+
+    if (queryParam === "random") {
+      if (eBallOverlay) {
+        eBallOverlay.style.viewTransitionName = 'oracle-expand';
+        eBallOverlay.classList.remove('hidden');
+      }
+      openEightBallOracle(pushToHistory);
+    } else if (queryParam) {
+      const index = cubbyData.findIndex(item => item.slug === queryParam);
+      if (index >= 0 && index < 15) {
+        openProjectOverlay(index, pushToHistory);
+      } else {
+        closeProjectOverlay(pushToHistory);
+      }
+    } else {
+      closeProjectOverlay(pushToHistory);
     }
+  };
+
+  if (document.visibilityState === 'visible' && document.startViewTransition && !document.activeTransition) {
+    const transition = document.startViewTransition(updateDOM);
+    transition.finished.then(() => {
+      if (eBallOverlay) eBallOverlay.style.viewTransitionName = '';
+    });
+  } else {
+    updateDOM();
   }
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  setTimeout(() => handleGlobalAppRouting(false), 150);
 
   const closeBtn = document.getElementById('close-btn');
   if (closeBtn) {
@@ -414,13 +487,8 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-// Sync Overlay states with browser Back and Forward navigation buttons
 window.addEventListener('popstate', (event) => {
-  if (event.state && event.state.projectIndex !== undefined) {
-    openProjectOverlay(event.state.projectIndex, false);
-  } else {
-    closeProjectOverlay(false);
-  }
+  handleGlobalAppRouting(false);
 });
 
 // --- CURATORIAL HOVER, CLICK, & DRAG INTERACTION ENGINE ---
@@ -434,15 +502,15 @@ let deltaX = 0;
 
 window.addEventListener('mousemove', (e) => {
   if (!curatorialPanel || isDragging || curatorialPanel.classList.contains('open')) return;
-  
+
   if (projectOverlay && projectOverlay.classList.contains('active')) {
     curatorialPanel.classList.remove('peek', 'open');
     return;
   }
 
   const screenWidth = window.innerWidth;
-  const triggerZone = screenWidth * 0.80; 
-  const peekEdge = triggerZone;     
+  const triggerZone = screenWidth * 0.80;
+  const peekEdge = triggerZone;
 
   if (!curatorialPanel.classList.contains('peek')) {
     if (e.clientX > triggerZone) {
@@ -456,7 +524,7 @@ window.addEventListener('mousemove', (e) => {
 });
 
 if (curatorialPanel) {
-  
+
   curatorialPanel.addEventListener('pointerdown', (e) => {
     if (!curatorialPanel.classList.contains('peek')) return;
     if (e.target.closest('#curatorial-close-btn')) return;
@@ -469,7 +537,7 @@ if (curatorialPanel) {
     currentTransformX = screenWidth - 50;
 
     curatorialPanel.classList.add('dragging');
-    curatorialPanel.setPointerCapture(e.pointerId); 
+    curatorialPanel.setPointerCapture(e.pointerId);
   });
 
   curatorialPanel.addEventListener('pointermove', (e) => {
@@ -488,10 +556,10 @@ if (curatorialPanel) {
   curatorialPanel.addEventListener('pointerup', (e) => {
     if (!isDragging) return;
     isDragging = false;
-    
+
     curatorialPanel.classList.remove('dragging');
     curatorialPanel.releasePointerCapture(e.pointerId);
-    
+
     curatorialPanel.style.transform = '';
 
     const screenWidth = window.innerWidth;
@@ -521,13 +589,14 @@ if (curatorialPanel) {
 
 if (curatorialCloseBtn) {
   curatorialCloseBtn.addEventListener('click', (e) => {
-    e.stopPropagation(); 
+    e.stopPropagation();
     curatorialPanel.classList.remove('open', 'peek');
     document.documentElement.classList.remove('no-scroll');
   });
 }
 
 // --- MAGIC 8-BALL OVERLAY ROUTING & SELECTION ENGINE ---
+// --- UPDATED MAGIC 8-BALL OVERLAY ROUTING & SELECTION ENGINE ---
 const eBallOverlay = document.getElementById('eight-ball-overlay');
 const eBallClose = document.getElementById('eight-ball-close');
 const interactiveBall = document.getElementById('overlay-eight-ball');
@@ -535,7 +604,9 @@ const oracleAnswer = document.getElementById('oracle-answer');
 
 let isOracleShaking = false;
 
-function openEightBallOracle() {
+
+
+function openEightBallOracle(pushToHistory = true) {
   if (!eBallOverlay) return;
   
   if (oracleAnswer) {
@@ -544,25 +615,70 @@ function openEightBallOracle() {
     oracleAnswer.style.transform = 'scale(1)';
   }
   
-  eBallOverlay.classList.remove('hidden');
-  document.documentElement.classList.add('no-scroll'); 
+  // Dynamically apply transition name to the specific cubby
+  const eBallCubbyContent = document.querySelector('.cubby[data-index="15"] .content');
+  if (eBallCubbyContent) eBallCubbyContent.style.viewTransitionName = 'oracle-expand';
+
+  const updateDOM = () => {
+    eBallOverlay.style.viewTransitionName = 'oracle-expand';
+    eBallOverlay.classList.remove('hidden');
+    document.documentElement.classList.add('no-scroll'); 
+  };
+
+  if (document.visibilityState === 'visible' && document.startViewTransition) {
+    const transition = document.startViewTransition(updateDOM);
+    
+    // FIX: Catch the internal promise
+    transition.finished
+      .catch(() => {
+         // Silently catch the DOMException
+      })
+      .finally(() => {
+        // Clean up the tags so they don't cause duplicate errors later
+        eBallOverlay.style.viewTransitionName = '';
+        if (eBallCubbyContent) eBallCubbyContent.style.viewTransitionName = '';
+      });
+      
+  } else {
+    updateDOM();
+  }
+
+  if (pushToHistory) {
+    history.pushState({ systemState: 'random' }, "", "?random");
+  }
 }
 
+// Update the close handler to also utilize the smooth view transition morph engine
 if (eBallClose) {
   eBallClose.addEventListener('click', () => {
-    if (isOracleShaking) return; 
-    eBallOverlay.classList.add('hidden');
-    document.documentElement.classList.remove('no-scroll'); 
+    if (isOracleShaking) return;
+
+    const updateDOM = () => {
+      eBallOverlay.style.viewTransitionName = 'oracle-expand';
+      eBallOverlay.classList.add('hidden');
+      document.documentElement.classList.remove('no-scroll');
+    };
+
+    if (document.visibilityState === 'visible' && document.startViewTransition) {
+      const transition = document.startViewTransition(updateDOM);
+      transition.finished.then(() => {
+        eBallOverlay.style.viewTransitionName = '';
+        history.pushState(null, "", window.location.pathname);
+      });
+    } else {
+      updateDOM();
+      history.pushState(null, "", window.location.pathname);
+    }
   });
 }
 
 if (interactiveBall) {
   interactiveBall.addEventListener('click', () => {
     if (isOracleShaking) return;
-    
+
     isOracleShaking = true;
     interactiveBall.classList.add('shaking');
-    
+
     if (oracleAnswer) {
       oracleAnswer.style.opacity = '0';
       oracleAnswer.style.transform = 'scale(0.7)';
@@ -572,8 +688,8 @@ if (interactiveBall) {
       interactiveBall.classList.remove('shaking');
 
       // Map real matching elements inside your global list data array
-      const validProjects = cubbyData.filter(project => project.link !== "magic-8-ball.html");
-      
+      const validProjects = cubbyData.filter(project => project.slug !== "random" && project.slug !== "curatorial-statement");
+      console.log(validProjects);
       if (validProjects.length === 0) {
         if (oracleAnswer) oracleAnswer.innerHTML = "ERROR:<br>NO PROJ";
         isOracleShaking = false;
@@ -583,10 +699,10 @@ if (interactiveBall) {
       // Roll indices and pull out selection properties
       const randomIndex = Math.floor(Math.random() * validProjects.length);
       const chosenProject = validProjects[randomIndex];
-      
+
       // Map original array location index matching our selection to trigger smooth modal expanding
       const originalProjectIndex = cubbyData.findIndex(item => item.title === chosenProject.title);
-      
+
       if (oracleAnswer) {
         oracleAnswer.innerHTML = chosenProject.title;
         oracleAnswer.style.opacity = '1';
@@ -596,11 +712,11 @@ if (interactiveBall) {
       // Wait 2 seconds, drop the curtains, and trigger the chosen modal dynamically
       setTimeout(() => {
         isOracleShaking = false;
-        
+
         // Hide the 8-Ball overlay container layer 
         if (eBallOverlay) eBallOverlay.classList.add('hidden');
         document.documentElement.classList.remove('no-scroll');
-        
+
         // FIX: Fire openProjectOverlay matching our dataset instead of doing a destructive window reload
         if (originalProjectIndex !== -1) {
           openProjectOverlay(originalProjectIndex, true);

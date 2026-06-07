@@ -83,11 +83,17 @@
   --track-size: calc(var(--cube-size) - var(--rim-thickness));
 
   --shelf-base: #bbb4ae;
-  --shelf-back: #f3efe6;
-  --shelf-floor: #dfdbd3;
-  --shelf-wall-left: #faf7e8;
-  --shelf-wall-right: #ebe6dc;
+  --shelf-back: #9e9b94;
+  --shelf-floor: #5f5c57;
+  --shelf-wall-left: #d9d6c6;
+  --shelf-wall-right: #d2ccc0;
   --rim-color: #fffdf5;
+  --shelf-base: #292726;
+  --shelf-back: #1b1b1b;
+  --shelf-floor: #090908;
+  --shelf-wall-left: #4d4c47;
+  --shelf-wall-right: #3a3937;
+  --rim-color: #757471;
   --border-color: rgba(0, 0, 0, 0);
   --proj-image: url('/images/placeholder.jpg');
 
@@ -110,7 +116,7 @@ html {
   width: 100%;
   display: flex;
   justify-content: center;
-  background-color: #000000;
+  background-color: #c9c8c8;
   perspective: calc(var(--cube-size) * 12);
   overflow-x: hidden;
   overflow-y: auto;
@@ -163,7 +169,7 @@ nav ul li::marker {
 }
 
 nav a,
-#close-btn, #curatorial-close-btn {
+.close-btn {
   text-transform: uppercase;
   font-weight: bold;
   text-decoration: none;
@@ -218,7 +224,7 @@ body.modal-open {
 }
 
 .modal {
-  background: var(--shelf-back);
+  background: white;
   padding: 1em;
   width: 100%;
   position: relative;
@@ -240,7 +246,6 @@ body.modal-open {
   /* Space for scrollbar */
   overscroll-behavior: contain;
   /* Prevents "scroll chaining" to background */
-  margin-bottom: 2em;
   display: flex;
   flex-direction: column;
   gap: 2em;
@@ -308,7 +313,7 @@ body.modal-open {
   margin-right: 0.5em;
 }
 
-#close-btn, #curatorial-close-btn {
+.close-btn {
   background: none;
   border: none;
   cursor: pointer;
@@ -317,7 +322,7 @@ body.modal-open {
   padding: 0;
 }
 
-#close-btn:before, #curatorial-close-btn:before {
+.close-btn:before {
   content: '⇜';
   font-weight: bold;
   font-size: 2em;
@@ -360,6 +365,8 @@ body.modal-open {
   width: var(--cube-size);
   height: var(--cube-size);
   transform-style: preserve-3d;
+  background: rgba(0, 0, 0, 0.01);
+  pointer-events: auto !important;
 }
 
 /* Ensure users can see which cubby they've tabbed to */
@@ -497,6 +504,7 @@ a.cubby:focus-visible {
   background: rgb(0, 0, 0);
   background-image: var(--proj-image);
   background-size: cover;
+  background-position: center;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   font-size: calc(var(--cube-size) * 0.084);
   text-transform: uppercase;
@@ -520,21 +528,51 @@ a.cubby:focus-visible {
   width: 100vw;
   height: 100vh;
   background: rgba(8, 8, 8, 0.97);
+  background-image: url("images/p.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
-  z-index: 2000; /* High index to cover everything including the shelf canvas */
+  z-index: 2000;
+  /* High index to cover everything including the shelf canvas */
   display: flex;
   justify-content: center;
   align-items: center;
-  opacity: 1;
-  transition: opacity 0.3s ease;
-}
 
+}
+/* Assign a distinct identifier target to the 8-ball cubby slot */
+.cubby[data-index="15"] .content {
+  view-transition-name: oracle-expand;
+}
+#eight-ball-overlay:not(.hidden) {
+  view-transition-name: oracle-expand;
+}
 #eight-ball-overlay.hidden {
-  display: none;
-  opacity: 0;
+  display: none !important;
 }
 
+/* Customize the crossfade timeline speeds */
+::view-transition-old(oracle-expand) {
+  animation: fade-out 0.25s ease forwards;
+}
+
+::view-transition-new(oracle-expand) {
+  animation: scale-up-fade 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+@keyframes scale-up-fade {
+  from {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@keyframes fade-out {
+  to { opacity: 0; }
+}
 .eight-ball-container {
   text-align: center;
   color: #ffffff;
@@ -559,7 +597,7 @@ a.cubby:focus-visible {
   height: 320px;
   background: radial-gradient(circle at 30% 30%, #3a3a3a 0%, #080808 70%, #000000 100%);
   border-radius: 50%;
-  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8), inset -10px -10px 30px rgba(0,0,0,0.6);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8), inset -10px -10px 30px rgba(0, 0, 0, 0.6);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -583,7 +621,7 @@ a.cubby:focus-visible {
   display: flex;
   justify-content: center;
   align-items: center;
-  box-shadow: inset 0 5px 15px rgba(0,0,0,0.9);
+  box-shadow: inset 0 5px 15px rgba(0, 0, 0, 0.9);
 }
 
 /* The Floating Glowing Prediction Text Element */
@@ -610,13 +648,11 @@ a.cubby:focus-visible {
   position: absolute;
   top: 40px;
   right: 50px;
-  background: none;
-  border: none;
-  color: #ffffff;
-  font-size: 3rem;
-  cursor: pointer;
-  opacity: 0.5;
-  transition: opacity 0.2s;
+  color: white;
+}
+
+#eight-ball-close:before {
+  color: white;
 }
 
 #eight-ball-close:hover {
@@ -629,11 +665,25 @@ a.cubby:focus-visible {
 }
 
 @keyframes shakeBall {
-  0% { transform: translate(4px, 4px) rotate(3deg); }
-  25% { transform: translate(-4px, -2px) rotate(-4deg); }
-  50% { transform: translate(3px, -3px) rotate(5deg); }
-  75% { transform: translate(-3px, 3px) rotate(-2deg); }
-  100% { transform: translate(2px, -1px) rotate(3deg); }
+  0% {
+    transform: translate(4px, 4px) rotate(3deg);
+  }
+
+  25% {
+    transform: translate(-4px, -2px) rotate(-4deg);
+  }
+
+  50% {
+    transform: translate(3px, -3px) rotate(5deg);
+  }
+
+  75% {
+    transform: translate(-3px, 3px) rotate(-2deg);
+  }
+
+  100% {
+    transform: translate(2px, -1px) rotate(3deg);
+  }
 }
 
 .magic-8-ball {
@@ -649,7 +699,6 @@ a.cubby:focus-visible {
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
   transition: transform 0.2s ease;
   animation: float 3s ease-in-out infinite;
-  pointer-events: none;
 }
 
 .magic-8-ball:active {
@@ -668,7 +717,6 @@ a.cubby:focus-visible {
   align-items: center;
   text-align: center;
   color: #55aaff;
-  font-family: 'Georgia', serif;
   font-size: 0.4em;
   /* Relative to cubby size */
   padding: 5px;
@@ -696,6 +744,25 @@ a.cubby:focus-visible {
   }
 }
 
+/* Force the model viewer container to occupy full volumetric space */
+#shelf-eight-ball {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+#eight-ball-heading {
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  font-size: 3em;
+}
+.bottom-text {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
 /* Page transition for project */
 .proj-expand {
   view-transition-name: proj-expand;
@@ -717,7 +784,7 @@ a.cubby:focus-visible {
 }
 
 .vid-container {
-  view-transition-name: proj-expand;
+  /*view-transition-name: proj-expand;*/
   display: flex;
   position: relative;
   justify-content: center;
@@ -751,28 +818,28 @@ a.cubby:focus-visible {
 }
 
 
-  .highlight {
-    background: var(--yellow);
-    padding: 0.5em 1em;
-    font-size: 1.5em;
-    font-weight: bold;
-  }
+.highlight {
+  background: var(--yellow);
+  padding: 0.5em 1em;
+  font-size: 1.5em;
+  font-weight: bold;
+}
 
-  .link-note {
-    background: var(--yellow);
-    padding: 0.5em 1em;
-    margin-top: 1em;
-  }
+.link-note {
+  background: var(--yellow);
+  padding: 0.5em 1em;
+  margin-top: 1em;
+}
 
-  a.work-link {
-    text-decoration: none;
-  }
+a.work-link {
+  text-decoration: none;
+}
 
-  .link-container:hover {
-    opacity: 1;
-  }
+.link-container:hover {
+  opacity: 1;
+}
 
-  @media (min-width: 600px) {
+@media (min-width: 600px) {
   .link-container {
     width: 70%;
   }
@@ -783,29 +850,30 @@ a.cubby:focus-visible {
 #curatorial-panel {
   position: fixed;
   top: 0;
-  right: 0;
-  width: 100vw;         
+  right: 1em;
+  width: 100vw;
   height: 100vh;
-  background: var(--shelf-back);
-  transform: translateX(100%); 
+  background-color: #000;
+  color: white;
+  transform: translateX(99%);
   transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-  z-index: 1500;
+  z-index: 10;
   display: flex;
 }
 
 #curatorial-panel.peek {
-  background: var(--gold);
-  transform: translateX(calc(85%));
-  cursor: pointer;
+  background: var(--blue);
+  transform: translateX(calc(90%));
+  cursor: grab;
 }
 
 #curatorial-panel.open {
-  transform: translateX(0);
+  transform: translateX(3em);
   cursor: default;
 }
 
 .curatorial-peek-handle {
-  width: 15%;
+  width: 2%;
   height: 100%;
   display: flex;
   align-items: center;
@@ -820,7 +888,8 @@ a.cubby:focus-visible {
 }
 
 #curatorial-panel.peek:hover {
-  background-color: var(--blue);
+  background-color: white;
+  color: var(--blue);
 }
 
 /* Smoothly collapse the vertical handle strip once fully opened */
@@ -834,7 +903,8 @@ a.cubby:focus-visible {
 .curatorial-content {
   flex: 1;
   padding: 80px 10%;
-  overflow-y: auto;    /* Allows the statement to scroll if reading on mobile */
+  overflow-y: auto;
+  /* Allows the statement to scroll if reading on mobile */
   position: relative;
   box-sizing: border-box;
 }
@@ -854,7 +924,8 @@ a.cubby:focus-visible {
 
 /* Changes cursor to a grab hand when hovering over the peek strip */
 .curatorial-peek-handle {
-  touch-action: none; /* Prevents mobile browsers from triggering history-swiping gestures */
+  touch-action: none;
+  /* Prevents mobile browsers from triggering history-swiping gestures */
   cursor: grab;
 }
 

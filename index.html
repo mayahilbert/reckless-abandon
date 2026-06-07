@@ -6,13 +6,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Reckless Abandon</title>
   <link href="styles.css" rel="stylesheet">
+  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script>
 </head>
 
 <body>
   <nav>
     <ul>
       <li><a href="https://newmediartspace.info">New Media Artspace</a></li>
-      <li><a href="curatorial-statement.html">Curatorial Statement</a></li>
     </ul>
   </nav>
   <canvas id="erase-canvas" aria-hidden="true" role="presentation">
@@ -27,42 +27,35 @@
 
     <div class="modal">
       <div>
-        <button id="close-btn" aria-label="Close modal">Reckless Abandon</button>
+        <button id="close-btn" class="close-btn" aria-label="Close modal">Reckless Abandon</button>
         <h2 id="modal-title">Project Title</h2>
         <div id="proj-info"></div>
       </div>
       <div id="modal-body"></div>
     </div>
   </div>
-<div id="curatorial-panel" role="complementary" aria-label="Curatorial Statement">
+<div id="curatorial-panel" role="complementary" aria-modal="true" aria-label="Curatorial Statement">
     
     <div class="curatorial-peek-handle">
       <span>CURATORIAL STATEMENT</span>
     </div>
 
     <div class="curatorial-content">
-      <button id="curatorial-close-btn" aria-label="Close panel">Reckless Abandon</button>
+      <button id="curatorial-close-btn" class="close-btn" aria-label="Close panel">Reckless Abandon</button>
       
       <h2>Curatorial Statement</h2>
       <p>
-        Welcome to <strong>Reckless Abandon</strong>. This interactive space explores 
-        the boundaries of digital curation, physical frameworks, and discovery. 
-        By scratching away the top frosted glass texture, you uncover hidden portals 
-        arranged on a dimensional grid shelf.
+        Text
       </p>
-      <p>
-        Each element represents a window into alternative creative dimensions, 
-        encouraging open exploration, random interactivity via the future-telling 
-        mechanisms, and seamless fluid visual architecture.
-      </p>
+      <h3>Credits</h3>
+      <p>8 Ball Model: <a href="https://skfb.ly/6qvFO">8ball</a> by jtherussian is licensed under <a href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution</a>.</p>
     </div>
   </div>
-  <div id="eight-ball-overlay" class="hidden" role="dialog" aria-modal="true" aria-labelledby="eight-ball-heading">
-    <button id="eight-ball-close" aria-label="Close selector">&times;</button>
+  <div id="eight-ball-overlay" class="hidden" role="complementary" aria-modal="true" aria-labelledby="eight-ball-heading">
+    <button id="eight-ball-close" class="close-btn" aria-label="Close selector">Reckless Abandon</button>
     
     <div class="eight-ball-container">
-      <h2 id="eight-ball-heading">Consult the Oracle...</h2>
-      <p class="eight-ball-sub">Click the 8-Ball to summon a random project dimension.</p>
+      <h2 id="eight-ball-heading">Shake with <span class="bottom-text">Reckless Abandon</span></h2>
       
       <div id="overlay-eight-ball" class="oracle-sphere">
         <div class="oracle-window">
