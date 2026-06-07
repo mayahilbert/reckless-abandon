@@ -27,7 +27,6 @@ const cubbyData = [
   { slug: "desire-paths-for-wikipedia", worklink: "https://greasyfork.org/en/scripts/565058-desire-paths-for-wikipedia", image: "/images/key/JPEG/pipkin.jpg", title: "Desire Paths for Wikipedia", artist: "Everest Pipkin", medium: "Browser extension userscript", year: "2026", description: "<p><em>Desire Paths for Wikipedia</em> is a browser userscript that remembers the path of a cursor over the linked pages of Wikipedia.org. It averages these paths and “wears” them into the page, showing your browsing history over time. Return to a page months or years later and find not just that you had been there before, but exactly how you wandered.</p><p>With thanks to Kate Compton and Christina Cuneo, with whom this idea emerged in conversation.</p>", bio: "<p>Everest Pipkin is a game developer, artist, and educator who works in games and software tools across the handmade web—as well as on paper through books, zines and drawings. They have shown and spoken at The Design Museum of London, The Texas Biennial, The XXI Triennale of Milan, The Photographers Gallery of London, Center for Land Use Interpretation, and currently teach game design at the Pratt Institute. They believe the internet is a public good, and the post office should operate it.</p>", ig: "https://www.instagram.com/everestpipkin/", website: "https://everest-pipkin.com/" },
   { slug: "www-blairs-computer", worklink: "https://www.blairs.computer", image: "/images/key/JPEG/simmons.jpg", title: "www.blairs.computer", artist: "Blair Simmons", medium: "Website", year: "2025", description: "<p>So I have decided I want my computer to forget, to delete, like I do. I want to move on. In this series of work, I utilize my personal digital archive to explore the relationship between my human and digital memories –  digital memory as a prosthetic extension of my human memory. www.blairs.computer is a website that asks visitors of the site to take and hold onto my files, so that I can delete them from my drive. <a href=\"https://www.blairsimmons.com/portraits\">Archive of Digital Portraits Cast in Concrete</a> is an ongoing series of sculptures made of discarded personal computing devices from myself and people in my life. These sculptures are cast in concrete, making the data permanently inaccessible.</p>", bio: "<p>I am a queer and anxious artist, curator, researcher, storyteller, and technician working in as many mediums as will have me. I enjoy exploring themes of technology, labor, bodies, and pain. My physical process of making mimics the daily pain of working and labor: warping, distorting, grinding and wearing down. My pieces are both critical of and dependent on technology, mirroring the ways technology can be a solution to my chronic pain, and the source of the pain itself.</p><p>I am currently teaching at the Interactive Media Arts and Interactive Telecommunications Program at New York University. My research often materializes as objects and performances which have been performed at the likes of Pioneer Works, La Mama’s CultureHub, Wordhack at Babycastles, theBlanc and the Edinburgh Fringe Festival. I have been mentioned in publications like PARtake, The Scotsman, USA Today, The Guardian, NYTimes, etc.</p>", website: "https://www.blairsimmons.com" },
   { slug: "photo-news", vimeo: "https://player.vimeo.com/video/967244235?h=8d82c6d042", image: "/images/key/JPEG/zellen.jpg", title: "Photo News", artist: "Jody Zellen", medium: "Video", year: "2019-2026", description: "<p><em>Photo News</em>, January 1, 2019 – present, is an ongoing project consisting of daily Instagram posts of digital collages that combine news images from lead stories, juxtaposed with excerpts from the headline that accompanies each chosen photograph. This ever changing but always familiar cacophony of headlines and images gives voice to the uniquely fragmented realities we now inhabit. The project can be viewed daily on <a href=\"www.instagram.com/photonews5\">Instagram</a>. At the end of each year, Zellen compiles a film containing that years collages. She has completed a composite film that presents the first six years of the project.</p>", bio: "<p>Jody Zellen is a Los Angeles based artist who works in many media simultaneously. She makes animations, interactive installations, app art, net art, drawings, paintings, photographs, public art, and artists' books. She constantly thinks about ways to use new technologies and to integrate interactivity into her artworks.</p><p>Zellen received a BA from Wesleyan University (1983), a MFA from CalArts (1989) and a MPS from NYU's Interactive Telecommunications Program (2009). </p><p>Her work has been included in more than 500 group exhibitions and festivals since the late 1980s and is in the collections of the Los Angeles County Museum of Art, The Whitney Museum of Art, The Getty Museum, The Museum of Modern Art, New York, The San Francisco Museum of Art, The Laguna Art Museum, The Orange County Museum of Art as well as in numerous private collections.</p>", ig: "https://instagram.com/photonews5", website: "https://www.jodyzellen.com" },
-  { slug: "random", image: "/images/blue.png" },
   { slug: "random" }
 ];
 
@@ -54,6 +53,8 @@ for (let i = 0; i < 16; i++) {
 >
 </model-viewer>
       </div>`;
+  } else if (i === 14) {
+    cubby.innerHTML = contentHtml;
   } else {
     cubby.innerHTML = contentHtml + `<div class="content"></div>`;
   }
@@ -243,6 +244,8 @@ canvas.addEventListener('mousedown', (e) => {
 
     if (index === 15) {
       openEightBallOracle();
+    } else if (index === 14) {
+      return;
     } else {
       openProjectOverlay(index);
     }
@@ -461,8 +464,6 @@ function handleGlobalAppRouting(pushToHistory = false) {
       } else {
         closeProjectOverlay(pushToHistory);
       }
-    } else {
-      closeProjectOverlay(pushToHistory);
     }
   };
 
@@ -498,7 +499,8 @@ const projectOverlay = document.getElementById('overlay');
 
 let isDragging = false;
 let currentTransformX = 0;
-let deltaX = 0;
+let startYc = 0, startXc = 0;
+let deltaY = 0, deltaX = 0;
 
 window.addEventListener('mousemove', (e) => {
   if (!curatorialPanel || isDragging || curatorialPanel.classList.contains('open')) return;
@@ -523,58 +525,79 @@ window.addEventListener('mousemove', (e) => {
   }
 });
 
-if (curatorialPanel) {
 
+if (curatorialPanel) {
   curatorialPanel.addEventListener('pointerdown', (e) => {
     if (!curatorialPanel.classList.contains('peek')) return;
     if (e.target.closest('#curatorial-close-btn')) return;
 
     isDragging = true;
-    startX = e.clientX;
+    startXc = e.clientX;
+    startYc = e.clientY;
     deltaX = 0;
-
-    const screenWidth = window.innerWidth;
-    currentTransformX = screenWidth - 50;
+    deltaY = 0;
 
     curatorialPanel.classList.add('dragging');
     curatorialPanel.setPointerCapture(e.pointerId);
+    
+    // CRITICAL: Disable CSS transitions while dragging so it sticks to the finger
+    curatorialPanel.style.transition = 'none'; 
   });
 
   curatorialPanel.addEventListener('pointermove', (e) => {
     if (!isDragging) return;
 
-    deltaX = e.clientX - startX;
-    let newX = currentTransformX + deltaX;
+    const isMobile = window.innerWidth <= 768;
 
-    const screenWidth = window.innerWidth;
-    if (newX < 0) newX = 0;
-    if (newX > screenWidth - 50) newX = screenWidth - 50;
-
-    curatorialPanel.style.transform = `translateX(${newX}px)`;
+    if (isMobile) {
+      // Mobile: Vertical drag (Y-axis)
+      deltaY = e.clientY - startYc;
+      
+      let dragOffset = deltaY;
+      if (dragOffset > 0) dragOffset = 0; // Prevent dragging downwards past the peek state
+      
+      // Calculate inline transform from the peek position (100% - 50px)
+      curatorialPanel.style.transform = `translateY(calc(100% - 50px + ${dragOffset}px))`;
+    } else {
+      // Desktop: Horizontal drag (X-axis)
+      deltaX = e.clientX - startXc;
+      
+      let dragOffset = deltaX;
+      if (dragOffset > 0) dragOffset = 0; // Prevent dragging rightwards past peek
+      
+      // Desktop peek offset (assuming 40px width handle, adjust if your CSS differs)
+      curatorialPanel.style.transform = `translateX(calc(100% - 40px + ${dragOffset}px))`;
+    }
   });
 
   curatorialPanel.addEventListener('pointerup', (e) => {
     if (!isDragging) return;
     isDragging = false;
-
+    
     curatorialPanel.classList.remove('dragging');
     curatorialPanel.releasePointerCapture(e.pointerId);
+    
+    // Restore CSS transitions and clear inline styles to let CSS handle the snap
+    curatorialPanel.style.transition = ''; 
+    curatorialPanel.style.transform = ''; 
 
-    curatorialPanel.style.transform = '';
+    const isMobile = window.innerWidth <= 768;
+    const dragThreshold = isMobile ? -60 : -100; // Pixels needed to trigger open
 
-    const screenWidth = window.innerWidth;
-    const openThreshold = screenWidth * 0.15;
-
-    if (Math.abs(deltaX) < 6) {
-      curatorialPanel.classList.remove('peek');
-      curatorialPanel.classList.add('open');
-      document.documentElement.classList.add('no-scroll');
-    } else if (deltaX < -openThreshold) {
-      curatorialPanel.classList.remove('peek');
-      curatorialPanel.classList.add('open');
-      document.documentElement.classList.add('no-scroll');
+    if (isMobile) {
+      // Mobile drop logic (checking negative Y)
+      if (deltaY < dragThreshold) {
+        curatorialPanel.classList.remove('peek');
+        curatorialPanel.classList.add('open');
+        document.documentElement.classList.add('no-scroll');
+      }
     } else {
-      curatorialPanel.classList.add('peek');
+      // Desktop drop logic (checking negative X)
+      if (deltaX < dragThreshold) {
+        curatorialPanel.classList.remove('peek');
+        curatorialPanel.classList.add('open');
+        document.documentElement.classList.add('no-scroll');
+      }
     }
   });
 
@@ -582,8 +605,9 @@ if (curatorialPanel) {
     if (!isDragging) return;
     isDragging = false;
     curatorialPanel.classList.remove('dragging');
+    curatorialPanel.releasePointerCapture(e.pointerId);
+    curatorialPanel.style.transition = '';
     curatorialPanel.style.transform = '';
-    curatorialPanel.classList.add('peek');
   });
 }
 
@@ -615,12 +639,17 @@ function openEightBallOracle(pushToHistory = true) {
     oracleAnswer.style.transform = 'scale(1)';
   }
   
-  // Dynamically apply transition name to the specific cubby
   const eBallCubbyContent = document.querySelector('.cubby[data-index="15"] .content');
+  
+  // 1. Give transition name to the Cubby (Old State)
   if (eBallCubbyContent) eBallCubbyContent.style.viewTransitionName = 'oracle-expand';
 
   const updateDOM = () => {
-    eBallOverlay.style.viewTransitionName = 'oracle-expand';
+    // 2. Remove transition name from the Cubby BEFORE capturing new state
+    if (eBallCubbyContent) eBallCubbyContent.style.viewTransitionName = '';
+    
+    // 3. Give transition name to the Overlay (New State)
+    interactiveBall.style.viewTransitionName = 'oracle-expand';
     eBallOverlay.classList.remove('hidden');
     document.documentElement.classList.add('no-scroll'); 
   };
@@ -628,19 +657,16 @@ function openEightBallOracle(pushToHistory = true) {
   if (document.visibilityState === 'visible' && document.startViewTransition) {
     const transition = document.startViewTransition(updateDOM);
     
-    // FIX: Catch the internal promise
     transition.finished
-      .catch(() => {
-         // Silently catch the DOMException
-      })
+      .catch(() => {}) // Suppress skipped transition errors
       .finally(() => {
-        // Clean up the tags so they don't cause duplicate errors later
-        eBallOverlay.style.viewTransitionName = '';
+        // 4. Clean up all tags when finished
+        interactiveBall.style.viewTransitionName = '';
         if (eBallCubbyContent) eBallCubbyContent.style.viewTransitionName = '';
       });
-      
   } else {
     updateDOM();
+    interactiveBall.style.viewTransitionName = '';
   }
 
   if (pushToHistory) {
@@ -651,22 +677,38 @@ function openEightBallOracle(pushToHistory = true) {
 // Update the close handler to also utilize the smooth view transition morph engine
 if (eBallClose) {
   eBallClose.addEventListener('click', () => {
-    if (isOracleShaking) return;
+    if (isOracleShaking) return; 
+
+    const eBallCubbyContent = document.querySelector('.cubby[data-index="15"] .content');
+
+    // 1. Old State: Give name to Overlay, explicitly strip from Cubby
+    eBallOverlay.style.viewTransitionName = 'oracle-expand';
+    if (eBallCubbyContent) eBallCubbyContent.style.viewTransitionName = 'none';
 
     const updateDOM = () => {
-      eBallOverlay.style.viewTransitionName = 'oracle-expand';
+      // 2. New State: Force-kill name on Overlay 
+      eBallOverlay.style.viewTransitionName = 'none';
+      
+      // Give name back to Cubby
+      if (eBallCubbyContent) eBallCubbyContent.style.viewTransitionName = 'oracle-expand';
+      
       eBallOverlay.classList.add('hidden');
-      document.documentElement.classList.remove('no-scroll');
+      document.documentElement.classList.remove('no-scroll'); 
     };
 
     if (document.visibilityState === 'visible' && document.startViewTransition) {
       const transition = document.startViewTransition(updateDOM);
-      transition.finished.then(() => {
-        eBallOverlay.style.viewTransitionName = '';
-        history.pushState(null, "", window.location.pathname);
-      });
+      
+      transition.finished
+        .catch(() => {})
+        .finally(() => {
+          // 3. Total Cleanup
+          if (eBallCubbyContent) eBallCubbyContent.style.viewTransitionName = 'none';
+          history.pushState(null, "", window.location.pathname);
+        });
     } else {
       updateDOM();
+      if (eBallCubbyContent) eBallCubbyContent.style.viewTransitionName = 'none';
       history.pushState(null, "", window.location.pathname);
     }
   });

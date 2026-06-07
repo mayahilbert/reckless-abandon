@@ -535,44 +535,15 @@ a.cubby:focus-visible {
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
   z-index: 2000;
-  /* High index to cover everything including the shelf canvas */
   display: flex;
   justify-content: center;
   align-items: center;
+}
 
-}
-/* Assign a distinct identifier target to the 8-ball cubby slot */
-.cubby[data-index="15"] .content {
-  view-transition-name: oracle-expand;
-}
-#eight-ball-overlay:not(.hidden) {
-  view-transition-name: oracle-expand;
-}
 #eight-ball-overlay.hidden {
   display: none !important;
 }
 
-/* Customize the crossfade timeline speeds */
-::view-transition-old(oracle-expand) {
-  animation: fade-out 0.25s ease forwards;
-}
-
-::view-transition-new(oracle-expand) {
-  animation: scale-up-fade 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-@keyframes scale-up-fade {
-  from {
-    opacity: 0;
-    transform: scale(0.85);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-@keyframes fade-out {
-  to { opacity: 0; }
-}
 .eight-ball-container {
   text-align: center;
   color: #ffffff;
@@ -593,9 +564,10 @@ a.cubby:focus-visible {
 
 /* The 3D Rendered Sphere Body */
 .oracle-sphere {
-  width: 320px;
-  height: 320px;
-  background: radial-gradient(circle at 30% 30%, #3a3a3a 0%, #080808 70%, #000000 100%);
+  width: 30em;
+  height: 30em;
+  background: radial-gradient(ellipse at 22% 22%, #a59eb8 0%,#a59eb8 3%, transparent 4%), radial-gradient(circle at 30% 30%, #3a334e 0%, #080808 30%, #000000 100%);
+  /*background: black;*/
   border-radius: 50%;
   box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8), inset -10px -10px 30px rgba(0, 0, 0, 0.6);
   display: flex;
@@ -613,8 +585,8 @@ a.cubby:focus-visible {
 
 /* The Classic Blue Liquid Oracle Window Window */
 .oracle-window {
-  width: 150px;
-  height: 150px;
+  width: 14em;
+  height: 14em;
   background: radial-gradient(circle at center, #001133 0%, #000511 100%);
   border: 8px solid #141414;
   border-radius: 50%;
@@ -626,14 +598,12 @@ a.cubby:focus-visible {
 
 /* The Floating Glowing Prediction Text Element */
 .oracle-text {
-  width: 100px;
-  height: 100px;
-  font-family: system-ui, sans-serif;
+  width: 6em;
+  height: 7.5em;
   font-size: 0.8rem;
   font-weight: 700;
   letter-spacing: 1px;
-  color: #4da6ff;
-  text-shadow: 0 0 8px rgba(77, 166, 255, 0.6);
+  color: rgba(255, 255, 255, 0.86);
   text-align: center;
   text-transform: uppercase;
   display: flex;
@@ -641,6 +611,19 @@ a.cubby:focus-visible {
   align-items: center;
   line-height: 1.4;
   transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+/* Outer Triangle (Border Color) */
+.oracle-text::before {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-left: 6em solid transparent;
+  border-right: 6em solid transparent;
+  border-top: 11em solid var(--blue);
+  top: 0;
+  z-index: -1;
 }
 
 /* Exit Button Component */
@@ -689,14 +672,14 @@ a.cubby:focus-visible {
 .magic-8-ball {
   width: calc(var(--cube-size) / 2);
   height: calc(var(--cube-size) / 2);
-  background: radial-gradient(circle at 30% 30%, #444, #000);
-  border-radius: 50%;
+  /*background: radial-gradient(circle at 30% 30%, #444, #000);*/
+  /*border-radius: 50%;*/
   display: flex;
   justify-content: center;
   align-items: center;
   position: relative;
   cursor: pointer;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+  /*box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);*/
   transition: transform 0.2s ease;
   animation: float 3s ease-in-out infinite;
 }
@@ -756,6 +739,7 @@ a.cubby:focus-visible {
   letter-spacing: 0.03em;
   font-size: 3em;
 }
+
 .bottom-text {
   position: absolute;
   bottom: 0;
@@ -853,8 +837,8 @@ a.work-link {
   right: 1em;
   width: 100vw;
   height: 100vh;
-  background-color: #000;
-  color: white;
+  background-color: white;
+  color: black;
   transform: translateX(99%);
   transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
   z-index: 10;
@@ -862,7 +846,6 @@ a.work-link {
 }
 
 #curatorial-panel.peek {
-  background: var(--blue);
   transform: translateX(calc(90%));
   cursor: grab;
 }
@@ -892,19 +875,16 @@ a.work-link {
   color: var(--blue);
 }
 
-/* Smoothly collapse the vertical handle strip once fully opened */
 #curatorial-panel.open .curatorial-peek-handle {
   width: 0;
   border-left: none;
   overflow: hidden;
 }
 
-/* Main Text Container Layout */
 .curatorial-content {
   flex: 1;
   padding: 80px 10%;
   overflow-y: auto;
-  /* Allows the statement to scroll if reading on mobile */
   position: relative;
   box-sizing: border-box;
 }
@@ -922,24 +902,59 @@ a.work-link {
 
 /* --- DRAGGABLE EXTENSIONS --- */
 
-/* Changes cursor to a grab hand when hovering over the peek strip */
 .curatorial-peek-handle {
   touch-action: none;
-  /* Prevents mobile browsers from triggering history-swiping gestures */
   cursor: grab;
 }
 
-/* Switches to a active clenching hand while dragging is occurring */
 #curatorial-panel.dragging .curatorial-peek-handle {
   cursor: grabbing;
 }
 
-/* Temporarily kills the 0.5s CSS animation timeline so the panel tracks the cursor instantly */
 #curatorial-panel.dragging {
   transition: none !important;
 }
 
-/* Restores default arrow pointer once the panel is fully locked open */
 #curatorial-panel.open .curatorial-peek-handle {
   cursor: default;
+}
+
+@media (max-width: 768px) {
+  #curatorial-panel {
+    top: auto;
+    bottom: 4em;
+    left: 0;
+    width: 100vw;
+    height: 100vh; 
+    flex-direction: column; 
+    transform: translateY(100%);
+  }
+
+  /* Make the handle horizontal */
+  .curatorial-peek-handle {
+    width: 100%;
+    height: 4em; 
+    border-left: none;
+    touch-action: none;
+    user-select: none; 
+  }
+
+  /* Force the text to sit flat */
+  .curatorial-peek-handle span {
+    transform: none !important; 
+    white-space: nowrap;
+  }
+
+  /* Peek state: Translate Y down so only the 50px handle shows */
+  #curatorial-panel.peek {
+    transform: translateY(calc(100% - 50px)) !important;
+        touch-action: none; 
+
+  }
+
+  /* Open state: Translate Y to 0 so the whole panel shows */
+  #curatorial-panel.open {
+    transform: translateY(0) !important;
+  }
+
 }
