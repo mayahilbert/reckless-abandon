@@ -363,8 +363,10 @@ body.modal-open {
   z-index: 10;
   cursor: crosshair;
   touch-action: none;
-  transform-style: preserve-3d;
-  transform: translateZ(var(--cube-size) + 100px);
+  will-change: transform;
+  transform: translate3d(0, 0, 20px) !important;
+  z-index: 99;
+  pointer-events: none;
 }
 
 .scene {
@@ -867,10 +869,9 @@ a.work-link {
   height: 100vh;
   background-color: white;
   color: black;
-  transform: translateX(99%) translateZ(500px);
-  transform-style: preserve-3d;
+  transform: translateX(99%);
   transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-  z-index: 1000;
+  z-index: 3000;
   display: flex;
 }
 
