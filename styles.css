@@ -241,6 +241,7 @@ body.modal-open {
   .modal {
     grid-template-columns: 1fr 2fr;
   }
+
   .modal .fixed-column {
     position: sticky;
     top: 0;
@@ -284,6 +285,23 @@ body.modal-open {
   background-color: var(--yellow);
   padding: 2em 2.4em 2.4em 2.4em;
   max-width: 70ch;
+}
+
+.instagram-media {
+  background: white;
+  border: 1px solid black;
+  max-width: 100%;
+  width: 100%;
+  box-shadow: none;
+  display: block;
+  min-width: 326px;
+  padding: 0px;
+}
+
+@media (min-width: 600px) {
+  .instagram-media {
+    width: 80%;
+  }
 }
 
 #socials {
@@ -343,6 +361,7 @@ body.modal-open {
   z-index: 10;
   cursor: crosshair;
   touch-action: none;
+  transform: translateZ(50px);
 }
 
 .scene {
@@ -514,6 +533,14 @@ a.cubby:focus-visible {
   padding: 1em;
   transition: transform 0.3s ease, filter 0.3s ease;
   filter: brightness(0.5);
+}
+
+.cubby .content * {
+  webkit-backface-visibility: visible !important;
+  backface-visibility: visible !important;
+  webkit-transform-style: flat !important;
+  transform-style: flat !important;
+  transform: translateZ(1px);
 }
 
 .cubby.hovered .content {
