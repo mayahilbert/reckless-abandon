@@ -363,7 +363,7 @@ body.modal-open {
   cursor: crosshair;
   touch-action: none;
   will-change: transform;
-  transform: translate3d(0, 0, 20px) !important;
+  transform: translateZ(0);
   z-index: 99;
 }
 
