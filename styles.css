@@ -361,7 +361,7 @@ body.modal-open {
   z-index: 10;
   cursor: crosshair;
   touch-action: none;
-  transform: translateZ(50px);
+  transform: translateZ(var(--cube-size) + 20px);
 }
 
 .scene {
@@ -380,6 +380,7 @@ body.modal-open {
   transform-style: preserve-3d;
   margin-top: 3em;
   transform: rotateX(-8deg);
+  transform: translateZ(- var(--cube-size) - 20px);
 }
 
 .cubby {
