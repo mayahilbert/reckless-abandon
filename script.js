@@ -564,16 +564,16 @@ if (curatorialPanel) {
 
     const isMobile = window.innerWidth <= 768;
 
-    //if (isMobile) {
-    //  // Mobile: Vertical drag (Y-axis)
-    //  deltaY = e.clientY - startYc;
+    if (isMobile) {
+      // Mobile: Vertical drag (Y-axis)
+      deltaY = e.clientY - startYc;
       
-    //  let dragOffset = deltaY;
-    //  if (dragOffset > 0) dragOffset = 0; // Prevent dragging downwards past the peek state
+      let dragOffset = deltaY;
+      if (dragOffset > 0) dragOffset = 0; // Prevent dragging downwards past the peek state
       
-    //  // Calculate inline transform from the peek position (100% - 50px)
-    //  curatorialPanel.style.transform = `translateY(calc(100% - 50px + ${dragOffset}px))`;
-    //} else {
+      // Calculate inline transform from the peek position (100% - 50px)
+      curatorialPanel.style.transform = `translateY(calc(100% - 50px + ${dragOffset}px))`;
+    } else {
       // Desktop: Horizontal drag (X-axis)
       deltaX = e.clientX - startXc;
       
@@ -582,7 +582,7 @@ if (curatorialPanel) {
       
       // Desktop peek offset (assuming 40px width handle, adjust if your CSS differs)
       curatorialPanel.style.transform = `translateX(calc(100% - 40px + ${dragOffset}px))`;
-    //}
+    }
   });
 
   curatorialPanel.addEventListener('pointerup', (e) => {
@@ -599,21 +599,21 @@ if (curatorialPanel) {
     const isMobile = window.innerWidth <= 768;
     const dragThreshold = isMobile ? -60 : -100; // Pixels needed to trigger open
 
-    //if (isMobile) {
-    //  // Mobile drop logic (checking negative Y)
-    //  if (deltaY < dragThreshold) {
-    //    curatorialPanel.classList.remove('peek');
-    //    curatorialPanel.classList.add('open');
-    //    document.documentElement.classList.add('no-scroll');
-    //  }
-    //} else {
+    if (isMobile) {
+      // Mobile drop logic (checking negative Y)
+      if (deltaY < dragThreshold) {
+        curatorialPanel.classList.remove('peek');
+        curatorialPanel.classList.add('open');
+        document.documentElement.classList.add('no-scroll');
+      }
+    } else {
       // Desktop drop logic (checking negative X)
       if (deltaX < dragThreshold) {
         curatorialPanel.classList.remove('peek');
         curatorialPanel.classList.add('open');
         document.documentElement.classList.add('no-scroll');
       }
-    //}
+    }
   });
 
   curatorialPanel.addEventListener('pointercancel', (e) => {

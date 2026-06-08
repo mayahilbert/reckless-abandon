@@ -384,6 +384,12 @@ body.modal-open {
   transform: rotateX(-8deg);
 }
 
+@media (max-width: 600px) {
+  .shelf {
+    margin-top: 0;
+  }
+}
+
 .cubby {
   position: relative;
   width: var(--cube-size);
@@ -947,7 +953,7 @@ a.work-link {
   cursor: default;
 }
 
-/*@media (max-width: 768px) {
+@media (max-width: 768px) {
   #curatorial-panel {
     top: auto;
     bottom: 4em;
@@ -981,4 +987,4 @@ a.work-link {
     transform: translateY(0) !important;
   }
 
-}*/
+}
