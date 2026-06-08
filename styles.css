@@ -869,6 +869,7 @@ a.work-link {
   transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
   z-index: 100;
   display: flex;
+  touch-action: none !important;
 }
 
 #curatorial-panel.peek {
@@ -888,6 +889,7 @@ a.work-link {
   align-items: center;
   justify-content: center;
   user-select: none;
+  touch-action: none !important;
 }
 
 .curatorial-peek-handle span {
