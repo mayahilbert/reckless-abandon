@@ -201,7 +201,7 @@ body.no-scroll {
   background: rgba(0, 0, 0, 0.85);
   z-index: 1000;
   transform-style: preserve-3d;
-  transform: translateZ(var(--cube-size) + 100px);
+  transform: translateZ(1000px);
   /* Above the canvas */
   display: flex;
   opacity: 0;
@@ -370,11 +370,9 @@ body.modal-open {
 .scene {
   width: calc(var(--track-size) * var(--cols));
   height: calc(var(--track-size) * var(--rows));
-  transform: translateZ(- var(--cube-size) - 20px);
   transition: transform 0.1s ease-out;
   z-index: -10;
-  margin-bottom: 100px;
-  transform-style: flat !important;
+  margin-bottom: 100px;  
 }
 
 .shelf {
@@ -384,7 +382,6 @@ body.modal-open {
   transform-style: preserve-3d;
   margin-top: 3em;
   transform: rotateX(-8deg);
-  transform-style: preserve-3d;
 }
 
 .cubby {
