@@ -199,7 +199,8 @@ body.no-scroll {
   height: 100%;
   inset: 0;
   background: rgba(0, 0, 0, 0.85);
-  z-index: 100;
+  z-index: 1000;
+  transform: translateZ(var(--cube-size) + 20px);
   /* Above the canvas */
   display: flex;
   opacity: 0;
@@ -368,8 +369,9 @@ body.modal-open {
   width: calc(var(--track-size) * var(--cols));
   height: calc(var(--track-size) * var(--rows));
   transform-style: preserve-3d;
+  transform: translateZ(- var(--cube-size) - 20px);
   transition: transform 0.1s ease-out;
-  z-index: 1;
+  z-index: -10;
   margin-bottom: 100px;
 }
 
@@ -380,7 +382,6 @@ body.modal-open {
   transform-style: preserve-3d;
   margin-top: 3em;
   transform: rotateX(-8deg);
-  transform: translateZ(- var(--cube-size) - 20px);
 }
 
 .cubby {
@@ -566,6 +567,7 @@ a.cubby:focus-visible {
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
   z-index: 2000;
+  transform: translateZ(var(--cube-size) + 20px);
   display: flex;
   justify-content: center;
   align-items: center;
