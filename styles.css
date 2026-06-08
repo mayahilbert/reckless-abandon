@@ -535,7 +535,7 @@ a.cubby:focus-visible {
   filter: brightness(0.5);
 }
 
-.cubby .content * {
+.cubby .content {
   webkit-backface-visibility: visible !important;
   backface-visibility: visible !important;
   webkit-transform-style: flat !important;
