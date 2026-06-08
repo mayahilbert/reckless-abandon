@@ -200,7 +200,8 @@ body.no-scroll {
   inset: 0;
   background: rgba(0, 0, 0, 0.85);
   z-index: 1000;
-  transform: translateZ(var(--cube-size) + 20px);
+  transform-style: preserve-3d;
+  transform: translateZ(var(--cube-size) + 100px);
   /* Above the canvas */
   display: flex;
   opacity: 0;
@@ -362,7 +363,8 @@ body.modal-open {
   z-index: 10;
   cursor: crosshair;
   touch-action: none;
-  transform: translateZ(var(--cube-size) + 20px);
+  transform-style: preserve-3d;
+  transform: translateZ(var(--cube-size) + 100px);
 }
 
 .scene {
@@ -865,7 +867,8 @@ a.work-link {
   height: 100vh;
   background-color: white;
   color: black;
-  transform: translateX(99%);
+  transform: translateX(99%) translateZ(500px);
+  transform-style: preserve-3d;
   transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
   z-index: 1000;
   display: flex;
