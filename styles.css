@@ -596,8 +596,8 @@ a.cubby:focus-visible {
 
 /* The 3D Rendered Sphere Body */
 .oracle-sphere {
-  width: 30em;
-  height: 30em;
+  width: 18em;
+  height: 18em;
   background: radial-gradient(ellipse at 22% 22%, #a59eb8 0%, #a59eb8 3%, transparent 4%), radial-gradient(circle at 30% 30%, #3a334e 0%, #080808 30%, #000000 100%);
   /*background: black;*/
   border-radius: 50%;
@@ -615,8 +615,54 @@ a.cubby:focus-visible {
   transform: scale(1.1);
 }
 
-/* The Classic Blue Liquid Oracle Window Window */
 .oracle-window {
+  width: 8em;
+  height: 8em;
+  background: radial-gradient(circle at center, #001133 0%, #000511 100%);
+  border: 8px solid #141414;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: inset 0 5px 15px rgba(0, 0, 0, 0.9);
+}
+
+/* The Floating Glowing Prediction Text Element */
+.oracle-text {
+  width: 3.5em;
+  height: 4.2em;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: rgba(255, 255, 255, 0.86);
+  text-align: center;
+  text-transform: uppercase;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  line-height: 1.4;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+/* Outer Triangle (Border Color) */
+.oracle-text::before {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-left: 3.5em solid transparent;
+  border-right: 3.5em solid transparent;
+  border-top: 6.5em solid var(--blue);
+  top: 0;
+  z-index: -1;
+}
+@media (min-width: 600px) {
+  .oracle-sphere {
+    width: 30em;
+  height: 30em;
+  }
+
+  .oracle-window {
   width: 14em;
   height: 14em;
   background: radial-gradient(circle at center, #001133 0%, #000511 100%);
@@ -657,7 +703,7 @@ a.cubby:focus-visible {
   top: 0;
   z-index: -1;
 }
-
+}
 /* Exit Button Component */
 #eight-ball-close {
   position: absolute;
