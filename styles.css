@@ -867,7 +867,7 @@ a.work-link {
   color: black;
   transform: translateX(99%);
   transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-  z-index: 1000;
+  z-index: 100;
   display: flex;
 }
 
