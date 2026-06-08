@@ -360,23 +360,21 @@ body.modal-open {
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 10;
   cursor: crosshair;
   touch-action: none;
   will-change: transform;
   transform: translate3d(0, 0, 20px) !important;
   z-index: 99;
-  pointer-events: none;
 }
 
 .scene {
   width: calc(var(--track-size) * var(--cols));
   height: calc(var(--track-size) * var(--rows));
-  transform-style: preserve-3d;
   transform: translateZ(- var(--cube-size) - 20px);
   transition: transform 0.1s ease-out;
   z-index: -10;
   margin-bottom: 100px;
+  transform-style: flat !important;
 }
 
 .shelf {
@@ -386,6 +384,7 @@ body.modal-open {
   transform-style: preserve-3d;
   margin-top: 3em;
   transform: rotateX(-8deg);
+  transform-style: preserve-3d;
 }
 
 .cubby {
