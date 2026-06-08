@@ -369,7 +369,7 @@ body.modal-open {
   width: calc(var(--track-size) * var(--cols));
   height: calc(var(--track-size) * var(--rows));
   transform-style: preserve-3d;
-  transform: translateZ(- var(--cube-size) - 20px);
+  transform: translateZ(calc((var(--cube-size) * -1) - 20px));
   transition: transform 0.1s ease-out;
   z-index: -10;
   margin-bottom: 100px;
