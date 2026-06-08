@@ -729,7 +729,6 @@ if (interactiveBall) {
     setTimeout(() => {
       interactiveBall.classList.remove('shaking');
 
-      // Map real matching elements inside your global list data array
       const validProjects = cubbyData.filter(project => project.slug !== "random" && project.slug !== "curatorial-statement");
       console.log(validProjects);
       if (validProjects.length === 0) {
@@ -738,11 +737,10 @@ if (interactiveBall) {
         return;
       }
 
-      // Roll indices and pull out selection properties
       const randomIndex = Math.floor(Math.random() * validProjects.length);
       const chosenProject = validProjects[randomIndex];
 
-      // Map original array location index matching our selection to trigger smooth modal expanding
+
       const originalProjectIndex = cubbyData.findIndex(item => item.title === chosenProject.title);
 
       if (oracleAnswer) {
@@ -751,19 +749,16 @@ if (interactiveBall) {
         oracleAnswer.style.transform = 'scale(1)';
       }
 
-      // Wait 2 seconds, drop the curtains, and trigger the chosen modal dynamically
       setTimeout(() => {
         isOracleShaking = false;
 
-        // Hide the 8-Ball overlay container layer 
         if (eBallOverlay) eBallOverlay.classList.add('hidden');
         document.documentElement.classList.remove('no-scroll');
 
-        // FIX: Fire openProjectOverlay matching our dataset instead of doing a destructive window reload
         if (originalProjectIndex !== -1) {
           openProjectOverlay(originalProjectIndex, true);
         }
-      }, 2000);
+      }, 1000);
 
     }, 600);
   });

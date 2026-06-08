@@ -558,13 +558,6 @@ a.cubby:focus-visible {
   margin-bottom: 8px;
 }
 
-.eight-ball-sub {
-  font-family: 'Rosario', sans-serif;
-  color: #888888;
-  margin-bottom: 40px;
-  font-size: 1.1rem;
-}
-
 /* The 3D Rendered Sphere Body */
 .oracle-sphere {
   width: 30em;
@@ -583,7 +576,7 @@ a.cubby:focus-visible {
 }
 
 .oracle-sphere:hover {
-  transform: scale(1.03);
+  transform: scale(1.1);
 }
 
 /* The Classic Blue Liquid Oracle Window Window */
@@ -632,8 +625,8 @@ a.cubby:focus-visible {
 /* Exit Button Component */
 #eight-ball-close {
   position: absolute;
-  top: 40px;
-  right: 50px;
+  top: 1em;
+  left: 1em;
   color: white;
 }
 
