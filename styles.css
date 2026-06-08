@@ -867,7 +867,8 @@ a.work-link {
   color: black;
   transform: translateX(99%);
   transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-  z-index: 10;
+  z-index: 1000;
+  transform: translateZ(var(--cube-size) + 20px);
   display: flex;
 }
 
@@ -888,6 +889,7 @@ a.work-link {
   align-items: center;
   justify-content: center;
   user-select: none;
+  transform: translateZ(var(--cube-size) + 20px);
 }
 
 .curatorial-peek-handle span {
