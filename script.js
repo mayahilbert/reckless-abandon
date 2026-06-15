@@ -404,7 +404,11 @@ function openProjectOverlay(index, pushToHistory = true) {
   }
 
   if (pushToHistory) {
-    history.pushState(null, "", window.location.search ? window.location.pathname : window.location.pathname);
+    history.pushState(
+      { type: "project", slug: data.slug },
+      "",
+      `?${data.slug}`
+    );
   }
 }
 
@@ -460,13 +464,17 @@ function closeProjectOverlay(pushToHistory = true) {
 }
 
 function handleGlobalAppRouting(pushToHistory = false) {
+
   const queryParam = window.location.search.substring(1);
 
   // Wrap the state switches inside a view transition frame block
   const updateDOM = () => {
     if (eBallOverlay) eBallOverlay.classList.add('hidden');
     document.documentElement.classList.remove('no-scroll');
-
+    if (!queryParam) {
+      closeProjectOverlay(false);
+      return;
+    }
     if (queryParam === "random") {
       if (eBallOverlay) {
         eBallOverlay.style.viewTransitionName = 'oracle-expand';
@@ -544,30 +552,30 @@ window.addEventListener('mousemove', (e) => {
 
 // --- ACCESSIBLE MOBILE TOUCH CAPTURE ENGAGEMENT ENGINE ---
 if (curatorialPanel) {
-  
+
   curatorialPanel.addEventListener('pointerdown', (e) => {
     // Only drag with primary touch/mouse clicks
-    if (e.button !== 0) return; 
-    
+    if (e.button !== 0) return;
+
     isDragging = true;
     startX = e.clientX;
     deltaX = 0;
-    
+
     curatorialPanel.classList.add('dragging');
     curatorialPanel.style.transition = 'none';
-    
+
     // CRITICAL MOBILE FIX: Lock this specific finger tracking ID to the element
     curatorialPanel.setPointerCapture(e.pointerId);
   });
 
   curatorialPanel.addEventListener('pointermove', (e) => {
     if (!isDragging) return;
-    
+
     deltaX = e.clientX - startX;
-    
+
     // Prevent dragging the panel further right than its default starting position
-    if (deltaX > 0) deltaX = 0; 
-    
+    if (deltaX > 0) deltaX = 0;
+
     // Update the layout position visually on screen
     curatorialPanel.style.transform = `translateX(${deltaX}px)`;
   });
@@ -575,10 +583,10 @@ if (curatorialPanel) {
   curatorialPanel.addEventListener('pointerup', (e) => {
     if (!isDragging) return;
     isDragging = false;
-    
+
     curatorialPanel.classList.remove('dragging');
     curatorialPanel.style.transition = ''; // Restores spring-snapping transitions
-    
+
     // CRITICAL MOBILE FIX: Cleanly release the touch lock identifier
     curatorialPanel.releasePointerCapture(e.pointerId);
 
@@ -628,33 +636,33 @@ let isOracleShaking = false;
 
 function openEightBallOracle(pushToHistory = true) {
   if (!eBallOverlay) return;
-  
+
   if (oracleAnswer) {
     oracleAnswer.innerHTML = "CLICK<br>TO SHAKE";
     oracleAnswer.style.opacity = '1';
     oracleAnswer.style.transform = 'scale(1)';
   }
-  
+
   const eBallCubbyContent = document.querySelector('.cubby[data-index="15"] .content');
-  
+
   // 1. Give transition name to the Cubby (Old State)
   if (eBallCubbyContent) eBallCubbyContent.style.viewTransitionName = 'oracle-expand';
 
   const updateDOM = () => {
     // 2. Remove transition name from the Cubby BEFORE capturing new state
     if (eBallCubbyContent) eBallCubbyContent.style.viewTransitionName = '';
-    
+
     // 3. Give transition name to the Overlay (New State)
     interactiveBall.style.viewTransitionName = 'oracle-expand';
     eBallOverlay.classList.remove('hidden');
-    document.documentElement.classList.add('no-scroll'); 
+    document.documentElement.classList.add('no-scroll');
   };
 
   if (document.visibilityState === 'visible' && document.startViewTransition) {
     const transition = document.startViewTransition(updateDOM);
-    
+
     transition.finished
-      .catch(() => {}) // Suppress skipped transition errors
+      .catch(() => { }) // Suppress skipped transition errors
       .finally(() => {
         // 4. Clean up all tags when finished
         interactiveBall.style.viewTransitionName = '';
@@ -673,7 +681,7 @@ function openEightBallOracle(pushToHistory = true) {
 // Update the close handler to also utilize the smooth view transition morph engine
 if (eBallClose) {
   eBallClose.addEventListener('click', () => {
-    if (isOracleShaking) return; 
+    if (isOracleShaking) return;
 
     const eBallCubbyContent = document.querySelector('.cubby[data-index="15"] .content');
 
@@ -684,19 +692,19 @@ if (eBallClose) {
     const updateDOM = () => {
       // 2. New State: Force-kill name on Overlay 
       eBallOverlay.style.viewTransitionName = 'none';
-      
+
       // Give name back to Cubby
       if (eBallCubbyContent) eBallCubbyContent.style.viewTransitionName = 'oracle-expand';
-      
+
       eBallOverlay.classList.add('hidden');
-      document.documentElement.classList.remove('no-scroll'); 
+      document.documentElement.classList.remove('no-scroll');
     };
 
     if (document.visibilityState === 'visible' && document.startViewTransition) {
       const transition = document.startViewTransition(updateDOM);
-      
+
       transition.finished
-        .catch(() => {})
+        .catch(() => { })
         .finally(() => {
           // 3. Total Cleanup
           if (eBallCubbyContent) eBallCubbyContent.style.viewTransitionName = 'none';
