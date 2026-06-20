@@ -273,24 +273,6 @@ canvas.addEventListener('touchmove', (e) => {
 
 canvas.addEventListener('touchend', () => lastPoint = null);
 
-// Magic 8 Ball Logic
-//function shakeEightBall() {
-//  const ball = document.getElementById('eight-ball');
-//  const display = document.getElementById('ball-answer');
-//  if (!ball || !display) return;
-
-//  ball.style.transform = "scale(0.8) rotate(15deg)";
-//  display.style.opacity = '0';
-
-//  setTimeout(() => {
-//    const randomAnswer = answers[Math.floor(Math.random() * answers.length)];
-//    display.innerHTML = randomAnswer.replace('\n', '<br>');
-//    display.style.opacity = '1';
-//    ball.style.transform = "scale(1) rotate(0deg)";
-//  }, 300);
-//}
-
-
 function openProjectOverlay(index,
   pushToHistory = true,
   useTransition = true) {
@@ -298,48 +280,15 @@ function openProjectOverlay(index,
   const cubby = document.querySelector(`.cubby[data-index="${index}"]`);
   const contentDiv = cubby ? cubby.querySelector('.content') : null;
 
-  // 1. COMPLETELY CLEAN UP PREVIOUS GHOSTS AND NAMES RIGHT AWAY
-  const oldGhost = document.getElementById('vt-ghost-proxy');
-  if (oldGhost) oldGhost.remove();
-
   document.querySelectorAll('#eight-ball-overlay').forEach(el => {
     el.style.viewTransitionName = '';
   });
-
-  if (contentDiv && document.startViewTransition) {
-    const rect = contentDiv.getBoundingClientRect();
-    const ghost = document.createElement('div');
-    ghost.style.outline = '4px solid red';
-    ghost.id = 'vt-ghost-proxy'; // Give it an explicit ID to target safely
-    ghost.setAttribute('aria-hidden', 'true');
-    ghost.style.position = 'fixed';
-    ghost.style.top = rect.top + 'px';
-    ghost.style.left = rect.left + 'px';
-    ghost.style.width = rect.width + 'px';
-    ghost.style.height = rect.height + 'px';
-    ghost.style.backgroundImage = cubby.style.getPropertyValue('--proj-image');
-    ghost.style.backgroundSize = 'cover';
-    ghost.style.backgroundPosition = 'center';
-    ghost.style.setProperty('view-transition-name', 'proj-expand');
-    ghost.style.pointerEvents = 'none';
-    ghost.style.zIndex = '9999';
-    ghost.style.margin = '0';
-    document.body.appendChild(ghost);
-
-    ghost.offsetHeight; // Force layout pass
-  }
 
   const updateDOM = () => {
     console.log('inside updateDOM',
       [...document.querySelectorAll('*')]
         .filter(el => getComputedStyle(el).viewTransitionName === 'proj-expand')
     );
-
-    const ghost = document.getElementById('vt-ghost-proxy');
-
-    if (ghost) {
-      ghost.style.opacity = '0';
-    }
 
     const overlay = document.getElementById('overlay');
     const modalTitle = document.getElementById('modal-title');
@@ -351,7 +300,6 @@ function openProjectOverlay(index,
     if (projArtist) projArtist.innerHTML = `${data.artist}`;
     if (projInfo) projInfo.innerHTML = `${data.medium}, ${data.year}`;
 
-    // 💡 FIXED STRINGS BELOW: Added proper closing quotes ')' and "
     if (data.worklink && modalBody) {
       modalBody.innerHTML = `
         <a class="work-link" target="_blank" href="${data.worklink}"><div class="link-container proj-expand" style="background-image: url('${data.image}')"> <span class="highlight">Click to visit the work</span><br><span class="link-note">Opens in new tab</span>
@@ -468,12 +416,10 @@ function openProjectOverlay(index,
 
     // Clean up as soon as possible when the transition finishes
     transition.finished.finally(() => {
-      const liveGhost = document.getElementById('vt-ghost-proxy');
-      if (liveGhost) liveGhost.remove();
+
     });
   } else {
-    const liveGhost = document.getElementById('vt-ghost-proxy');
-    if (liveGhost) liveGhost.remove();
+
     updateDOM();
   }
 
@@ -545,9 +491,7 @@ function closeProjectOverlay(pushToHistory = true,
         // Final fallback cleanup ensures everything is released
         if (contentDiv) contentDiv.style.viewTransitionName = '';
 
-        // Double check ghost proxy is gone if transition was aborted mid-flight
-        const liveGhost = document.getElementById('vt-ghost-proxy');
-        if (liveGhost) liveGhost.remove();
+
       });
 
   } else {
