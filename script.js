@@ -291,38 +291,70 @@ canvas.addEventListener('touchend', () => lastPoint = null);
 //}
 
 
-function openProjectOverlay(index, pushToHistory = true) {
+function openProjectOverlay(index,
+  pushToHistory = true,
+  useTransition = true) {
   const data = cubbyData[index] || { title: `Project ${index + 1}`, description: "Details about this project...", image: "" };
   const cubby = document.querySelector(`.cubby[data-index="${index}"]`);
   const contentDiv = cubby ? cubby.querySelector('.content') : null;
 
-  // Clean slate any unexpected view transition remnants
-  document.querySelectorAll('.content, #eight-ball-overlay').forEach(el => {
+  // 1. COMPLETELY CLEAN UP PREVIOUS GHOSTS AND NAMES RIGHT AWAY
+  const oldGhost = document.getElementById('vt-ghost-proxy');
+  if (oldGhost) oldGhost.remove();
+
+  document.querySelectorAll('#eight-ball-overlay').forEach(el => {
     el.style.viewTransitionName = '';
   });
 
+  if (contentDiv && document.startViewTransition) {
+    const rect = contentDiv.getBoundingClientRect();
+    const ghost = document.createElement('div');
+    ghost.style.outline = '4px solid red';
+    ghost.id = 'vt-ghost-proxy'; // Give it an explicit ID to target safely
+    ghost.setAttribute('aria-hidden', 'true');
+    ghost.style.position = 'fixed';
+    ghost.style.top = rect.top + 'px';
+    ghost.style.left = rect.left + 'px';
+    ghost.style.width = rect.width + 'px';
+    ghost.style.height = rect.height + 'px';
+    ghost.style.backgroundImage = cubby.style.getPropertyValue('--proj-image');
+    ghost.style.backgroundSize = 'cover';
+    ghost.style.backgroundPosition = 'center';
+    ghost.style.setProperty('view-transition-name', 'proj-expand');
+    ghost.style.pointerEvents = 'none';
+    ghost.style.zIndex = '9999';
+    ghost.style.margin = '0';
+    document.body.appendChild(ghost);
 
-  if (contentDiv) {
-    contentDiv.style.viewTransitionName = 'proj-expand';
+    ghost.offsetHeight; // Force layout pass
   }
 
   const updateDOM = () => {
+    console.log('inside updateDOM',
+      [...document.querySelectorAll('*')]
+        .filter(el => getComputedStyle(el).viewTransitionName === 'proj-expand')
+    );
+
+    const ghost = document.getElementById('vt-ghost-proxy');
+
+    if (ghost) {
+      ghost.style.opacity = '0';
+    }
+
     const overlay = document.getElementById('overlay');
     const modalTitle = document.getElementById('modal-title');
     const projArtist = document.getElementById('proj-artist');
     const projInfo = document.getElementById('proj-info');
     const modalBody = document.getElementById('modal-body');
 
-    if (contentDiv) {
-      contentDiv.style.viewTransitionName = '';
-    }
-
     if (modalTitle) modalTitle.textContent = data.title;
     if (projArtist) projArtist.innerHTML = `${data.artist}`;
     if (projInfo) projInfo.innerHTML = `${data.medium}, ${data.year}`;
+
+    // 💡 FIXED STRINGS BELOW: Added proper closing quotes ')' and "
     if (data.worklink && modalBody) {
       modalBody.innerHTML = `
-        <a class="work-link" target="_blank" href="${data.worklink}"><div class="link-container proj-expand" style="background-image: url('${data.image}"><span class="highlight">Click to visit the work</span><br><span class="link-note">Opens in new tab</span>
+        <a class="work-link" target="_blank" href="${data.worklink}"><div class="link-container proj-expand" style="background-image: url('${data.image}')"> <span class="highlight">Click to visit the work</span><br><span class="link-note">Opens in new tab</span>
         </div></a>
         <div class="modal-desc">
         <h3>About the work</h3>
@@ -337,7 +369,7 @@ function openProjectOverlay(index, pushToHistory = true) {
     }
     else if (data.slug === "memorial-for-bad-jokes" && modalBody) {
       modalBody.innerHTML = `
-      <div class="vid-container proj-expand" style="background-image: url('${data.image}">
+      <div class="vid-container proj-expand" style="background-image: url('${data.image}')">
         <iframe src="${data.vimeo}"
           frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe></div>
           <div class="mem-imgs">
@@ -356,7 +388,7 @@ function openProjectOverlay(index, pushToHistory = true) {
       `;
     } else if (data.slug === "photo-news" && modalBody) {
       modalBody.innerHTML = `
-        <div class="vid-container proj-expand" style="background-image: url('${data.image}">
+        <div class="vid-container proj-expand" style="background-image: url('${data.image}')">
         <iframe src="${data.vimeo}"
           frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe></div>
         <iframe class="instagram-media instagram-media-rendered" id="instagram-embed-0" src="https://www.instagram.com/photonews5/embed/" allowtransparency="true" allowfullscreen="true" frameborder="0" height="500" data-instgrm-payload-id="instagram-media-payload-0" scrolling="no"></iframe>
@@ -373,7 +405,7 @@ function openProjectOverlay(index, pushToHistory = true) {
     }
     else if (modalBody) {
       modalBody.innerHTML = `
-        <div class="vid-container proj-expand" style="background-image: url('${data.image}">
+        <div class="vid-container proj-expand" style="background-image: url('${data.image}')">
         <iframe src="${data.vimeo}"
           frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe></div>
         <div class="modal-desc">
@@ -387,40 +419,72 @@ function openProjectOverlay(index, pushToHistory = true) {
         <div id="socials"></div>
       `;
     }
+
     const modalSocials = document.getElementById('socials');
 
     if (data.website) {
       const website = `<a class="social website" href="${data.website}">Website</a>`;
       modalSocials.insertAdjacentHTML('beforeend', website);
     }
+
     if (data.ig) {
       const ig = `<a class="social ig" href="${data.ig}">Instagram</a>`;
       modalSocials.insertAdjacentHTML('beforeend', ig);
     }
+    const hero =
+      modalBody.querySelector('.vid-container') ||
+      modalBody.querySelector('.link-container');
 
+    if (hero) {
+      hero.style.viewTransitionName = 'proj-expand';
+    }
     if (overlay) overlay.classList.add('active');
     document.body.classList.add('no-scroll');
+
+    if (overlay) overlay.offsetHeight;
+    console.log(
+      'end updateDOM',
+      [...document.querySelectorAll('*')]
+        .filter(el => getComputedStyle(el).viewTransitionName !== 'none')
+        .map(el => ({
+          tag: el.tagName,
+          cls: el.className,
+          vt: getComputedStyle(el).viewTransitionName
+        }))
+    );
   };
 
-  if (document.visibilityState === 'visible' && document.startViewTransition && !document.activeTransition) {
+  if (
+    useTransition &&
+    document.visibilityState === 'visible' &&
+    document.startViewTransition
+  ) {
+    console.log('before transition',
+      [...document.querySelectorAll('*')]
+        .filter(el => getComputedStyle(el).viewTransitionName === 'proj-expand')
+    );
     const transition = document.startViewTransition(updateDOM);
-    transition.finished.then(() => {
-      if (contentDiv) contentDiv.style.viewTransitionName = '';
+
+
+    // Clean up as soon as possible when the transition finishes
+    transition.finished.finally(() => {
+      const liveGhost = document.getElementById('vt-ghost-proxy');
+      if (liveGhost) liveGhost.remove();
     });
   } else {
+    const liveGhost = document.getElementById('vt-ghost-proxy');
+    if (liveGhost) liveGhost.remove();
     updateDOM();
   }
 
   if (pushToHistory) {
-    history.pushState(
-      { type: "project", slug: data.slug },
-      "",
-      `?${data.slug}`
-    );
+    history.pushState({ type: "project", slug: data.slug }, "", `?${data.slug}`);
   }
 }
 
-function closeProjectOverlay(pushToHistory = true) {
+
+
+  useTransition = true) {
   const projectParam = window.location.search.substring(1);
   let contentDiv = null;
 
@@ -432,38 +496,62 @@ function closeProjectOverlay(pushToHistory = true) {
     }
   }
 
-  // Strip transition classes from the modal elements BEFORE capturing state
-  document.querySelectorAll('.proj-expand').forEach(el => el.classList.remove('proj-expand'));
-  document.querySelectorAll('.content').forEach(el => el.style.viewTransitionName = '');
+  // Strip transition names from the modal elements BEFORE capturing the new state
 
-  if (contentDiv) {
-    contentDiv.style.viewTransitionName = 'proj-expand';
-  }
+  document.querySelectorAll('.content').forEach(el => el.style.viewTransitionName = '');
 
   const updateDOM = () => {
     const overlay = document.getElementById('overlay');
-    if (overlay) overlay.classList.remove('active');
+
+    if (overlay) {
+      overlay.classList.remove('active');
+    }
+
     document.body.classList.remove('no-scroll');
+
+    const modalBody = document.getElementById('modal-body');
+    if (modalBody) {
+      modalBody.innerHTML = '';
+    }
+
+    if (contentDiv) {
+      contentDiv.style.viewTransitionName = 'proj-expand';
+    }
   };
 
-  if (document.visibilityState === 'visible' && document.startViewTransition) {
+  if (
+    useTransition &&
+    document.visibilityState === 'visible' &&
+    document.startViewTransition
+  ) {
+    console.log(
+      'close old state',
+      [...document.querySelectorAll('*')]
+        .filter(el => getComputedStyle(el).viewTransitionName !== 'none')
+        .map(el => ({
+          tag: el.tagName,
+          cls: el.className,
+          vt: getComputedStyle(el).viewTransitionName
+        }))
+    );
     const transition = document.startViewTransition(updateDOM);
 
-    // FIX: Catch the rejection on the 'finished' promise to suppress the error,
-    // then run the cleanup logic regardless of whether it finished or skipped.
     transition.finished
       .catch(() => {
-        // Silently catch the DOMException if the transition is skipped
+        // Silently catch rejections if the transition is skipped
       })
       .finally(() => {
-        // Cleanup always runs
+        // Final fallback cleanup ensures everything is released
         if (contentDiv) contentDiv.style.viewTransitionName = '';
-        const modalBody = document.getElementById('modal-body');
-        if (modalBody) modalBody.innerHTML = '';
+
+        // Double check ghost proxy is gone if transition was aborted mid-flight
+        const liveGhost = document.getElementById('vt-ghost-proxy');
+        if (liveGhost) liveGhost.remove();
       });
 
   } else {
     updateDOM();
+    if (contentDiv) contentDiv.style.viewTransitionName = '';
   }
 
   if (pushToHistory) {
@@ -492,14 +580,17 @@ function handleGlobalAppRouting(pushToHistory = false) {
     } else if (queryParam) {
       const index = cubbyData.findIndex(item => item.slug === queryParam);
       if (index >= 0 && index < 15) {
-        openProjectOverlay(index, pushToHistory);
+        openProjectOverlay(index, pushToHistory, false);
       } else {
-        closeProjectOverlay(pushToHistory);
+        closeProjectOverlay(pushToHistory, false);
       }
     }
   };
 
-  if (document.visibilityState === 'visible' && document.startViewTransition && !document.activeTransition) {
+  if (
+    document.visibilityState === 'visible' &&
+    document.startViewTransition
+  ) {
     const transition = document.startViewTransition(updateDOM);
     transition.finished.then(() => {
       if (eBallOverlay) eBallOverlay.style.viewTransitionName = '';

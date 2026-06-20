@@ -191,9 +191,6 @@ nav ul li:nth-of-type(1) a {
 }
 
 /* Modal */
-body.no-scroll {
-  overflow: hidden;
-}
 
 #overlay {
   position: fixed;
@@ -204,11 +201,12 @@ body.no-scroll {
   inset: 0;
   background: rgba(0, 0, 0, 0.85);
   z-index: 1000;
-  transform: translateZ(var(--cube-size) + 20px);
+  /*transform: translateZ(var(--cube-size) + 20px);*/
   /* Above the canvas */
   display: flex;
   opacity: 0;
   pointer-events: none;
+  visibility: hidden;
   transition: opacity 0.3s ease;
   /* Space for mobile */
   overflow-y: auto;
@@ -218,10 +216,11 @@ body.no-scroll {
 
 #overlay.active {
   opacity: 1;
+  visibility: visible;
   pointer-events: auto;
 }
 
-body.modal-open {
+body.no-scroll {
   overflow: hidden;
   /* Stops background scrolling */
   height: 100vh;
@@ -421,6 +420,7 @@ body.modal-open {
   transform: translateZ(calc((var(--cube-size) * -1) - 20px));
   transition: transform 0.1s ease-out;
   z-index: -10;
+  position: relative;
   margin-bottom: 100px;
 }
 
@@ -628,7 +628,7 @@ a.cubby:focus-visible {
   align-items: center;
 }
 
-#eight-ball-overlay.hidden, #curatorial-panel.hidden {
+.hidden {
   display: none !important;
 }
 
@@ -875,16 +875,16 @@ a.cubby:focus-visible {
 }
 
 /* Page transition for project */
-.proj-expand {
+/*.proj-expand {
   view-transition-name: proj-expand;
-}
+}*/
 
 ::view-transition-old(proj-expand),
 ::view-transition-new(proj-expand),
 ::view-transition-old(oracle-expand),
 ::view-transition-new(oracle-expand) {
   object-fit: cover;
-}
+animation-duration: 700ms;}
 
 /* Video */
 
@@ -1104,4 +1104,10 @@ a.work-link {
     transform: translateY(0) !important;
   }
 
+}
+
+#overlay,
+#curatorial-panel,
+#eight-ball-overlay {
+  contain: layout;
 }
