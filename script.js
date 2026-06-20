@@ -336,7 +336,7 @@ function openProjectOverlay(index,
       `;
     } else if (data.slug === "photo-news" && modalBody) {
       modalBody.innerHTML = `
-        <div class="vid-container proj-expand" style="background-image: url('${data.image}')">
+        <div class="vid-container proj-expand vid-4-5" style="background-image: url('${data.image}')">
         <iframe src="${data.vimeo}"
           frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe></div>
         <iframe class="instagram-media instagram-media-rendered" id="instagram-embed-0" src="https://www.instagram.com/photonews5/embed/" allowtransparency="true" allowfullscreen="true" frameborder="0" height="500" data-instgrm-payload-id="instagram-media-payload-0" scrolling="no"></iframe>

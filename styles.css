@@ -267,6 +267,7 @@ body.no-scroll {
 #modal-title {
   font-family: var(--base-font);
   margin: 0;
+  padding-left: 1rem;
 }
 
 .modal-top {
@@ -275,7 +276,7 @@ body.no-scroll {
   align-items: center;
   flex-wrap: wrap;
   padding-inline-end: 2em;
-  margin-bottom: 2em;
+  margin: 0.5em 0 2em 0;
   gap: 1em;
 }
 
@@ -294,6 +295,7 @@ body.no-scroll {
   max-width: 60ch;
   min-width: 16ch;
   margin: 0;
+  padding-left: 1rem;
   margin-bottom: 0.2em;
 }
 
@@ -326,11 +328,12 @@ body.no-scroll {
   display: block;
   min-width: 326px;
   padding: 0px;
+  margin: 0 auto;
 }
 
 @media (min-width: 600px) {
   .instagram-media {
-    width: 80%;
+    width: 40%;
   }
 }
 
@@ -875,16 +878,17 @@ a.cubby:focus-visible {
 }
 
 /* Page transition for project */
-/*.proj-expand {
+.proj-expand {
   view-transition-name: proj-expand;
-}*/
+}
 
 ::view-transition-old(proj-expand),
 ::view-transition-new(proj-expand),
 ::view-transition-old(oracle-expand),
 ::view-transition-new(oracle-expand) {
   object-fit: cover;
-animation-duration: 700ms;}
+  animation-duration: 500ms;
+}
 
 /* Video */
 
@@ -893,9 +897,10 @@ animation-duration: 700ms;}
   height: auto;
   aspect-ratio: 16 / 9;
   /* Sets the proportional width-to-height ratio */
-
 }
-
+.vid-container.vid-4-5 iframe {
+    aspect-ratio: 5 / 4;
+}
 @media (min-width: 700px) {
   .vid-container {
     width: 60%;
