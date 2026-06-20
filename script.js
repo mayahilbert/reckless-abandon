@@ -484,6 +484,7 @@ function openProjectOverlay(index,
 
 
 
+function closeProjectOverlay(pushToHistory = true,
   useTransition = true) {
   const projectParam = window.location.search.substring(1);
   let contentDiv = null;
