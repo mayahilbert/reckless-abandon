@@ -1,16 +1,6 @@
 // --- CONFIGURATION ---
 const TEXTURE_URL = 'images/Texturelabs_Glass_135St.png';
 
-const answers = [
-  "IT IS\nCERTAIN", "DECIDEDLY\nSO", "WITHOUT\nA DOUBT",
-  "YES\nDEFINITELY", "YOU MAY\nRELY ON IT", "AS I\nSEE IT, YES",
-  "MOST\nLIKELY", "OUTLOOK\nGOOD", "YES", "SIGNS POINT\nTO YES",
-  "REPLY HAZY\nTRY AGAIN", "ASK AGAIN\nLATER", "BETTER NOT\nTELL YOU",
-  "CANNOT\nPREDICT", "CONCENTRATE\nAND ASK", "DON'T\nCOUNT ON IT",
-  "MY REPLY\nIS NO", "MY SOURCES\nSAY NO", "OUTLOOK\nNOT SO GOOD",
-  "VERY\nDOUBTFUL"
-];
-
 const shelf = document.getElementById('shelf');
 const cubbyData = [
   { slug: "virtual-discussion", vimeo: "https://player.vimeo.com/video/1190479860?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479", image: "images/key/JPEG/cyber-chiffon.jpg", title: "virtual DISCussion", artist: "cyber//chiffon (Taylor Elise Colimore + Noren G-H)", medium: "Video", year: "2025", description: "<p>The film begins with \"muzzled\" centering on feelings of madness and rage conjured by being trapped by the perception of others.</p><p>Transiting next into \"I ENDURE WITH A TENSE PULSE\" the video builds from sustained unsettled movement to an explosive climax, communicating frustration with unsolicited attention.</p><p>The film concludes with \"virtual DISCussion,\" a two channel collaborative video combining audio, assets, and footage from the previous sections. Referencing the circular frame from the beginning video, the artists overlap motifs such as plaid and grid, shades of pink, and the figure, thus bringing the two videos into conversation and showcasing the different yet complementary perspectives of the two artists.</p>", bio: "The artist collective, cyber//chiffon, is Taylor Elise Colimore and Noren G-H. Taylor Elise Colimore (she/her) is a multimedia artist, born in Baltimore, Maryland, and currently living in Richmond, Virginia, with a visual art practice consisting of both digital and analog art making techniques. Colimore graduated summa cum laude from Virginia Commonwealth University with a B.F.A. in Kinetic Imaging. Noren G-H (they/them) is an interdisciplinary artist located in Richmond, Virginia, making work that navigates identity, time, and interaction. G-H graduated summa cum laude from Virginia Commonwealth University with a B.F.A in Kinetic imaging with minors in Sculpture and Art History. Coming together and pulling from their time-based fine arts background, they explore the intersection of classical craft and emerging media technologies with the joint desire to communicate their inner truths. @cyberchiffon", ig: "https://www.instagram.com/cyberchiffon/" },
@@ -21,12 +11,13 @@ const cubbyData = [
   { slug: "be-happy", vimeo: "https://player.vimeo.com/video/1199088741?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479", image: "images/key/JPEG/ladislas.jpg", title: "Be Happy", artist: "Robert Ladislas Derr", medium: "Video", year: "2023", description: "<p>With a dental cheek retractor forcing my mouth into a smile, I fill my mouth and cover my face with Reddi-Wip Cream, then speak “be happy” 139 times. This durational performance recognizes one of the meanings of 139, which presages impending change. The end of something and the beginning of another whether good or bad. These uncertain times prompt this action.</p>", bio: "<p>Robert Ladislas Derr is a visual artist making performance art from live to intervention, videos, photographs, and multimedia installations. He has exhibited and performed widely at such venues as, the Riga Performance Festival (Latvia), SomoS Art House (Germany), Black Mountain College Museum + Arts Center (US), Canberra Contemporary Art Space (Australia), Mendel Art Gallery (Canada), Schirn Kunsthalle Frankfurt (Germany), Wexner Center for the Arts (US), LIVE Performance Art Biennale (Canada), and Irish Film Institute (Ireland).</p>", website: "http://robertladislasderr.com/" },
   { slug: "rolling-piece", vimeo: "https://player.vimeo.com/video/1190481791?title=0&amp;byline=0&amp;portrait=0&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479", image: "images/key/JPEG/laguna.jpg", title: "Rolling Piece", artist: "Angelina Laguna", medium: "Video", year: "2025", description: "<p>Outside the Headquarters to the United Nations on 1st Ave, <em>Rolling Piece</em> was performed on March 10th 2025 at 1pm EST. The audience was invited to view the performance via a livestream and in-person spectators were by happenstance. The cast of <em>Rolling Piece</em> includes performers Jeff Natt, Lindsay Brents and myself; a stage manager Zool Zulkowitz;  videographers Alec Hawkins, Nathan Williams, and Rosa Allegra Wolff; and invited spectator Yoshiko Chuma. The structure involved me lying on the pavement and rolling from one end of the campus to the other, past the 193 member nations flags and 2 non-member nation flags. Two performers walked with me, protecting and guiding my body. Unsurprisingly, the score was interrupted by authority figures 20 minutes into the piece. Following the plan, I waited on the pavement until my arrest was threatened. This concluded the performance. This video footage by Alec Hawkins is a chronological documentation of the piece. </p>", bio: "<p>Angelina Laguna is an independent dance artist working in New York City. After receiving a BFA in dance from Purchase College, she has performed multiple restaged works by Merce Cunningham and worked with artists such as Liz Gerring, Cherrie Yu, John Heginbotham, and Yoshiko Chuma and the School of Hard Knocks. Laguna has also worked for and alongside, visual artists, musicians, activists, lawyers, and table tennis champions, among other New York professionals and residents. She has performed her own work in studios, on stages, and on sidewalks.</p><p>Laguna maintains physical practices of ballet, Cunningham technique, and the classical Pilates method. Additionally, she is involved with the Cabrini Immigrant Services Food Pantry, working in manual labor and fundraising, and with various anti-war groups across the city. These practices shape her performances.</p>", ig: "https://instagram.com/angelina_laguna", website: "angelinalaguna.cargo.site" },
   { slug: "therapy-room", vimeo: "https://player.vimeo.com/video/1199088744?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479", image: "images/key/JPEG/larrosa.jpg", title: "Therapy Room", artist: "Ivana Larrosa", medium: "Video", year: "2026", description: "<p><em>Therapy Room</em> investigates my experience of space as the consequence of a car accident that left me with permanent double vision. Based on my first Eye Movement Desensitization and Reprocessing (EMDR) therapy session, this exploration offers insight into the human psyche, connecting to memory through vision. Can you describe something that you can never see but you notice is there? Memory is continually active, continually moving, continually holding things in a circle around itself.</p>", bio: "<p>Ivana Larrosa is a visual artist from Spain living in New York City. She works primarily with photography, video and performance. Her work has been shown at at Art venues and Museums including Anthology Film Archives, International Center of Photography, The Arthur L. Carter Journalism Institute of New York University, The Exponential, Queens Museum, The Center for Fine Art Photography, Project Space Kleiner Salon, Accademia di Belle Arti di Brera, and Galeria Sicart, among others. Larrosa's work is at the permanent collection of Foundations, Museums, Institutions and Collections such as Bassat Private Collection, Spanish National Museum of Sculpture, and video art platform PerformVu/ Lucid.</p><p>Ivana Larrosa has received several grants such as City Artist Corps Grant of New York, Lluís Carulla Foundation Individual Artist Grant, and Museum of Tortosa Artist in Residency, and numerous awards, including Ramon Aloy International Photographic Award and Camera Club of New York Baxter St, Annual Juried Competition.</p>", ig: "https://www.instagram.com/ivanalarrosa/" },
-  { slug: "i-thought-it-would-be-funny", image: "images/key/JPEG/mcdermott.jpg", title: "I Thought it Would Be Funny (Death Shrouds)", artist: "Kathleen McDermott", medium: "Fabric, LEDs, blinking circuit, GIF", year: "2016", description: "<p><em>I Thought it Would be Funny (Death Shrouds)</em> is an exploration of a wearable epitaph, or death shroud. It may also be an apology. I hand-soldered an LED sign that reads \"I thought it would be funny\" and hooked it up to a blinking circuit. I then wore it and documented it in a series of videos that became gifs, which became progressively more other-worldly. I still have this textile, and inspired by the invitation to revisit old works, unfinished thoughts, intuition, and letting go—I am considering making images with it again, perhaps at 10 year intervals.</p>", bio: "<p>Kathleen McDermott is an interdisciplinary artist with a background in installation, prop-making and sculpture, based in Brooklyn, NY. She combines her knowledge of fabrication with open source hardware to build a language of absurdity that merges new media, design, performance, and video. She is interested in unproductive technologies that extend and highlight embodied knowledge, and that resist control. Her work has been exhibited internationally, including at the Museum of Arts and Design in New York, The Tides Institute and Museum of Art in Maine, the Wende Museum in LA, and Ars Electronica in Linz, Austria; and has been featured in publications such as The Wall Street Journal, Huffington Post, Fast Company, and Dezeen.</p>", ig: "https://www.instagram.com/kit_the_robot", website: "https://kthartic.com/" },
+  { slug: "memorial-for-bad-jokes", vimeo: "https://player.vimeo.com/video/1202899619?autoplay=1&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479", image: "images/key/JPEG/memorial.jpg", title: "Memorial For Bad Jokes", artist: "Kathleen McDermott", medium: "Wearable machines, video and editing by Kathleen McDermott. Sound design by Senem Pirler. 4 minute loop", year: "2016", description: "<p><em>Memorial For Bad Jokes</em> is an exploration of the relationship between mortality and electricity, a dynamic yet non-organic force. The constructed environment within the video functions as a purgatory and as an absurdist procession performed to the rhythms created by a cast of strange wearables, each of which is performed by the artist.</p><p><em>\"I Thought It Would Be Funny,\"</em> is a death shroud made of LED lights, pulsing based on a simple timing circuit. Time is also kept by <em>\"The Little Drummer Boy,\"</em> a motorized drum stick strapped around the artist's waist, and <em>\"The Public Speaker,\"</em> a shawl covered in speakers that plays a recording of the artist screaming. <em>\"The Social Escape Dress,\"</em> passes through, emitting a cloud of fog through a wearable system of vaporizers and aquarium pump motors.</p>", bio: "<p>Kathleen McDermott is an interdisciplinary artist with a background in installation, prop-making and sculpture, based in Brooklyn, NY. She combines her knowledge of fabrication with open source hardware to build a language of absurdity that merges new media, design, performance, and video. She is interested in unproductive technologies that extend and highlight embodied knowledge, and that resist control. Her work has been exhibited internationally, including at the Museum of Arts and Design in New York, The Tides Institute and Museum of Art in Maine, the Wende Museum in LA, and Ars Electronica in Linz, Austria; and has been featured in publications such as The Wall Street Journal, Huffington Post, Fast Company, and Dezeen.</p>", ig: "https://www.instagram.com/kit_the_robot", website: "https://kthartic.com/" },
   { slug: "hello-its-you", worklink: "https://mitraavrs.neocities.org", image: "images/key/JPEG/mitra.jpg", title: "Hello - It's You", artist: "Mitra", medium: "Website (Neocities)", year: "2025", description: "<p><em>Hello – It’s You</em> is an immersive exploration of memory and self-discovery, merging illustrations and text in the form of an ARG-like hypertext adventure. This project invites the viewer to navigate a dynamic, nonlinear journey, where fragments of the past and present interact, revealing the complexities of personal identity. Through this fusion of visual storytelling and textual exploration, <em>Hello – It’s You</em> engages the audience in a dialogue about how memory shapes who we are, and how the act of revisiting those memories becomes a path to understanding the self.</p>", bio: "<p>MITRAAVRS is a multimedia artist and educator exploring memory, identity disturbance and nonlinear narratives through hypertext and experimental web-based formats. Born in India and raised across Oman and Dubai before relocating to the United States at twenty-three, their transnational upbringing shapes an interest in shifting selves and unstable temporalities within narrative form. Holding a BFA in 3D Modeling and Animation from SAE Institute Dubai, they merge illustration and creative coding to build hybrid narrative spaces and interactive systems. They have exhibited work with New Bedford Arts Illuminated and Hatch Street Studios.</p><p>MITRAAVRS has also worked as a Gallery Assistant and currently servers as a Teaching Fellow at UMass Dartmouth, suporting students in developing foundational digital media skills.</p>", ig: "https://www.instagram.com/mitraavrs", website: "https://mitraavrs.carrd.co" },
   { slug: "a-stabilizing-loop", vimeo: "https://itch.io/embed/1038681", worklink: "https://aaronoldenburg.itch.io/loop", image: "images/key/JPEG/oldenburg.jpg", title: "A Stabilizing Loop", artist: "Aaron Oldenburg", medium: "Software (web-based or local application download)", year: "2023", description: "<p>Layers of hand-drawn images taken from my own past photography of anonymized friends and family and images of extinct animal and plant species are given chance combinations via autonomous real-time software. The environments created in these vignettes are unpredictable and often chaotic. The figures are both overwhelmed by this and participate in it.</p><p>The elements that make up the collage were chosen as they aligned with a sense of uncertainty and loss. There is a feeling for me, in the collision of the semi-random images, of the chaos of earth in a period of late humankind. It is the momentum of natural disasters birthed from our energy usage. It is a constant state of rupture interspersed with moments of new equilibria.</p><p>My mediums tend to be videogames, interactive and non-interactive procedural software, and video, with the latter often using the former as material.  Simulations of instability, the overwhelming power of nature, post-human worlds and dissociation are themes I lean toward. They all come from a similar place, even if they produce different results. All of them can be seen as a form of rupture with our assumed control over our world and reality. There’s a spiritual element of letting go or riding the discomfort.</p>", bio: "<p>Aaron Oldenburg is a Baltimore-based game, interactive and video artist. His work has exhibited in festivals and galleries in New York, Johannesburg, London, Buenos Aires, São Paulo and Los Angeles, including SIGGRAPH, A MAZE. International Games and Playful Media Festival, the LeftField Collection at EGX Rezzed, Slamdance DIG, Game On! - El arte en el juego, and FILE Electronic Language International Festival. His games have been written about in Kill Screen, Baltimore City Paper, BmoreArt, and Rock, Paper, Shotgun.</p><p>He teaches game design as a professor in The University of Baltimore's Simulation and Game Design program and has an MFA from the University of Maryland, Baltimore County. His writing on games has been published in Game Studies, Journal of Gaming and Virtual Worlds, Hyperrhiz, Acta Ludologica, and the proceedings of the International Symposium on Electronic Art (ISEA). In October 2003 he finished two years as an HIV Health Extension Agent for the Peace Corps in Mali.</p>", website: "https://aaronoldenburg.itch.io" },
   { slug: "desire-paths-for-wikipedia", worklink: "https://greasyfork.org/en/scripts/565058-desire-paths-for-wikipedia", image: "images/key/JPEG/pipkin.jpg", title: "Desire Paths for Wikipedia", artist: "Everest Pipkin", medium: "Browser extension userscript", year: "2026", description: "<p><em>Desire Paths for Wikipedia</em> is a browser userscript that remembers the path of a cursor over the linked pages of Wikipedia.org. It averages these paths and “wears” them into the page, showing your browsing history over time. Return to a page months or years later and find not just that you had been there before, but exactly how you wandered.</p><p>With thanks to Kate Compton and Christina Cuneo, with whom this idea emerged in conversation.</p>", bio: "<p>Everest Pipkin is a game developer, artist, and educator who works in games and software tools across the handmade web—as well as on paper through books, zines and drawings. They have shown and spoken at The Design Museum of London, The Texas Biennial, The XXI Triennale of Milan, The Photographers Gallery of London, Center for Land Use Interpretation, and currently teach game design at the Pratt Institute. They believe the internet is a public good, and the post office should operate it.</p>", ig: "https://www.instagram.com/everestpipkin/", website: "https://everest-pipkin.com/" },
   { slug: "www-blairs-computer", worklink: "https://www.blairs.computer", image: "images/key/JPEG/simmons.jpg", title: "www.blairs.computer", artist: "Blair Simmons", medium: "Website", year: "2025", description: "<p>So I have decided I want my computer to forget, to delete, like I do. I want to move on. In this series of work, I utilize my personal digital archive to explore the relationship between my human and digital memories –  digital memory as a prosthetic extension of my human memory. www.blairs.computer is a website that asks visitors of the site to take and hold onto my files, so that I can delete them from my drive. <a href=\"https://www.blairsimmons.com/portraits\">Archive of Digital Portraits Cast in Concrete</a> is an ongoing series of sculptures made of discarded personal computing devices from myself and people in my life. These sculptures are cast in concrete, making the data permanently inaccessible.</p>", bio: "<p>I am a queer and anxious artist, curator, researcher, storyteller, and technician working in as many mediums as will have me. I enjoy exploring themes of technology, labor, bodies, and pain. My physical process of making mimics the daily pain of working and labor: warping, distorting, grinding and wearing down. My pieces are both critical of and dependent on technology, mirroring the ways technology can be a solution to my chronic pain, and the source of the pain itself.</p><p>I am currently teaching at the Interactive Media Arts and Interactive Telecommunications Program at New York University. My research often materializes as objects and performances which have been performed at the likes of Pioneer Works, La Mama’s CultureHub, Wordhack at Babycastles, theBlanc and the Edinburgh Fringe Festival. I have been mentioned in publications like PARtake, The Scotsman, USA Today, The Guardian, NYTimes, etc.</p>", website: "https://www.blairsimmons.com" },
   { slug: "photo-news", vimeo: "https://player.vimeo.com/video/967244235?h=8d82c6d042", image: "images/key/JPEG/zellen.jpg", title: "Photo News", artist: "Jody Zellen", medium: "Video", year: "2019-2026", description: "<p><em>Photo News</em>, January 1, 2019 – present, is an ongoing project consisting of daily Instagram posts of digital collages that combine news images from lead stories, juxtaposed with excerpts from the headline that accompanies each chosen photograph. This ever changing but always familiar cacophony of headlines and images gives voice to the uniquely fragmented realities we now inhabit. The project can be viewed daily on <a href=\"https://www.instagram.com/photonews5\">Instagram</a>. At the end of each year, Zellen compiles a film containing that years collages. She has completed a composite film that presents the first six years of the project.</p>", bio: "<p>Jody Zellen is a Los Angeles based artist who works in many media simultaneously. She makes animations, interactive installations, app art, net art, drawings, paintings, photographs, public art, and artists' books. She constantly thinks about ways to use new technologies and to integrate interactivity into her artworks.</p><p>Zellen received a BA from Wesleyan University (1983), a MFA from CalArts (1989) and a MPS from NYU's Interactive Telecommunications Program (2009). </p><p>Her work has been included in more than 500 group exhibitions and festivals since the late 1980s and is in the collections of the Los Angeles County Museum of Art, The Whitney Museum of Art, The Getty Museum, The Museum of Modern Art, New York, The San Francisco Museum of Art, The Laguna Art Museum, The Orange County Museum of Art as well as in numerous private collections.</p>", ig: "https://instagram.com/photonews5", website: "https://www.jodyzellen.com" },
+  { slug: "curatorial-statement", image: "images/blue.png" },
   { slug: "random" }
 ];
 
@@ -53,8 +44,8 @@ for (let i = 0; i < 16; i++) {
 >
 </model-viewer>
       </div>`;
-  } else if (i === 14) {
-    cubby.innerHTML = contentHtml;
+    //} else if (i === 14) {
+    //  cubby.innerHTML = contentHtml;
   } else {
     cubby.innerHTML = contentHtml + `<div class="content"></div>`;
   }
@@ -65,42 +56,55 @@ for (let i = 0; i < 16; i++) {
 // Scratch-off Canvas Setup
 const canvas = document.getElementById('erase-canvas');
 const ctx = canvas.getContext('2d');
+
 const textureImg = new Image();
+textureImg.crossOrigin = 'anonymous';
 textureImg.src = TEXTURE_URL;
-textureImg.crossOrigin = "anonymous";
+
+
+canvas.style.filter = 'url(#spray-life)';
 
 function initCtx() {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 
+  // White base
   ctx.globalCompositeOperation = 'source-over';
   ctx.globalAlpha = 0.95;
-  ctx.fillStyle = 'rgba(255,255, 255, 1)';
+  ctx.fillStyle = 'rgba(255, 255, 255, 1)';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+  // Texture overlay
   if (textureImg.complete) {
-    const pattern = ctx.createPattern(textureImg, 'repeat');
-    if (pattern) {
-      ctx.fillStyle = pattern;
-      ctx.globalAlpha = 0.4;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-    }
+    ctx.globalAlpha = 0.4;
+    ctx.drawImage(textureImg, 0, 0, canvas.width, canvas.height);
   }
 
+  ctx.globalCompositeOperation = 'source-over';
   ctx.globalAlpha = 1.0;
-  ctx.fillStyle = "black";
-  const fontSize = Math.max(60, canvas.width * 0.17);
-  const fontFamily = "'Rubik Spray Paint', sans-serif";
-  ctx.font = `${fontSize}px ${fontFamily}`;
-  ctx.textAlign = "center";
-  ctx.textBaseline = "middle";
+  ctx.fillStyle = 'black';
 
-  ctx.fillText("Reckless", canvas.width / 2, canvas.height / 2.8);
-  ctx.fillText("Abandon", canvas.width / 2, canvas.height / 1.4);
+  const fontSize = Math.max(60, canvas.width * 0.17);
+  ctx.font = `${fontSize}px 'Rubik Spray Paint', sans-serif`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('Reckless', canvas.width / 2, canvas.height / 2.8);
+  ctx.fillText('Abandon', canvas.width / 2, canvas.height / 1.4);
 
   ctx.globalCompositeOperation = 'destination-out';
   ctx.globalAlpha = 1.0;
 }
+
+const turb = document.getElementById('turb');
+let t = 0;
+(function tick() {
+  t += 0.06;
+  turb.setAttribute('baseFrequency',
+    (0.12 + Math.sin(t * .71) * .004 + Math.sin(t * 1.37) * .002).toFixed(4) + ' ' +
+    (0.15 + Math.cos(t * .53) * .005 + Math.cos(t * 1.09) * .002).toFixed(4)
+  );
+  requestAnimationFrame(tick);
+})();
 
 Promise.all([
   textureImg.decode(),
@@ -108,6 +112,7 @@ Promise.all([
 ]).then(() => {
   initCtx();
 });
+
 window.addEventListener('resize', initCtx);
 
 const CORE_SIZE = 80;
@@ -118,17 +123,14 @@ function erase(currX, currY) {
     lastPoint = { x: currX, y: currY };
     return;
   }
-
   ctx.globalCompositeOperation = 'destination-out';
   ctx.globalAlpha = 1.0;
   ctx.lineWidth = CORE_SIZE;
   ctx.lineCap = 'round';
-
   ctx.beginPath();
   ctx.moveTo(lastPoint.x, lastPoint.y);
   ctx.lineTo(currX, currY);
   ctx.stroke();
-
   lastPoint = { x: currX, y: currY };
 }
 
@@ -245,7 +247,8 @@ canvas.addEventListener('mousedown', (e) => {
     if (index === 15) {
       openEightBallOracle();
     } else if (index === 14) {
-      return;
+      curatorialPanel.classList.add('open');
+      curatorialPanel.classList.remove('hidden');
     } else {
       openProjectOverlay(index);
     }
@@ -306,6 +309,7 @@ function openProjectOverlay(index, pushToHistory = true) {
   const updateDOM = () => {
     const overlay = document.getElementById('overlay');
     const modalTitle = document.getElementById('modal-title');
+    const projArtist = document.getElementById('proj-artist');
     const projInfo = document.getElementById('proj-info');
     const modalBody = document.getElementById('modal-body');
 
@@ -314,8 +318,8 @@ function openProjectOverlay(index, pushToHistory = true) {
     }
 
     if (modalTitle) modalTitle.textContent = data.title;
-    if (projInfo) projInfo.innerHTML = `<p class="proj-artist">${data.artist}</p>
-            <p class="proj-medium-year">${data.medium}, ${data.year}</p>`;
+    if (projArtist) projArtist.innerHTML = `${data.artist}`;
+    if (projInfo) projInfo.innerHTML = `${data.medium}, ${data.year}`;
     if (data.worklink && modalBody) {
       modalBody.innerHTML = `
         <a class="work-link" target="_blank" href="${data.worklink}"><div class="link-container proj-expand" style="background-image: url('${data.image}"><span class="highlight">Click to visit the work</span><br><span class="link-note">Opens in new tab</span>
@@ -331,11 +335,15 @@ function openProjectOverlay(index, pushToHistory = true) {
         <div id="socials"></div>
       `;
     }
-    else if (data.slug === "i-thought-it-would-be-funny" && modalBody) {
+    else if (data.slug === "memorial-for-bad-jokes" && modalBody) {
       modalBody.innerHTML = `
-        <img src="images/ithought.gif">
-        <img src="images/ithought2.gif">
-        <img src="images/ithought3.gif">
+      <div class="vid-container proj-expand" style="background-image: url('${data.image}">
+        <iframe src="${data.vimeo}"
+          frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe></div>
+          <div class="mem-imgs">
+        <img class="mem-img" src="images/ithought.gif">
+        <img class="mem-img" src="images/ithought2.gif">
+        <img class="mem-img" src="images/ithought3.gif"></div>
         <div class="modal-desc">
         <h3>About the work</h3>
           ${data.description.replace(/\n/g, '<br>')}
@@ -521,104 +529,16 @@ const curatorialPanel = document.getElementById('curatorial-panel');
 const curatorialCloseBtn = document.getElementById('curatorial-close-btn');
 const projectOverlay = document.getElementById('overlay');
 
-let isDragging = false;
-let currentTransformX = 0;
-let startYc = 0, startXc = 0;
-let deltaY = 0, deltaX = 0;
-
-window.addEventListener('mousemove', (e) => {
-  if (!curatorialPanel || isDragging || curatorialPanel.classList.contains('open')) return;
-
-  if (projectOverlay && projectOverlay.classList.contains('active')) {
-    curatorialPanel.classList.remove('peek', 'open');
-    return;
-  }
-
-  const screenWidth = window.innerWidth;
-  const triggerZone = screenWidth * 0.80;
-  const peekEdge = triggerZone;
-
-  if (!curatorialPanel.classList.contains('peek')) {
-    if (e.clientX > triggerZone) {
-      curatorialPanel.classList.add('peek');
-    }
-  } else {
-    if (e.clientX < peekEdge) {
-      curatorialPanel.classList.remove('peek');
-    }
-  }
-});
-
-
-// --- ACCESSIBLE MOBILE TOUCH CAPTURE ENGAGEMENT ENGINE ---
-if (curatorialPanel) {
-
-  curatorialPanel.addEventListener('pointerdown', (e) => {
-    // Only drag with primary touch/mouse clicks
-    if (e.button !== 0) return;
-
-    isDragging = true;
-    startX = e.clientX;
-    deltaX = 0;
-
-    curatorialPanel.classList.add('dragging');
-    curatorialPanel.style.transition = 'none';
-
-    // CRITICAL MOBILE FIX: Lock this specific finger tracking ID to the element
-    curatorialPanel.setPointerCapture(e.pointerId);
-  });
-
-  curatorialPanel.addEventListener('pointermove', (e) => {
-    if (!isDragging) return;
-
-    deltaX = e.clientX - startX;
-
-    // Prevent dragging the panel further right than its default starting position
-    if (deltaX > 0) deltaX = 0;
-
-    // Update the layout position visually on screen
-    curatorialPanel.style.transform = `translateX(${deltaX}px)`;
-  });
-
-  curatorialPanel.addEventListener('pointerup', (e) => {
-    if (!isDragging) return;
-    isDragging = false;
-
-    curatorialPanel.classList.remove('dragging');
-    curatorialPanel.style.transition = ''; // Restores spring-snapping transitions
-
-    // CRITICAL MOBILE FIX: Cleanly release the touch lock identifier
-    curatorialPanel.releasePointerCapture(e.pointerId);
-
-    const screenWidth = window.innerWidth;
-    const openThreshold = screenWidth * 0.15; // Requires sliding 15% of screen width
-
-    // Evaluation thresholds: Did the user drag it far enough to slide open?
-    if (deltaX < -openThreshold) {
-      openCuratorialPanel(true);
-      if (typeof updateCuratorialAccessibility === 'function') {
-        updateCuratorialAccessibility(true);
-      }
-    } else {
-      // Snaps right back to its resting peek strip position if let go too early
-      curatorialPanel.style.transform = '';
-      curatorialPanel.classList.add('peek');
-    }
-  });
-
-  // SAFETY NET: If a phone call alerts the device or the gesture is broken, release the lock cleanly
-  curatorialPanel.addEventListener('pointercancel', (e) => {
-    isDragging = false;
-    curatorialPanel.classList.remove('dragging');
-    curatorialPanel.style.transform = '';
-    curatorialPanel.releasePointerCapture(e.pointerId);
-  });
-}
-
 if (curatorialCloseBtn) {
   curatorialCloseBtn.addEventListener('click', (e) => {
+    e.preventDefault();
     e.stopPropagation();
+
+    curatorialPanel.style.transform = ''; // clear drag transform
+    curatorialPanel.classList.add('hidden');
+
     curatorialPanel.classList.remove('open', 'peek');
+
     document.documentElement.classList.remove('no-scroll');
   });
 }
@@ -633,6 +553,7 @@ const oracleAnswer = document.getElementById('oracle-answer');
 let isOracleShaking = false;
 
 
+const fx = willOWisps('#eight-ball-overlay', { count: 14, palette: 'marsh' });
 
 function openEightBallOracle(pushToHistory = true) {
   if (!eBallOverlay) return;
@@ -645,32 +566,13 @@ function openEightBallOracle(pushToHistory = true) {
 
   const eBallCubbyContent = document.querySelector('.cubby[data-index="15"] .content');
 
-  // 1. Give transition name to the Cubby (Old State)
-  if (eBallCubbyContent) eBallCubbyContent.style.viewTransitionName = 'oracle-expand';
-
   const updateDOM = () => {
-    // 2. Remove transition name from the Cubby BEFORE capturing new state
-    if (eBallCubbyContent) eBallCubbyContent.style.viewTransitionName = '';
-
-    // 3. Give transition name to the Overlay (New State)
-    interactiveBall.style.viewTransitionName = 'oracle-expand';
     eBallOverlay.classList.remove('hidden');
     document.documentElement.classList.add('no-scroll');
   };
 
-  if (document.visibilityState === 'visible' && document.startViewTransition) {
-    const transition = document.startViewTransition(updateDOM);
-
-    transition.finished
-      .catch(() => { }) // Suppress skipped transition errors
-      .finally(() => {
-        // 4. Clean up all tags when finished
-        interactiveBall.style.viewTransitionName = '';
-        if (eBallCubbyContent) eBallCubbyContent.style.viewTransitionName = '';
-      });
-  } else {
+  if (document.visibilityState === 'visible') {
     updateDOM();
-    interactiveBall.style.viewTransitionName = '';
   }
 
   if (pushToHistory) {
@@ -682,7 +584,6 @@ function openEightBallOracle(pushToHistory = true) {
 if (eBallClose) {
   eBallClose.addEventListener('click', () => {
     if (isOracleShaking) return;
-
     const eBallCubbyContent = document.querySelector('.cubby[data-index="15"] .content');
 
     // 1. Old State: Give name to Overlay, explicitly strip from Cubby
@@ -762,8 +663,290 @@ if (interactiveBall) {
         if (originalProjectIndex !== -1) {
           openProjectOverlay(originalProjectIndex, true);
         }
-      }, 1000);
+      }, 2300);
 
-    }, 600);
+    }, 900);
   });
 }
+
+/* Orbs */
+/*!
+ * wisps.js — will-o'-wisp canvas overlay
+ *
+ * willOWisps(target, options)
+ *
+ * Options: count, size (px), speed (1-10), trail (1-10),
+ *          palette ('marsh'|'spirit'|'shade'|'lantern'|'deep')
+ *
+ * Example:
+ *   willOWisps('#hero', { count: 7, palette: 'marsh' });
+ *
+ * Performance note:
+ *   Each wisp's gradient layers are baked to an OffscreenCanvas once on creation.
+ *   Per frame: zero gradient objects created — only drawImage + globalAlpha.
+ *   Roughly 10–15× less work in the draw path vs creating radial gradients each frame.
+ */
+function willOWisps(target, {
+  count = 14,
+  size = 35,
+  speed = 4,
+  trail = 3,
+  palette = 'marsh',
+} = {}) {
+
+  const PALS = {
+    marsh: [[245, 245, 255], [255, 253, 216], [30, 80, 180]],
+    spirit: [[200, 255, 220], [50, 210, 130], [20, 120, 70]],
+    shade: [[240, 210, 255], [160, 70, 255], [90, 30, 160]],
+    lantern: [[255, 248, 200], [255, 160, 50], [180, 80, 10]],
+    deep: [[200, 255, 235], [30, 200, 160], [10, 100, 90]],
+  };
+
+  const pal = PALS[palette] ?? PALS.marsh;
+  const el = typeof target === 'string' ? document.querySelector(target) : target;
+  const rnd = (a, b) => a + Math.random() * (b - a);
+
+  // ── Canvas setup ──────────────────────────────────────────────────────────
+  if (getComputedStyle(el).position === 'static') el.style.position = 'relative';
+
+  const canvas = document.createElement('canvas');
+  Object.assign(canvas.style, {
+    position: 'absolute', inset: '0',
+    width: '100%', height: '100%',
+    pointerEvents: 'none', zIndex: '0',
+    willChange: 'transform',
+  });
+  el.insertBefore(canvas, el.firstChild);
+  const ctx = canvas.getContext('2d');
+
+  let wisps = [], sparks = [];
+  let gatherPt = null;  // {x, y} when gathering, null otherwise
+
+  function init() {
+    canvas.width = el.offsetWidth;
+    canvas.height = el.offsetHeight;
+    wisps = Array.from({ length: count }, makeWisp);
+    sparks = [];
+    gatherPt = null;
+  }
+  new ResizeObserver(init).observe(el);
+  init();
+
+  // ── Factories ─────────────────────────────────────────────────────────────
+  function makeWisp() {
+    const w = {
+      x: rnd(canvas.width * .1, canvas.width * .9),
+      y: rnd(canvas.height * .1, canvas.height * .9),
+      vx: rnd(-.4, .4), vy: rnd(-.4, .4),
+      wanderAngle: rnd(0, Math.PI * 2),
+      wanderSpeed: rnd(-.022, .022),
+      flicker: rnd(.6, 1), targetFlicker: rnd(.5, 1),
+      flickTimer: 0, flickPeriod: rnd(10, 32),
+      baseRadius: size * rnd(.6, 1.4),
+      trail: [], trailLen: Math.floor(rnd(10, 24)),
+      sparkTimer: 0, sparkPeriod: Math.floor(rnd(8, 22)),
+      gatherAlpha: 1, dead: false,
+    };
+    bakeWisp(w);
+    return w;
+  }
+
+  function bakeWisp(w) {
+    const rad = w.baseRadius * (size / 30);
+    const ext = Math.ceil(rad * 4.6);
+    const dim = ext * 2;
+    const oc = typeof OffscreenCanvas !== 'undefined'
+      ? new OffscreenCanvas(dim, dim)
+      : Object.assign(document.createElement('canvas'), { width: dim, height: dim });
+    const ocx = oc.getContext('2d');
+    const [core, glow, amb] = pal;
+    const rg = (r0, r1) => ocx.createRadialGradient(ext, ext, r0, ext, ext, r1);
+    const fill = (r) => { ocx.beginPath(); ocx.arc(ext, ext, r, 0, Math.PI * 2); ocx.fill(); };
+    const rgba = (c, a) => `rgba(${c},${a})`;
+
+    const haze = rg(0, rad * 4.5);
+    haze.addColorStop(0, rgba(amb, .06));
+    haze.addColorStop(1, rgba(amb, 0));
+    ocx.fillStyle = haze; fill(rad * 4.5);
+
+    const body = rg(0, rad);
+    body.addColorStop(0, rgba(glow, .65));
+    body.addColorStop(0.45, rgba(glow, .35));
+    body.addColorStop(1, rgba(glow, 0));
+    ocx.fillStyle = body; fill(rad);
+
+    const inner = rg(0, rad * .48);
+    inner.addColorStop(0, rgba(core, .95));
+    inner.addColorStop(0.55, rgba(core, .5));
+    inner.addColorStop(1, rgba(glow, 0));
+    ocx.fillStyle = inner; fill(rad * .48);
+
+    const pin = rg(0, rad * .15);
+    pin.addColorStop(0, 'rgba(255,255,255,1)');
+    pin.addColorStop(1, 'rgba(255,255,255,0)');
+    ocx.fillStyle = pin; fill(rad * .15);
+
+    w.cache = oc;
+    w.cacheExt = ext;
+    w.cacheDim = dim;
+  }
+
+  function makeSpark(x, y) {
+    return {
+      x: x + rnd(-18, 18), y: y + rnd(-18, 18),
+      life: rnd(.5, 1), decay: rnd(.012, .028), size: rnd(.8, 2.4)
+    };
+  }
+
+  // ── Update: two modes ────────────────────────────────────────────────────
+
+  function update(w) {
+    return gatherPt ? updateGathering(w) : updateWandering(w);
+  }
+
+  function updateWandering(w) {
+    const sm = speed / 4;
+    const W = canvas.width, H = canvas.height;
+
+    w.wanderSpeed += rnd(-.004, .004);
+    w.wanderSpeed *= .96;
+    w.wanderAngle += w.wanderSpeed + rnd(-.018, .018) * sm;
+    w.vx += Math.cos(w.wanderAngle) * .05 * sm;
+    w.vy += Math.sin(w.wanderAngle) * .06 * sm;
+    w.vy -= .018 * sm;
+    w.vx *= .965; w.vy *= .965;
+
+    const mg = 80;
+    if (w.x < mg) w.vx += .15 * sm;
+    if (w.x > W - mg) w.vx -= .15 * sm;
+    if (w.y < mg) w.vy += .15 * sm;
+    if (w.y > H - mg) w.vy -= .15 * sm;
+
+    w.x += w.vx; w.y += w.vy;
+
+    w.trail.push({ x: w.x, y: w.y });
+    const maxTrail = Math.max(Math.floor(w.trailLen * (trail / 5)), 1);
+    if (w.trail.length > maxTrail) w.trail.shift();
+
+    if (++w.flickTimer >= w.flickPeriod) {
+      w.targetFlicker = rnd(.38, 1);
+      w.flickPeriod = rnd(8, 30);
+      w.flickTimer = 0;
+    }
+    w.flicker += (w.targetFlicker - w.flicker) * .07;
+
+    if (++w.sparkTimer >= w.sparkPeriod) {
+      if (Math.random() < .6) sparks.push(makeSpark(w.x, w.y));
+      w.sparkPeriod = rnd(6, 22);
+      w.sparkTimer = 0;
+    }
+  }
+
+  function updateGathering(w) {
+    const dx = gatherPt.x - w.x;
+    const dy = gatherPt.y - w.y;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+
+    // Arrived — burst of sparks, mark for removal
+    if (dist < 6) {
+      for (let i = 0; i < 7; i++) sparks.push(makeSpark(gatherPt.x, gatherPt.y));
+      w.dead = true;
+      return;
+    }
+
+    // Pull strength grows with distance so they accelerate from afar,
+    // then naturally slow as they close in (accel proportional to dist)
+    const sm = speed;
+    const pull = Math.min(dist * 0.012, 1.8) * sm;
+    w.vx += (dx / dist) * pull;
+    w.vy += (dy / dist) * pull;
+    w.vx *= 0.91;   // higher damping than wandering keeps them from overshooting
+    w.vy *= 0.91;
+
+    w.x += w.vx;
+    w.y += w.vy;
+
+    // Trail
+    w.trail.push({ x: w.x, y: w.y });
+    const maxTrail = Math.max(Math.floor(w.trailLen * (trail / 5)), 1);
+    if (w.trail.length > maxTrail) w.trail.shift();
+
+    // Fade out over the last 160px
+    const fadeStart = 200;
+    if (dist < fadeStart) {
+      w.gatherAlpha = Math.min(w.gatherAlpha, dist / fadeStart);
+    }
+    w.flicker = w.gatherAlpha;
+  }
+
+  // ── Draw ──────────────────────────────────────────────────────────────────
+  function draw(w) {
+    const { cache, cacheExt: e, cacheDim: dim, flicker: f, trail: tr, gatherAlpha: ga } = w;
+    const alpha = f * ga;   // gatherAlpha fades the whole wisp during convergence
+
+    for (let i = 0; i < tr.length; i++) {
+      const t = (i + 1) / tr.length;
+      const pt = tr[i];
+      const sw = dim * .12 * t;
+      ctx.globalAlpha = .28 * t * alpha;
+      ctx.drawImage(cache, pt.x - sw * .5, pt.y - sw * .5, sw, sw);
+    }
+
+    ctx.globalAlpha = alpha;
+    ctx.drawImage(cache, w.x - e, w.y - e, dim, dim);
+    ctx.globalAlpha = 1;
+  }
+
+  // ── Loop ──────────────────────────────────────────────────────────────────
+  (function loop() {
+    const W = canvas.width, H = canvas.height;
+
+    ctx.clearRect(0, 0, W, H);
+
+
+    ctx.globalCompositeOperation = 'screen';
+    wisps.forEach(w => { update(w); draw(w); });
+    wisps = wisps.filter(w => !w.dead);
+
+    ctx.globalCompositeOperation = 'source-over';
+    sparks = sparks.filter(s => {
+      s.life -= s.decay;
+      if (s.life <= 0) return false;
+      ctx.fillStyle = `rgba(255,255,255,${s.life * s.life})`;
+      ctx.beginPath(); ctx.arc(s.x, s.y, s.size * s.life, 0, Math.PI * 2); ctx.fill();
+      return true;
+    });
+
+    requestAnimationFrame(loop);
+  })();
+
+  // ── Public API ────────────────────────────────────────────────────────────
+  return {
+    /**
+     * Send all wisps toward (x, y) — element-relative coords — then vanish them.
+     * Typically called from a click handler on another element:
+     *
+     *   const hostRect = document.querySelector('#hero').getBoundingClientRect();
+     *   fx.gather(e.clientX - hostRect.left, e.clientY - hostRect.top);
+     *
+     * Or toward the centre of a specific element:
+     *
+     *   const host = document.querySelector('#hero').getBoundingClientRect();
+     *   const btn  = document.querySelector('#btn').getBoundingClientRect();
+     *   fx.gather(btn.left - host.left + btn.width/2,
+     *             btn.top  - host.top  + btn.height/2);
+     */
+    gather(x, y) {
+      gatherPt = { x, y };
+      wisps.forEach(w => { w.gatherAlpha = 1; w.dead = false; });
+    },
+  };
+}
+
+
+
+// Gather to wherever the user clicked (coords relative to the host element)
+document.querySelector('#eight-ball-overlay').addEventListener('click', e => {
+  const r = e.currentTarget.getBoundingClientRect();
+  fx.gather(e.clientX - r.left, e.clientY - r.top);
+});

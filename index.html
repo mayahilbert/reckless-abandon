@@ -16,8 +16,16 @@
     </ul>
   </nav>
 
-  <h1 class="sr-only">Reckless Abandon</h1>
-
+  <h1 class="sr-only spray">Reckless Abandon</h1>
+  <svg style="position:absolute;width:0;height:0" aria-hidden="true">
+    <defs>
+      <filter id="spray-life" x="-25%" y="-25%" width="150%" height="150%">
+        <feTurbulence id="turb" type="fractalNoise" baseFrequency="0.12 0.15" numOctaves="3" result="noise" />
+        <feDisplacementMap id="disp" in="SourceGraphic" in2="noise" scale="6" xChannelSelector="R"
+          yChannelSelector="G" />
+      </filter>
+    </defs>
+  </svg>
   <div class="scene" id="scene">
     <div class="shelf" id="shelf"></div>
   </div>
@@ -26,37 +34,35 @@
   <div id="overlay" class="hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title">
 
     <div class="modal">
-      <div class="fixed-column">
+      <div class="modal-top">
         <button id="close-btn" class="close-btn" aria-label="Close modal">Reckless Abandon</button>
         <h2 id="modal-title">Project Title</h2>
+        <div id="proj-artist"></div>
         <div id="proj-info"></div>
       </div>
       <div id="modal-body"></div>
     </div>
   </div>
-<div id="curatorial-panel" role="complementary" aria-modal="true" aria-label="Curatorial Statement">
-    
-    <div class="curatorial-peek-handle">
-      <span>CURATORIAL STATEMENT</span>
-    </div>
-
+  <div id="curatorial-panel" class="modal hidden" role="complementary" aria-modal="true" aria-label="Curatorial Statement">
     <div class="curatorial-content">
       <button id="curatorial-close-btn" class="close-btn" aria-label="Close panel">Reckless Abandon</button>
-      
+
       <h2>Curatorial Statement</h2>
       <p>
         Text
       </p>
       <h3>Credits</h3>
-      <p>8 Ball Model: <a href="https://skfb.ly/6qvFO">8ball</a> by jtherussian is licensed under <a href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution</a>.</p>
+      <p>8 Ball Model: <a href="https://skfb.ly/6qvFO">8ball</a> by jtherussian is licensed under <a
+          href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution</a>.</p>
     </div>
   </div>
-  <div id="eight-ball-overlay" class="hidden" role="complementary" aria-modal="true" aria-labelledby="eight-ball-heading">
+  <div id="eight-ball-overlay" class="hidden" role="complementary" aria-modal="true"
+    aria-labelledby="eight-ball-heading">
     <button id="eight-ball-close" class="close-btn" aria-label="Close selector">Reckless Abandon</button>
-    
+
     <div class="eight-ball-container">
-      <h2 id="eight-ball-heading">Shake with <span class="bottom-text">Reckless Abandon</span></h2>
-      
+      <!--<h2 id="eight-ball-heading">Shake with <span class="bottom-text">Reckless Abandon</span></h2>-->
+
       <div id="overlay-eight-ball" class="oracle-sphere">
         <div class="oracle-window">
           <div id="oracle-answer" class="oracle-text">CLICK<br>TO SHAKE</div>
