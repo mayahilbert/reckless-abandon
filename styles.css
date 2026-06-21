@@ -280,16 +280,16 @@ body.no-scroll {
   gap: 1em;
 }
 
-.proj-artist {
+#proj-artist {
   font-size: 1.2rem;
   color: #c1c1c1;
-  width: 100%;
   margin: 0;
+  padding-left: 1rem;
   /*margin-bottom: 0.5em;*/
 }
 
 #proj-info {
-  font-size: 0.9rem;
+  font-size: 1rem;
   font-weight: 300;
   color: #c1c1c1;
   max-width: 60ch;
@@ -317,6 +317,10 @@ body.no-scroll {
   padding: 2em 2.4em 2.4em 2.4em;
   max-width: 70ch;
   color: black;
+}
+
+.modal-bio h3 {
+  margin-top: 0;
 }
 
 .instagram-media {
@@ -411,6 +415,8 @@ body.no-scroll {
   color: var(--blue);
   font-size: 1rem;
   padding: 0;
+  display: flex;
+  align-items: center;
 }
 
 .close-btn:before {
@@ -666,8 +672,8 @@ a.cubby:focus-visible {
 
 /* The 3D Rendered Sphere Body */
 .oracle-sphere {
-  width: 18em;
-  height: 18em;
+  width: 24em;
+  height: 24em;
   background: radial-gradient(ellipse at 22% 22%, #a99eb8b1 0%, #9ea2b8bd 2.6%, transparent 3%), radial-gradient(circle at 30% 30%, #3a334e 0%, #080808 30%, #000000 100%);
   /*background: black;*/
   border-radius: 50%;
@@ -688,8 +694,8 @@ a.cubby:focus-visible {
 }
 
 .oracle-window {
-  width: 8em;
-  height: 8em;
+  width: 12em;
+  height: 12em;
   background: radial-gradient(circle at center, #001133 0%, #000511 100%);
   border: 8px solid #141414;
   border-radius: 50%;
@@ -701,9 +707,9 @@ a.cubby:focus-visible {
 
 /* The Floating Glowing Prediction Text Element */
 .oracle-text {
-  width: 3.5em;
-  height: 4.2em;
-  font-size: 0.8rem;
+  width: 5em;
+  height: 7em;
+  font-size: 0.6rem;
   font-weight: 700;
   letter-spacing: 1px;
   color: rgba(255, 255, 255, 0.86);
@@ -722,9 +728,9 @@ a.cubby:focus-visible {
   position: absolute;
   width: 0;
   height: 0;
-  border-left: 3.5em solid transparent;
-  border-right: 3.5em solid transparent;
-  border-top: 6.5em solid var(--blue);
+  border-left: 6em solid transparent;
+  border-right: 6em solid transparent;
+  border-top: 10em solid var(--blue);
   filter: blur(1px);
   top: 0;
   z-index: -1;
@@ -752,17 +758,7 @@ a.cubby:focus-visible {
   .oracle-text {
     width: 6em;
     height: 7.5em;
-    font-size: 0.8rem;
-    font-weight: 700;
-    letter-spacing: 1px;
-    color: rgba(255, 255, 255, 0.86);
-    text-align: center;
-    text-transform: uppercase;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    line-height: 1.4;
-    transition: opacity 0.25s ease, transform 0.25s ease;
+    font-size: 0.75rem;
   }
 
   /* Outer Triangle (Border Color) */
