@@ -76,7 +76,7 @@ function initCtx() {
 
   // Texture overlay
   if (textureImg.complete) {
-    ctx.globalAlpha = 0.4;
+    ctx.globalAlpha = 0.3;
     ctx.drawImage(textureImg, 0, 0, canvas.width, canvas.height);
   }
 
@@ -124,7 +124,7 @@ function erase(currX, currY) {
     return;
   }
   ctx.globalCompositeOperation = 'destination-out';
-  ctx.globalAlpha = 1.0;
+  ctx.globalAlpha = 0.8;
   ctx.lineWidth = CORE_SIZE;
   ctx.lineCap = 'round';
   ctx.beginPath();
@@ -164,7 +164,6 @@ canvas.addEventListener('mousemove', (e) => {
     rotateShelf(mouseX, mouseY);
   } else {
     // --- HOVER LOGIC START ---
-    // Temporarily hide canvas pointer events so we can see what's underneath
     canvas.style.pointerEvents = 'none';
     const elementUnderMouse = document.elementFromPoint(mouseX, mouseY);
     canvas.style.pointerEvents = 'auto';
@@ -191,7 +190,6 @@ canvas.addEventListener('mousemove', (e) => {
       }
     }
 
-    // Update layout classes cleanly
     if (cubby !== currentHoveredCubby) {
       if (currentHoveredCubby) {
         currentHoveredCubby.classList.remove('hovered');
@@ -411,14 +409,9 @@ function openProjectOverlay(index,
         .filter(el => getComputedStyle(el).viewTransitionName === 'proj-expand')
     );
     const transition = document.startViewTransition(updateDOM);
-
-
-    // Clean up as soon as possible when the transition finishes
     transition.finished.finally(() => {
-
     });
   } else {
-
     updateDOM();
   }
 
@@ -426,8 +419,6 @@ function openProjectOverlay(index,
     history.pushState({ type: "project", slug: data.slug }, "", `?${data.slug}`);
   }
 }
-
-
 
 function closeProjectOverlay(pushToHistory = true,
   useTransition = true) {
@@ -625,15 +616,12 @@ if (eBallClose) {
     if (isOracleShaking) return;
     const eBallCubbyContent = document.querySelector('.cubby[data-index="15"] .content');
 
-    // 1. Old State: Give name to Overlay, explicitly strip from Cubby
     eBallOverlay.style.viewTransitionName = 'oracle-expand';
     if (eBallCubbyContent) eBallCubbyContent.style.viewTransitionName = 'none';
 
     const updateDOM = () => {
-      // 2. New State: Force-kill name on Overlay 
       eBallOverlay.style.viewTransitionName = 'none';
 
-      // Give name back to Cubby
       if (eBallCubbyContent) eBallCubbyContent.style.viewTransitionName = 'oracle-expand';
 
       eBallOverlay.classList.add('hidden');
@@ -709,22 +697,6 @@ if (interactiveBall) {
 }
 
 /* Orbs */
-/*!
- * wisps.js — will-o'-wisp canvas overlay
- *
- * willOWisps(target, options)
- *
- * Options: count, size (px), speed (1-10), trail (1-10),
- *          palette ('marsh'|'spirit'|'shade'|'lantern'|'deep')
- *
- * Example:
- *   willOWisps('#hero', { count: 7, palette: 'marsh' });
- *
- * Performance note:
- *   Each wisp's gradient layers are baked to an OffscreenCanvas once on creation.
- *   Per frame: zero gradient objects created — only drawImage + globalAlpha.
- *   Roughly 10–15× less work in the draw path vs creating radial gradients each frame.
- */
 function willOWisps(target, {
   count = 14,
   size = 35,
@@ -745,7 +717,6 @@ function willOWisps(target, {
   const el = typeof target === 'string' ? document.querySelector(target) : target;
   const rnd = (a, b) => a + Math.random() * (b - a);
 
-  // ── Canvas setup ──────────────────────────────────────────────────────────
   if (getComputedStyle(el).position === 'static') el.style.position = 'relative';
 
   const canvas = document.createElement('canvas');
@@ -759,7 +730,7 @@ function willOWisps(target, {
   const ctx = canvas.getContext('2d');
 
   let wisps = [], sparks = [];
-  let gatherPt = null;  // {x, y} when gathering, null otherwise
+  let gatherPt = null; 
 
   function init() {
     canvas.width = el.offsetWidth;
@@ -771,7 +742,6 @@ function willOWisps(target, {
   new ResizeObserver(init).observe(el);
   init();
 
-  // ── Factories ─────────────────────────────────────────────────────────────
   function makeWisp() {
     const w = {
       x: rnd(canvas.width * .1, canvas.width * .9),
@@ -837,8 +807,6 @@ function willOWisps(target, {
     };
   }
 
-  // ── Update: two modes ────────────────────────────────────────────────────
-
   function update(w) {
     return gatherPt ? updateGathering(w) : updateWandering(w);
   }
@@ -886,7 +854,6 @@ function willOWisps(target, {
     const dy = gatherPt.y - w.y;
     const dist = Math.sqrt(dx * dx + dy * dy);
 
-    // Arrived — burst of sparks, mark for removal
     if (dist < 6) {
       for (let i = 0; i < 7; i++) sparks.push(makeSpark(gatherPt.x, gatherPt.y));
       w.dead = true;
@@ -899,18 +866,16 @@ function willOWisps(target, {
     const pull = Math.min(dist * 0.012, 1.8) * sm;
     w.vx += (dx / dist) * pull;
     w.vy += (dy / dist) * pull;
-    w.vx *= 0.91;   // higher damping than wandering keeps them from overshooting
+    w.vx *= 0.91;
     w.vy *= 0.91;
 
     w.x += w.vx;
     w.y += w.vy;
 
-    // Trail
     w.trail.push({ x: w.x, y: w.y });
     const maxTrail = Math.max(Math.floor(w.trailLen * (trail / 5)), 1);
     if (w.trail.length > maxTrail) w.trail.shift();
 
-    // Fade out over the last 160px
     const fadeStart = 200;
     if (dist < fadeStart) {
       w.gatherAlpha = Math.min(w.gatherAlpha, dist / fadeStart);
@@ -921,7 +886,7 @@ function willOWisps(target, {
   // ── Draw ──────────────────────────────────────────────────────────────────
   function draw(w) {
     const { cache, cacheExt: e, cacheDim: dim, flicker: f, trail: tr, gatherAlpha: ga } = w;
-    const alpha = f * ga;   // gatherAlpha fades the whole wisp during convergence
+    const alpha = f * ga; 
 
     for (let i = 0; i < tr.length; i++) {
       const t = (i + 1) / tr.length;
@@ -936,7 +901,6 @@ function willOWisps(target, {
     ctx.globalAlpha = 1;
   }
 
-  // ── Loop ──────────────────────────────────────────────────────────────────
   (function loop() {
     const W = canvas.width, H = canvas.height;
 
@@ -981,7 +945,6 @@ function willOWisps(target, {
     },
   };
 }
-
 
 
 // Gather to wherever the user clicked (coords relative to the host element)
@@ -1029,28 +992,6 @@ function startGifBg() {
   window.removeEventListener('resize', resizeHandler);
   resizeHandler = generateTiles;
   window.addEventListener('resize', resizeHandler);
-
-  /* Alternating option */
-  //const tileSize = window.innerWidth / 3; // Exactly 3 columns
-  //const columns = 3;
-  //const rows = Math.ceil(grid.clientHeight / tileSize);
-  //const totalTiles = columns * rows;
-
-  //for (let i = 0; i < totalTiles; i++) {
-  //  const tile = document.createElement('div');
-
-  //  // 1. Figure out which row this tile lives on (0, 1, 2, etc.)
-  //  const currentRow = Math.floor(i / columns);
-
-  //  // 2. Add the row number as a shift, then use % 3 to wrap it around 
-  //  // Row 0 starts: 1, 2, 3
-  //  // Row 1 starts: 2, 3, 1
-  //  // Row 2 starts: 3, 1, 2
-  //  const tileNumber = ((i + currentRow) % 3) + 1;
-
-  //  tile.classList.add('gif-tile', `tile-${tileNumber}`);
-  //  grid.appendChild(tile);
-  //}
 };
 
 
