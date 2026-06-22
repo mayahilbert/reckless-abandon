@@ -702,18 +702,14 @@ function willOWisps(target, {
   size = 35,
   speed = 4,
   trail = 3,
-  palette = 'marsh',
+  palette = 'light',
 } = {}) {
 
   const PALS = {
-    marsh: [[245, 245, 255], [255, 253, 216], [30, 80, 180]],
-    spirit: [[200, 255, 220], [50, 210, 130], [20, 120, 70]],
-    shade: [[240, 210, 255], [160, 70, 255], [90, 30, 160]],
-    lantern: [[255, 248, 200], [255, 160, 50], [180, 80, 10]],
-    deep: [[200, 255, 235], [30, 200, 160], [10, 100, 90]],
+    light: [[245, 245, 255], [255, 253, 216], [30, 80, 180]],
   };
 
-  const pal = PALS[palette] ?? PALS.marsh;
+  const pal = PALS[palette] ?? PALS.light;
   const el = typeof target === 'string' ? document.querySelector(target) : target;
   const rnd = (a, b) => a + Math.random() * (b - a);
 
