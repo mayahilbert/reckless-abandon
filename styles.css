@@ -237,7 +237,6 @@ body.no-scroll {
   grid-template-columns: 1fr;
   gap: 2em;
   overflow-y: auto;
-  padding-right: 10px;
   overscroll-behavior: contain;
 }
 
@@ -271,13 +270,14 @@ body.no-scroll {
 }
 
 .modal-top {
+  z-index: 5;
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  padding-inline-end: 2em;
-  margin: 0.5em 0 2em 0;
+  padding: 0.5em 2em 1em 0.5em;
   gap: 1em;
+  background-color: black;
 }
 
 #proj-artist {
@@ -305,6 +305,7 @@ body.no-scroll {
   margin-top: 5em;
   padding: 2em 2.4em 2.4em 2.4em;
   color: black;
+  z-index: 5;
 }
 
 #modal-body p {
@@ -312,6 +313,7 @@ body.no-scroll {
 }
 
 .modal-bio {
+  z-index: 5;
   margin-top: 3em;
   background-color: var(--yellow);
   padding: 2em 2.4em 2.4em 2.4em;
@@ -335,7 +337,35 @@ body.no-scroll {
   margin: 0 auto;
 }
 
+.gif-bg-grid {
+  pointer-events: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  max-width: 1920px;
+  z-index: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
 
+.gif-tile {
+  background-size: cover;
+  background-position: center;
+}
+
+.tile-1 {
+  background-image: url('images/ithought.gif');
+}
+
+.tile-2 {
+  background-image: url('images/ithought2.gif');
+}
+
+.tile-3 {
+  background-image: url('images/ithought3.gif');
+}
 
 .mem-imgs {
   gap: 2rem;
@@ -379,6 +409,7 @@ body.no-scroll {
 
 
 #socials {
+  z-index: 5;
   display: flex;
   gap: 2em;
 }
