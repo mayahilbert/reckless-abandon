@@ -489,6 +489,7 @@ body.no-scroll {
   transform-style: preserve-3d;
   margin-top: 3em;
   transform: rotateX(-8deg);
+  translate: translateZ(0);
 }
 @media only screen and (orientation: landscape) and (max-width: 767px) {
   .shelf {
