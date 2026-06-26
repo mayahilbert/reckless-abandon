@@ -490,16 +490,20 @@ body.no-scroll {
 }
 
 @media only screen and (orientation: landscape) and (max-width: 767px) {
-:root {
-  --cube-size: min(calc(90vh / var(--cols)), calc(90vw / var(--rows)));
-}
+  .shelf {
+    margin-top: 0;
+  }
+
+  :root {
+    --cube-size: min(calc(90vh / var(--cols)), calc(90vw / var(--rows)));
+  }
 }
 
 @media (max-width: 600px) {
   .shelf {
     margin-top: 0;
   }
-  
+
   .helper-text {
     bottom: 3em;
   }
