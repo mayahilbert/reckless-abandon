@@ -488,8 +488,7 @@ body.no-scroll {
   grid-template-rows: repeat(var(--rows), var(--track-size));
   transform-style: preserve-3d;
   margin-top: 3em;
-  transform: rotateX(-8deg);
-  translate: translateZ(0);
+  transform: rotateX(-8deg), translateZ(0);
 }
 @media only screen and (orientation: landscape) and (max-width: 767px) {
   .shelf {
