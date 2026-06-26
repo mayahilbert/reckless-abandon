@@ -107,11 +107,6 @@
   --yellow: #fef73c;
 }
 
-
-html {
-  scrollbar-gutter: stable;
-}
-
 body,
 html {
   margin: 0;
@@ -220,6 +215,7 @@ nav ul li:nth-of-type(1) a {
   visibility: hidden;
   /* Space for mobile */
   overflow-y: auto;
+  overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
   /* Smooth scrolling on iOS */
 }
@@ -248,6 +244,7 @@ body.no-scroll {
   gap: 2em;
   overflow-y: auto;
   overscroll-behavior: contain;
+  scroll-gutter: stable;
 }
 
 
@@ -351,13 +348,18 @@ body.no-scroll {
   pointer-events: none;
   position: fixed;
   top: 0;
-  left: 0;
-  width: 100vw;
+  left: 14px;
+  right: 14px;
   height: 100vh;
+  max-height: 100%;
+  overflow: hidden;
   max-width: 1920px;
   z-index: 0;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
+  margin: 0 auto;
+  clip-path: inset(0 0 0 0);
+
 }
 
 .gif-tile {
@@ -488,7 +490,6 @@ body.no-scroll {
   margin-top: 3em;
   transform: rotateX(-8deg);
 }
-
 @media only screen and (orientation: landscape) and (max-width: 767px) {
   .shelf {
     margin-top: 0;
@@ -498,13 +499,11 @@ body.no-scroll {
     --cube-size: min(calc(90vh / var(--cols)), calc(90vw / var(--rows)));
   }
 }
-
 @media (max-width: 600px) {
   .shelf {
     margin-top: 0;
   }
-
-     .helper-text {
+    .helper-text {
     bottom: 15%;
   }
 }
@@ -877,7 +876,6 @@ a.cubby:focus-visible {
     width: 60%;
     margin: 0 auto;
   }
-
 }
 
 .vid-container {
