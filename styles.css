@@ -776,8 +776,8 @@ a.cubby:focus-visible {
 
 @media only screen and (orientation: portrait) and (min-width: 600px) {
   .oracle-sphere {
-    width: 30em;
-    height: 30em;
+    width: 28em;
+    height: 28em;
   }
 
   .oracle-window {
