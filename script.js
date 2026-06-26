@@ -1,5 +1,6 @@
 // --- CONFIGURATION ---
 const TEXTURE_URL = 'images/Texturelabs_Glass_135St.png';
+const isReduced = window.matchMedia(`(prefers-reduced-motion: reduce)`) === true || window.matchMedia(`(prefers-reduced-motion: reduce)`).matches === true;
 
 const shelf = document.getElementById('shelf');
 const cubbyData = [
@@ -61,8 +62,9 @@ const textureImg = new Image();
 textureImg.crossOrigin = 'anonymous';
 textureImg.src = TEXTURE_URL;
 
-
-canvas.style.filter = 'url(#spray-life)';
+if (!isReduced) {
+  canvas.style.filter = 'url(#spray-life)';
+}
 
 function initCtx() {
   canvas.width = window.innerWidth;
@@ -272,8 +274,12 @@ canvas.addEventListener('touchmove', (e) => {
 canvas.addEventListener('touchend', () => lastPoint = null);
 
 function openProjectOverlay(index,
+
   pushToHistory = true,
   useTransition = true) {
+  if (isReduced) {
+    useTransition = false;
+  }
   const data = cubbyData[index] || { title: `Project ${index + 1}`, description: "Details about this project...", image: "" };
   const cubby = document.querySelector(`.cubby[data-index="${index}"]`);
   const contentDiv = cubby ? cubby.querySelector('.content') : null;
@@ -283,10 +289,6 @@ function openProjectOverlay(index,
   });
 
   const updateDOM = () => {
-    console.log('inside updateDOM',
-      [...document.querySelectorAll('*')]
-        .filter(el => getComputedStyle(el).viewTransitionName === 'proj-expand')
-    );
 
     const overlay = document.getElementById('overlay');
     const modalTitle = document.getElementById('modal-title');
@@ -379,24 +381,15 @@ function openProjectOverlay(index,
     const hero =
       modalBody.querySelector('.vid-container') ||
       modalBody.querySelector('.link-container');
-
-    if (hero) {
-      hero.style.viewTransitionName = 'proj-expand';
+    if (!isReduced) {
+      if (hero) {
+        hero.style.viewTransitionName = 'proj-expand';
+      }
     }
     if (overlay) overlay.classList.add('active');
     document.body.classList.add('no-scroll');
 
     if (overlay) overlay.offsetHeight;
-    console.log(
-      'end updateDOM',
-      [...document.querySelectorAll('*')]
-        .filter(el => getComputedStyle(el).viewTransitionName !== 'none')
-        .map(el => ({
-          tag: el.tagName,
-          cls: el.className,
-          vt: getComputedStyle(el).viewTransitionName
-        }))
-    );
   };
 
   if (
@@ -454,10 +447,11 @@ function closeProjectOverlay(pushToHistory = true,
     if (modalBody) {
       modalBody.innerHTML = '';
     }
-
+  if (!isReduced) {
     if (contentDiv) {
       contentDiv.style.viewTransitionName = 'proj-expand';
     }
+  }
   };
 
   if (
@@ -465,16 +459,6 @@ function closeProjectOverlay(pushToHistory = true,
     document.visibilityState === 'visible' &&
     document.startViewTransition
   ) {
-    console.log(
-      'close old state',
-      [...document.querySelectorAll('*')]
-        .filter(el => getComputedStyle(el).viewTransitionName !== 'none')
-        .map(el => ({
-          tag: el.tagName,
-          cls: el.className,
-          vt: getComputedStyle(el).viewTransitionName
-        }))
-    );
     const transition = document.startViewTransition(updateDOM);
 
     transition.finished
@@ -484,8 +468,6 @@ function closeProjectOverlay(pushToHistory = true,
       .finally(() => {
         // Final fallback cleanup ensures everything is released
         if (contentDiv) contentDiv.style.viewTransitionName = '';
-
-
       });
 
   } else {
@@ -726,7 +708,7 @@ function willOWisps(target, {
   const ctx = canvas.getContext('2d');
 
   let wisps = [], sparks = [];
-  let gatherPt = null; 
+  let gatherPt = null;
 
   function init() {
     canvas.width = el.offsetWidth;
@@ -882,7 +864,7 @@ function willOWisps(target, {
   // ── Draw ──────────────────────────────────────────────────────────────────
   function draw(w) {
     const { cache, cacheExt: e, cacheDim: dim, flicker: f, trail: tr, gatherAlpha: ga } = w;
-    const alpha = f * ga; 
+    const alpha = f * ga;
 
     for (let i = 0; i < tr.length; i++) {
       const t = (i + 1) / tr.length;
