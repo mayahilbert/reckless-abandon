@@ -504,8 +504,8 @@ body.no-scroll {
     margin-top: 0;
   }
 
-  .helper-text {
-    bottom: 3em;
+     .helper-text {
+    bottom: 15%;
   }
 }
 
