@@ -490,9 +490,9 @@ body.no-scroll {
 }
 
 @media only screen and (orientation: landscape) and (max-width: 767px) {
-.shelf {
-    rotate: 90deg;
-  }
+:root {
+  --cube-size: min(calc(90vh / var(--cols)), calc(90vw / var(--rows)));
+}
 }
 
 @media (max-width: 600px) {
