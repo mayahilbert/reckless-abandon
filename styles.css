@@ -115,6 +115,7 @@ html {
   display: flex;
   justify-content: center;
   background-color: #c9c8c8;
+  -webkit-perspective: calc(var(--cube-size) * 12);
   perspective: calc(var(--cube-size) * 12);
   overflow-x: hidden;
   overflow-y: auto;
@@ -247,23 +248,10 @@ html:not(.interactive-ready) .fallback-actions {
   display: none;
 }
 
-.fallback-header {
-  margin-bottom: 2.5rem;
-  text-align: center;
-}
-
-.fallback-links h2 {
-  font-family: var(--title-font);
-  font-size: clamp(2rem, 8vw, 5rem);
-  font-weight: 500;
-  line-height: 0.95;
-  margin: 0;
-}
-
 .fallback-links ul {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
-  gap: clamp(0.6rem, 2vw, 1.4rem);
+  gap: clamp(2rem, 2vw, 1.4rem);
   list-style: "";
   list-style-type: "";
   margin: 0.5rem 0 0;
@@ -666,27 +654,30 @@ body.no-scroll {
   z-index: 10;
   cursor: crosshair;
   touch-action: none;
-  transform: translateZ(var(--cube-size) + 20px);
+  transform: translate3d(0, 0, calc(var(--cube-size) + 20px));
 }
 
 .scene {
   width: calc(var(--track-size) * var(--cols));
   height: calc(var(--track-size) * var(--rows));
+  -webkit-transform-style: preserve-3d;
   transform-style: preserve-3d;
-  transform: translateZ(calc((var(--cube-size) * -1) - 20px));
+  transform: translate3d(0, 0, calc((var(--cube-size) * -1) - 20px));
   transition: transform 0.1s ease-out;
   z-index: -10;
   position: relative;
   margin-bottom: 100px;
+  will-change: transform;
 }
 
 .shelf {
   display: grid;
   grid-template-columns: repeat(var(--cols), var(--track-size));
   grid-template-rows: repeat(var(--rows), var(--track-size));
+  -webkit-transform-style: preserve-3d;
   transform-style: preserve-3d;
   margin-top: 3em;
-  transform: rotateX(-8deg) translateZ(0);
+  transform: rotateX(-8deg) translate3d(0, 0, 0);
 }
 
 @media only screen and (orientation: landscape) and (max-width: 767px) {
@@ -713,6 +704,7 @@ body.no-scroll {
   position: relative;
   width: var(--cube-size);
   height: var(--cube-size);
+  -webkit-transform-style: preserve-3d;
   transform-style: preserve-3d;
   background: rgba(0, 0, 0, 0.01);
   pointer-events: auto !important;
@@ -735,6 +727,7 @@ a.cubby {
   width: var(--track-size);
   /* Use track-size for the grid footprint */
   height: var(--track-size);
+  -webkit-transform-style: preserve-3d;
   transform-style: preserve-3d;
   box-sizing: border-box;
   cursor: pointer;
@@ -759,6 +752,10 @@ a.cubby:focus-visible {
   top: 50%;
   left: 50%;
   transform-origin: center;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-transform-style: preserve-3d;
+  transform-style: preserve-3d;
 }
 
 
@@ -846,7 +843,7 @@ a.cubby:focus-visible {
   height: 60%;
   top: 10%;
   left: 10%;
-  transform: translateZ(10px);
+  transform: translate3d(0, 0, 10px);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -863,15 +860,15 @@ a.cubby:focus-visible {
 }
 
 .cubby .content {
-  webkit-backface-visibility: visible !important;
+  -webkit-backface-visibility: visible !important;
   backface-visibility: visible !important;
-  webkit-transform-style: flat !important;
+  -webkit-transform-style: flat !important;
   transform-style: flat !important;
-  transform: translateZ(1px);
+  transform: translate3d(0, 0, 1px);
 }
 
 .cubby.hovered .content {
-  transform: translateZ(20px);
+  transform: translate3d(0, 0, 20px);
   filter: none;
 
 }
@@ -890,7 +887,7 @@ a.cubby:focus-visible {
   background-position: center;
   background-repeat: no-repeat;
   z-index: 2000;
-  transform: translateZ(var(--cube-size) + 20px);
+  transform: translate3d(0, 0, calc(var(--cube-size) + 20px));
   display: flex;
   justify-content: center;
   align-items: center;
@@ -1151,7 +1148,7 @@ a.work-link {
   background: #fff;
   color: black;
   z-index: 1000;
-  transform: translateZ(var(--cube-size) + 20px);
+  transform: translate3d(0, 0, calc(var(--cube-size) + 20px));
   /* Above the canvas */
   display: flex;
   opacity: 0;
