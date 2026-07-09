@@ -661,7 +661,6 @@ html.no-scroll #erase-canvas {
   z-index: 10;
   cursor: crosshair;
   touch-action: none;
-  transform: translate3d(0, 0, calc(var(--cube-size) + 20px));
 }
 
 .scene {
@@ -910,6 +909,16 @@ a.cubby:focus-visible {
   transform: translate3d(0, 0, 20px);
   filter: none;
 
+}
+
+@media (max-width: 600px) {
+  .shelf .cubby:nth-child(n + 13):nth-child(-n + 15) .content {
+    transform: translate3d(0, 0, calc(var(--half-size) + 2px));
+  }
+
+  .shelf .cubby:nth-child(n + 13):nth-child(-n + 15).hovered .content {
+    transform: translate3d(0, 0, calc(var(--half-size) + 12px));
+  }
 }
 
 /* Magic 8 Ball Container */
