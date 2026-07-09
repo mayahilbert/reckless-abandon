@@ -846,6 +846,15 @@ a.cubby:focus-visible {
     width: 100%;
   }
 
+  .shelf .cubby:last-child .top {
+    z-index: 0;
+  }
+
+  .shelf .cubby:nth-child(n + 13):nth-child(-n + 15) .face,
+  .shelf .cubby:nth-child(n + 13):nth-child(-n + 15) .content {
+    z-index: 1;
+  }
+
   .shelf .cubby:last-child .left,
   .shelf .cubby:last-child .right {
     width: var(--cube-size) !important;
@@ -909,16 +918,6 @@ a.cubby:focus-visible {
   transform: translate3d(0, 0, 20px);
   filter: none;
 
-}
-
-@media (max-width: 600px) {
-  .shelf .cubby:nth-child(n + 13):nth-child(-n + 15) .content {
-    transform: translate3d(0, 0, calc(var(--half-size) + 2px));
-  }
-
-  .shelf .cubby:nth-child(n + 13):nth-child(-n + 15).hovered .content {
-    transform: translate3d(0, 0, calc(var(--half-size) + 12px));
-  }
 }
 
 /* Magic 8 Ball Container */
