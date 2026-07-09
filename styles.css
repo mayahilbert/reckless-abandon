@@ -845,11 +845,11 @@ a.cubby:focus-visible {
   }
 
   .shelf .cubby:nth-child(n + 13):nth-child(-n + 15) .left {
-    transform: translate(-50%, -50%) rotateY(-90deg) translateZ(calc(var(--half-size) + 2px));
+    transform: translate(-50%, -50%) rotateY(-90deg) translateZ(calc(var(--half-size) - 2px));
   }
 
   .shelf .cubby:nth-child(n + 13):nth-child(-n + 15) .right {
-    transform: translate(-50%, -50%) rotateY(90deg) translateZ(calc(var(--half-size) + 2px));
+    transform: translate(-50%, -50%) rotateY(90deg) translateZ(calc(var(--half-size) - 2px));
   }
 
   .shelf .cubby:nth-child(n + 13):nth-child(-n + 15) .content {
