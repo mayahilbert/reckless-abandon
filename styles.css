@@ -784,11 +784,15 @@ a.cubby:focus-visible {
 .left {
   transform: translate(-50%, -50%) rotateY(-90deg) translateZ(var(--half-size));
   background-color: var(--shelf-wall-left);
+  -webkit-backface-visibility: visible;
+  backface-visibility: visible;
 }
 
 .right {
   transform: translate(-50%, -50%) rotateY(90deg) translateZ(var(--half-size));
   background-color: var(--shelf-wall-right);
+  -webkit-backface-visibility: visible;
+  backface-visibility: visible;
 }
 
 .front {
@@ -809,6 +813,27 @@ a.cubby:focus-visible {
     width: calc(100% + var(--rim-thickness));
     height: var(--cube-size);
     right: calc(var(--rim-thickness) / 2);
+    z-index: 1;
+  }
+
+  .shelf .cubby:nth-child(-n + 3) {
+    z-index: 6;
+  }
+
+  .shelf .cubby:nth-child(n + 4):nth-child(-n + 6) {
+    z-index: 5;
+  }
+
+  .shelf .cubby:nth-child(n + 7):nth-child(-n + 9) {
+    z-index: 4;
+  }
+
+  .shelf .cubby:nth-child(n + 10):nth-child(-n + 12) {
+    z-index: 3;
+  }
+
+  .shelf .cubby:nth-child(n + 13):nth-child(-n + 15) {
+    z-index: 2;
   }
 
   .shelf .cubby:last-child .top,
@@ -827,14 +852,16 @@ a.cubby:focus-visible {
     right: 0;
     left: auto;
     transform-origin: right;
-    transform: rotateY(90deg) translate(50%, -50%);
+    background-color: var(--shelf-wall-right);
+    transform: translate(50%, -50%) rotateY(90deg) translateZ(var(--half-size));
   }
 
   .shelf .cubby:last-child .left {
     left: 0;
     right: auto;
     transform-origin: left;
-    transform: rotateY(-90deg) translate(-50%, -50%);
+    background-color: var(--shelf-wall-left);
+    transform: translate(-50%, -50%) rotateY(-90deg) translateZ(var(--half-size));
   }
 
   .shelf .cubby:last-child .front,
