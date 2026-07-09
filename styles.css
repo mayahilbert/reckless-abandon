@@ -771,6 +771,15 @@ a.cubby:focus-visible {
   background-color: var(--shelf-back);
 }
 
+.back,
+.top,
+.bottom,
+.left,
+.right {
+  -webkit-backface-visibility: visible;
+  backface-visibility: visible;
+}
+
 .top {
   transform: translate(-50%, -50%) rotateX(90deg) translateZ(var(--half-size));
   background-color: var(--shelf-base);
@@ -784,15 +793,11 @@ a.cubby:focus-visible {
 .left {
   transform: translate(-50%, -50%) rotateY(-90deg) translateZ(var(--half-size));
   background-color: var(--shelf-wall-left);
-  -webkit-backface-visibility: visible;
-  backface-visibility: visible;
 }
 
 .right {
   transform: translate(-50%, -50%) rotateY(90deg) translateZ(var(--half-size));
   background-color: var(--shelf-wall-right);
-  -webkit-backface-visibility: visible;
-  backface-visibility: visible;
 }
 
 .front {
