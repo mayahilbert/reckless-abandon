@@ -262,7 +262,8 @@ html:not(.interactive-ready) .fallback-actions {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
   gap: clamp(0.6rem, 2vw, 1.4rem);
-  list-style: none;
+  list-style: "";
+  list-style-type: "";
   margin: 0.5rem 0 0;
   padding: 0;
 }

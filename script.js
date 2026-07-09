@@ -571,7 +571,7 @@ canvas.addEventListener('pointerleave', () => {
 });
 
 canvas.addEventListener('pointerdown', (e) => {
-  isMouseDown = true;
+  isMouseDown = e.pointerType === 'mouse';
   pointerX = e.clientX;
   pointerY = e.clientY;
   pointerStartX = e.clientX;
