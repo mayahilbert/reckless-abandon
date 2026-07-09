@@ -466,7 +466,7 @@ function showInteractiveView() {
   setInteractiveElementsHidden(false);
   if (viewAsListBtn) {
     viewAsListBtn.setAttribute('aria-pressed', 'false');
-    viewAsListBtn.textContent = 'View as list';
+    viewAsListBtn.textContent = 'List View';
   }
   cacheCubbyRects();
   startTurbulence();

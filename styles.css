@@ -261,27 +261,80 @@ html:not(.interactive-ready) .fallback-actions {
 .fallback-links ul {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
-  gap: 0.75rem;
+  gap: clamp(0.6rem, 2vw, 1.4rem);
   list-style: none;
-  margin: 0;
+  margin: 0.5rem 0 0;
   padding: 0;
 }
 
 .fallback-links li {
-  background: rgba(255, 255, 255, 0.7);
-  border: 1px solid rgba(0, 0, 0, 0.16);
   box-sizing: border-box;
-  min-height: 8rem;
   overflow: hidden;
+  transform: translate(var(--scatter-x, 0), var(--scatter-y, 0)) rotate(var(--scatter-r, 0deg));
+  transition: transform 160ms ease;
+}
+
+.fallback-links li:hover,
+.fallback-links li:focus-within {
+  transform: translate(var(--scatter-x, 0), calc(var(--scatter-y, 0) - 0.2rem)) rotate(0deg);
+  z-index: 1;
+}
+
+.fallback-links li:nth-child(8n + 1) {
+  --scatter-x: -0.35rem;
+  --scatter-y: 0.2rem;
+  --scatter-r: -1.8deg;
+}
+
+.fallback-links li:nth-child(8n + 2) {
+  --scatter-x: 0.2rem;
+  --scatter-y: -0.15rem;
+  --scatter-r: 1.3deg;
+}
+
+.fallback-links li:nth-child(8n + 3) {
+  --scatter-x: -0.1rem;
+  --scatter-y: 0.45rem;
+  --scatter-r: 0.8deg;
+}
+
+.fallback-links li:nth-child(8n + 4) {
+  --scatter-x: 0.45rem;
+  --scatter-y: 0.1rem;
+  --scatter-r: -0.9deg;
+}
+
+.fallback-links li:nth-child(8n + 5) {
+  --scatter-x: -0.2rem;
+  --scatter-y: -0.25rem;
+  --scatter-r: 1.9deg;
+}
+
+.fallback-links li:nth-child(8n + 6) {
+  --scatter-x: 0.15rem;
+  --scatter-y: 0.35rem;
+  --scatter-r: -1.2deg;
+}
+
+.fallback-links li:nth-child(8n + 7) {
+  --scatter-x: 0.35rem;
+  --scatter-y: -0.05rem;
+  --scatter-r: 1deg;
+}
+
+.fallback-links li:nth-child(8n) {
+  --scatter-x: -0.45rem;
+  --scatter-y: 0.05rem;
+  --scatter-r: -1.5deg;
 }
 
 .fallback-links a {
   box-sizing: border-box;
+  border: 1px solid black;
   color: black;
   display: flex;
   flex-direction: column;
   gap: 0.45rem;
-  height: 100%;
   padding: 1rem;
   text-decoration: none;
   width: 100%;
@@ -334,8 +387,6 @@ html.list-view #erase-canvas {
 
 #interactive-view-btn {
   padding: 1em;
-  right: 0;
-  position: absolute;
   color: var(--blue);
 }
 
