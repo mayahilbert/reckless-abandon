@@ -1053,8 +1053,8 @@ a.cubby:focus-visible {
 /* Exit Button Component */
 #eight-ball-close {
   position: absolute;
-  top: 1em;
-  left: 1em;
+  top: 2em;
+  left: 2em;
   color: white;
   z-index: 10;
 }
