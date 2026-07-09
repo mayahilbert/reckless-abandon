@@ -420,6 +420,12 @@ body.no-scroll {
   /* Keeps the viewport locked */
 }
 
+html.no-scroll #erase-canvas {
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+}
+
 .modal {
   background: black;
   color: white;
