@@ -455,7 +455,7 @@ function showListView() {
   setScrollLocked(false);
   if (viewAsListBtn) {
     viewAsListBtn.setAttribute('aria-pressed', 'true');
-    viewAsListBtn.textContent = 'Return to shelf view';
+    viewAsListBtn.textContent = 'Shelf View';
   }
 }
 
