@@ -857,7 +857,7 @@ a.cubby:focus-visible {
     left: auto;
     transform-origin: right;
     background-color: var(--shelf-wall-right);
-    transform: translate(50%, -50%) rotateY(90deg) translateZ(var(--half-size));
+    transform: translateY(-50%) translateZ(calc(var(--half-size) * -1)) rotateY(90deg);
   }
 
   .shelf .cubby:last-child .left {
@@ -865,7 +865,7 @@ a.cubby:focus-visible {
     right: auto;
     transform-origin: left;
     background-color: var(--shelf-wall-left);
-    transform: translate(-50%, -50%) rotateY(-90deg) translateZ(var(--half-size));
+    transform: translateY(-50%) translateZ(calc(var(--half-size) * -1)) rotateY(-90deg);
   }
 
   .shelf .cubby:last-child .front,
