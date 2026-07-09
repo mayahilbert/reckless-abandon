@@ -949,8 +949,8 @@ a.cubby:focus-visible {
 
 /* The 3D Rendered Sphere Body */
 .oracle-sphere {
-  width: 24em;
-  height: 24em;
+  width: 20em;
+  height: 20em;
   background: radial-gradient(ellipse at 22% 22%, #a99eb8b1 0%, #9ea2b8bd 2.6%, transparent 3%), radial-gradient(circle at 30% 30%, #3a334e 0%, #080808 30%, #000000 100%);
   /*background: black;*/
   border-radius: 50%;
@@ -966,8 +966,8 @@ a.cubby:focus-visible {
 }
 
 .oracle-window {
-  width: 12em;
-  height: 12em;
+  width: 10em;
+  height: 10em;
   background: radial-gradient(circle at center, #001133 0%, #000511 100%);
   border: 8px solid #141414;
   border-radius: 50%;
