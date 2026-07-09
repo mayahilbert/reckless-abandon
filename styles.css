@@ -840,6 +840,22 @@ a.cubby:focus-visible {
     z-index: 2;
   }
 
+  .shelf .cubby:nth-child(n + 13):nth-child(-n + 15) .front {
+    transform: translate(-50%, -50%) translateZ(calc(var(--half-size) + 2px));
+  }
+
+  .shelf .cubby:nth-child(n + 13):nth-child(-n + 15) .left {
+    transform: translate(-50%, -50%) rotateY(-90deg) translateZ(calc(var(--half-size) + 2px));
+  }
+
+  .shelf .cubby:nth-child(n + 13):nth-child(-n + 15) .right {
+    transform: translate(-50%, -50%) rotateY(90deg) translateZ(calc(var(--half-size) + 2px));
+  }
+
+  .shelf .cubby:nth-child(n + 13):nth-child(-n + 15) .content {
+    transform: translate3d(0, 0, calc(var(--half-size) + 2px));
+  }
+
   .shelf .cubby:last-child .top,
   .shelf .cubby:last-child .bottom {
     height: var(--cube-size) !important;
@@ -847,12 +863,7 @@ a.cubby:focus-visible {
   }
 
   .shelf .cubby:last-child .top {
-    z-index: 0;
-  }
-
-  .shelf .cubby:nth-child(n + 13):nth-child(-n + 15) .face,
-  .shelf .cubby:nth-child(n + 13):nth-child(-n + 15) .content {
-    z-index: 1;
+    transform: translate(-50%, -50%) rotateX(90deg) translateZ(calc(var(--half-size) - 2px));
   }
 
   .shelf .cubby:last-child .left,
