@@ -13,6 +13,8 @@
   <nav>
     <ul>
       <li><a href="https://newmediartspace.info">New Media Artspace</a></li>
+      <li><button id="view-as-list-btn" class="view-toggle" type="button" aria-pressed="false">View as list</button>
+      </li>
     </ul>
   </nav>
 
@@ -33,6 +35,15 @@
   </div>
   <canvas id="erase-canvas" aria-hidden="true" role="presentation">
   </canvas>
+  <section id="fallback-links" class="fallback-links" aria-labelledby="fallback-heading" hidden>
+    <div class="fallback-header">
+      <h2 id="fallback-heading">Reckless Abandon</h2>
+    </div>
+    <ul id="fallback-list"></ul>
+    <div class="fallback-actions">
+      <button id="interactive-view-btn" class="view-toggle fallback-return-btn" type="button">Return to shelf view</button>
+    </div>
+  </section>
   <div id="overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title">
 
     <div class="modal">
@@ -146,7 +157,8 @@
         they wander through the thicket of information, the averaged visitor's path wears a soft, rubbed effect on the
         page, evoking a beaten path or well-loved edges of a book. Each rabbit hole remembers the time we spent falling
         deeper, even if we forget.</p>
-      <p><a href="?www-blairs-computer"><em>www.blairs.computer</em></a> by Blair Simmons explores the relationship between
+      <p><a href="?www-blairs-computer"><em>www.blairs.computer</em></a> by Blair Simmons explores the relationship
+        between
         digital and human memories. Nested pop-up alerts ask visitors to download and hold onto Simmons&rsquo; files,
         transferring the weight of the files to their drive from her drive. Visitors can cancel&mdash;prompting more
         desperate pleas&mdash;or press ok, allowing the unknown download and decreasing the number of stored files by

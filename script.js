@@ -1,8 +1,3 @@
-// --- CONFIGURATION ---
-const TEXTURE_URL = 'images/Texturelabs_Glass_135St.png';
-const isReduced = window.matchMedia(`(prefers-reduced-motion: reduce)`) === true || window.matchMedia(`(prefers-reduced-motion: reduce)`).matches === true;
-
-const shelf = document.getElementById('shelf');
 const cubbyData = [
   { slug: "virtual-discussion", vimeo: "https://player.vimeo.com/video/1190479860?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479", image: "images/key/JPEG/cyber-chiffon.jpg", title: "virtual DISCussion", artist: "cyber//chiffon (Taylor Elise Colimore + Noren G-H)", medium: "Video", year: "2025", description: "<p>The film begins with \"muzzled\" centering on feelings of madness and rage conjured by being trapped by the perception of others.</p><p>Transiting next into \"I ENDURE WITH A TENSE PULSE\" the video builds from sustained unsettled movement to an explosive climax, communicating frustration with unsolicited attention.</p><p>The film concludes with \"virtual DISCussion,\" a two channel collaborative video combining audio, assets, and footage from the previous sections. Referencing the circular frame from the beginning video, the artists overlap motifs such as plaid and grid, shades of pink, and the figure, thus bringing the two videos into conversation and showcasing the different yet complementary perspectives of the two artists.</p>", bio: "<p>The artist collective, cyber//chiffon, is Taylor Elise Colimore and Noren G-H. Taylor Elise Colimore (she/her) is a multimedia artist, born in Baltimore, Maryland, and currently living in Richmond, Virginia, with a visual art practice consisting of both digital and analog art making techniques. Colimore graduated summa cum laude from Virginia Commonwealth University with a B.F.A. in Kinetic Imaging. Noren G-H (they/them) is an interdisciplinary artist located in Richmond, Virginia, making work that navigates identity, time, and interaction. G-H graduated summa cum laude from Virginia Commonwealth University with a B.F.A in Kinetic Imaging with minors in Sculpture and Art History. Coming together and pulling from their time-based fine arts background, they explore the intersection of classical craft and emerging media technologies with the joint desire to communicate their inner truths.</p>", ig: "https://www.instagram.com/cyberchiffon/" },
   { slug: "how-not-to-drown", vimeo: "https://player.vimeo.com/video/1191944962?title=0&amp;byline=0&amp;portrait=0&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479", image: "images/key/JPEG/hahn.jpg", title: "How Not to Drown", artist: "Alexander Hahn", medium: "Drawings, sketches, and unfinished 3D computer animation", year: "2026", description: "<p><em>How Not to Drown</em> is a short experimental video that unfolds as a forensic reconstruction—assisted by AI—of a long-abandoned project from the 1970s and 1990s. The origins of the work reach further back than initially assumed: to a linoleum floor that, seen through a black-and-white video camera, appeared as an aerial view of an ocean, traversed by reflections of light.</p><p>At the centre of the project is a Vogue article found in Venice in the late 1970s, entitled <em>Six mouvements pour vous sauver - Six Movements to Save You</em>, instructions on how to avoid drowning. Over the years, its illustrations inspired drawings, watercolours, swimming experiments, underwater footage, and eventually an unfinished 3D animation featuring a rigged digital figure.</p><p>Mythological, technological, and personal narratives overlap: Daedalus warning Icarus; software instructions controlling a digital skeleton; misunderstandings that transform survival movements into \"water ballet\"; and ageing videotape signals that disintegrate and collapse during playback.</p><p>In retrospect, the six instructions appear less as a swimming technique than as a modest guide to staying afloat: prepare the body, push off, stretch out, glide, move forward with care, relax—and recover.</p><p>Postscript: After completing the project, I attempted to restart my laptop. It remained unresponsive. It is currently in repair. The diagnosis: water damage.</p>", bio: "<p>Alexander Hahn is a media artist working with video, installation, computer graphics, and print. Since the late 1970s, he has explored how images emerge from noise, memory, and technological mediation. His work often begins with fragments—found photographs, field recordings, scientific data, or obsolete media—and transforms them through digital processes such as 3D modeling, CGI, and AI-based image generation. Hahn frequently moves images between immaterial and material forms, translating digital sources into installations, moving images, and large-format prints. Recurring themes include perception, chance encounters, and the unstable relationship between image and reality. His projects connect distant places and systems of knowledge, from urban street observations to geological and cosmic imagery. Hahn's work has been exhibited internationally in museums, galleries, and public spaces, and continues to investigate how technological tools shape the way we remember, imagine, dream and see the world.</p>", website: "https://alexanderhahn.com", ig: "https://www.instagram.com/lxhahn1/" },
@@ -21,6 +16,90 @@ const cubbyData = [
   { slug: "curatorial-statement", image: "images/blue.png" },
   { slug: "random" }
 ];
+// --- CONFIGURATION ---
+const TEXTURE_URL = 'images/Texturelabs_Glass_135St.png';
+const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+const isReduced = reducedMotionQuery.matches;
+let isListViewActive = false;
+
+const shelf = document.getElementById('shelf');
+const allowedRichTextTags = new Set(['A', 'BR', 'EM', 'I', 'P', 'STRONG', 'B']);
+
+function setScrollLocked(isLocked) {
+  document.documentElement.classList.toggle('no-scroll', isLocked);
+  document.body.classList.toggle('no-scroll', isLocked);
+}
+
+function safeUrl(value, fallback = '#', allowedProtocols = ['http:', 'https:']) {
+  try {
+    const url = new URL(String(value || '').replace(/&amp;/g, '&'), window.location.href);
+    return allowedProtocols.includes(url.protocol) ? url.href : fallback;
+  } catch {
+    return fallback;
+  }
+}
+
+function safeAssetUrl(value, fallback = '') {
+  return safeUrl(value, fallback, ['http:', 'https:', 'file:']);
+}
+
+function cssUrl(value) {
+  const url = safeAssetUrl(value);
+  return url ? `url("${url.replace(/["\\\n\r]/g, '\\$&')}")` : '';
+}
+
+function sanitizeRichHtml(html = '') {
+  const template = document.createElement('template');
+  template.innerHTML = html;
+
+  template.content.querySelectorAll('*').forEach((node) => {
+    if (!allowedRichTextTags.has(node.tagName)) {
+      node.replaceWith(...node.childNodes);
+      return;
+    }
+
+    Array.from(node.attributes).forEach((attr) => {
+      const href = node.tagName === 'A' && attr.name.toLowerCase() === 'href'
+        ? safeUrl(attr.value)
+        : null;
+
+      node.removeAttribute(attr.name);
+
+      if (href) {
+        node.setAttribute('href', href);
+        node.setAttribute('target', '_blank');
+        node.setAttribute('rel', 'noopener noreferrer');
+      }
+    });
+  });
+
+  return template.innerHTML.replace(/\n/g, '<br>');
+}
+
+function appendRichSection(parent, className, heading, html) {
+  const section = document.createElement('div');
+  section.className = className;
+
+  const title = document.createElement('h3');
+  title.textContent = heading;
+
+  const body = document.createElement('div');
+  body.innerHTML = sanitizeRichHtml(html);
+
+  section.append(title, body);
+  parent.appendChild(section);
+}
+
+function appendSocialLink(parent, className, href, label) {
+  const link = document.createElement('a');
+  link.className = `social ${className}`;
+  link.href = safeUrl(href);
+  link.target = '_blank';
+  link.rel = 'noopener noreferrer';
+  link.textContent = label;
+  parent.appendChild(link);
+}
+
 
 // Generate the 16 cubbies
 for (let i = 0; i < 16; i++) {
@@ -29,8 +108,8 @@ for (let i = 0; i < 16; i++) {
   cubby.setAttribute('aria-label', `View details for item ${i + 1}`);
   const data = cubbyData[i] || { link: "#", title: `Project ${i + 1}`, description: "Details about this project...", image: "" };
 
-  cubby.href = `?${data.slug}`;
-  cubby.style.setProperty('--proj-image', "url('" + data.image + "')");
+  cubby.href = `?${encodeURIComponent(data.slug || '')}`;
+  cubby.style.setProperty('--proj-image', cssUrl(data.image));
   cubby.dataset.index = i;
 
   let contentHtml = `<div class="face back"></div><div class="face top"></div><div class="face bottom"></div><div class="face left"></div><div class="face right"></div><div class="face front"></div>`;
@@ -62,36 +141,48 @@ const textureImg = new Image();
 textureImg.crossOrigin = 'anonymous';
 textureImg.src = TEXTURE_URL;
 
-if (!isReduced) {
-  canvas.style.filter = 'url(#spray-life)';
+// Coarse heuristic: fine pointer + wide viewport already excludes the vast
+// majority of phones and tablets (touch input reports as coarse). This is
+// the first, cheapest filter before any real measurement happens.
+const canUseHeavyFx = matchMedia('(pointer: fine) and (min-width: 900px)').matches;
+
+function applySprayFilter(enabled) {
+  canvas.style.filter = enabled ? 'url(#spray-life)' : 'none';
 }
 
 function initCtx() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
+  const dpr = window.devicePixelRatio || 1;
+  const width = window.innerWidth;
+  const height = window.innerHeight;
+
+  canvas.width = Math.round(width * dpr);
+  canvas.height = Math.round(height * dpr);
+  canvas.style.width = `${width}px`;
+  canvas.style.height = `${height}px`;
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
   // White base
   ctx.globalCompositeOperation = 'source-over';
   ctx.globalAlpha = 0.95;
   ctx.fillStyle = 'rgba(255, 255, 255, 1)';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.fillRect(0, 0, width, height);
 
   // Texture overlay
   if (textureImg.complete) {
     ctx.globalAlpha = 0.3;
-    ctx.drawImage(textureImg, 0, 0, canvas.width, canvas.height);
+    ctx.drawImage(textureImg, 0, 0, width, height);
   }
 
   ctx.globalCompositeOperation = 'source-over';
   ctx.globalAlpha = 1.0;
   ctx.fillStyle = 'black';
 
-  const fontSize = Math.max(60, canvas.width * 0.17);
+  const fontSize = Math.max(60, width * 0.17);
   ctx.font = `${fontSize}px 'Rubik Spray Paint', sans-serif`;
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
-  ctx.fillText('Reckless', canvas.width / 2, canvas.height / 2.8);
-  ctx.fillText('Abandon', canvas.width / 2, canvas.height / 1.4);
+  ctx.fillText('Reckless', width / 2, height / 2.8);
+  ctx.fillText('Abandon', width / 2, height / 1.4);
 
   ctx.globalCompositeOperation = 'destination-out';
   ctx.globalAlpha = 1.0;
@@ -99,23 +190,184 @@ function initCtx() {
 
 const turb = document.getElementById('turb');
 let t = 0;
-(function tick() {
-  t += 0.06;
-  turb.setAttribute('baseFrequency',
-    (0.12 + Math.sin(t * .71) * .004 + Math.sin(t * 1.37) * .002).toFixed(4) + ' ' +
-    (0.15 + Math.cos(t * .53) * .005 + Math.cos(t * 1.09) * .002).toFixed(4)
-  );
-  requestAnimationFrame(tick);
-})();
+let turbRafId = null;
+let isShelfVisible = true;
+let shelfVisibilityStopTimer = null;
 
-Promise.all([
+function stopTurbulence() {
+  if (turbRafId) {
+    cancelAnimationFrame(turbRafId);
+    turbRafId = null;
+  }
+}
+
+function runTurbulence() {
+  if (isReduced || isListViewActive || !turb || !isShelfVisible || document.visibilityState !== 'visible') {
+    turbRafId = null;
+    return;
+  }
+
+  t += 0.06;
+  const xFreq = (0.12 + Math.sin(t * .71) * .004 + Math.sin(t * 1.37) * .002).toFixed(4);
+  const yFreq = (0.15 + Math.cos(t * .53) * .005 + Math.cos(t * 1.09) * .002).toFixed(4);
+  turb.setAttribute('baseFrequency',
+    `${xFreq} ${yFreq}`
+  );
+  turbRafId = requestAnimationFrame(runTurbulence);
+}
+
+function startTurbulence() {
+  if (shelfVisibilityStopTimer) {
+    clearTimeout(shelfVisibilityStopTimer);
+    shelfVisibilityStopTimer = null;
+  }
+
+  if (!isListViewActive && !turbRafId) {
+    runTurbulence();
+  }
+}
+
+function scheduleTurbulenceStop() {
+  if (shelfVisibilityStopTimer) return;
+
+  shelfVisibilityStopTimer = setTimeout(() => {
+    shelfVisibilityStopTimer = null;
+    if (!isShelfVisible) {
+      stopTurbulence();
+    }
+  }, 1200);
+}
+
+startTurbulence();
+
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible') {
+    startTurbulence();
+  } else {
+    stopTurbulence();
+  }
+});
+
+if ('IntersectionObserver' in window && shelf) {
+  const shelfObserver = new IntersectionObserver(([entry]) => {
+    isShelfVisible = entry.isIntersecting;
+    if (isShelfVisible) {
+      startTurbulence();
+    } else {
+      scheduleTurbulenceStop();
+    }
+  }, { threshold: 0 });
+  shelfObserver.observe(shelf);
+}
+
+// --- Adaptive effect gating -------------------------------------------------
+// Shared pattern for any effect that's cheap on paper but expensive to
+// composite on real hardware: apply the coarse heuristic first (no flash),
+// then verify against real frame timings only while the effect's own
+// animation loop is actually running, then cache the verdict for the
+// rest of the session so we don't re-measure (and re-flash) on every use.
+function createFxGate({
+  cacheKey,
+  heuristicOk,
+  isActive,
+  onEnable,
+  onDisable,
+  sampleFrames = 90,
+  badFrameMs = 28,
+  maxAvgFrameMs = 24,
+  maxJankRatio = 0.25,
+  persistFalse = true,
+}) {
+  let measured = false;
+  let frameTimes = [];
+  let lastTime = 0;
+
+  function apply(state, persist = true) {
+    (state ? onEnable : onDisable)?.();
+    if (persist && (state || persistFalse)) sessionStorage.setItem(cacheKey, String(state));
+  }
+
+  function sample(now) {
+    if (measured) return;
+    if (!isActive()) {
+      // Effect isn't animating right now (e.g. overlay closed) — idle
+      // frames tell us nothing about compositing cost, so keep waiting.
+      requestAnimationFrame(sample);
+      return;
+    }
+    if (lastTime) frameTimes.push(now - lastTime);
+    lastTime = now;
+
+    if (frameTimes.length >= sampleFrames) {
+      measured = true;
+      const avg = frameTimes.reduce((a, b) => a + b, 0) / frameTimes.length;
+      const jankyFrames = frameTimes.filter((time) => time > badFrameMs).length;
+      const jankRatio = jankyFrames / frameTimes.length;
+
+      if (avg > maxAvgFrameMs && jankRatio > maxJankRatio) {
+        apply(false); // jank detected mid-animation — demote and remember
+      } else {
+        sessionStorage.setItem(cacheKey, 'true');
+      }
+      return;
+    }
+    requestAnimationFrame(sample);
+  }
+
+  return function init() {
+    if (isReduced) return apply(false, false);
+
+    const cached = sessionStorage.getItem(cacheKey);
+    if (cached === 'false') return apply(false, false);
+    if (cached === 'true') return apply(true, false);
+
+    if (!heuristicOk) return apply(false);
+
+    // Passed the coarse check with no cached verdict yet — apply
+    // optimistically, then verify once the animation is actually running.
+    apply(true, false);
+    frameTimes = [];
+    lastTime = 0;
+    measured = false;
+    requestAnimationFrame(sample);
+  };
+}
+
+const initSprayFilterGate = createFxGate({
+  cacheKey: 'spray-filter-ok-v2',
+  heuristicOk: canUseHeavyFx,
+  isActive: () => turbRafId !== null,
+  onEnable: () => applySprayFilter(true),
+  onDisable: () => applySprayFilter(false),
+  sampleFrames: 240,
+  badFrameMs: 36,
+  maxAvgFrameMs: 40,
+  maxJankRatio: 0.6,
+  persistFalse: false,
+});
+
+initSprayFilterGate();
+
+Promise.allSettled([
   textureImg.decode(),
   document.fonts.ready
 ]).then(() => {
   initCtx();
 });
 
-window.addEventListener('resize', initCtx);
+let resizeRafId = null;
+
+window.addEventListener('resize', () => {
+  if (resizeRafId) {
+    cancelAnimationFrame(resizeRafId);
+  }
+
+  resizeRafId = requestAnimationFrame(() => {
+    resizeRafId = null;
+    initCtx();
+    cacheCubbyRects();
+  });
+});
 
 const CORE_SIZE = 80;
 let lastPoint = null;
@@ -138,7 +390,96 @@ function erase(currX, currY) {
 
 // 3D Shelf Rotation Setup
 const scene = document.getElementById('scene');
+const helperText = document.querySelector('.helper-text');
+const fallbackLinks = document.getElementById('fallback-links');
+const fallbackList = document.getElementById('fallback-list');
+const viewAsListBtn = document.getElementById('view-as-list-btn');
+const interactiveViewBtn = document.getElementById('interactive-view-btn');
 let rotX = -15, rotY = 30, startX, startY, isMouseDown = false;
+
+function getFallbackLabel(data) {
+  if (data.slug === 'curatorial-statement') return 'Curatorial Statement';
+  if (data.slug === 'random') return 'Shake the Magic 8 Ball';
+  return data.title || data.slug || 'Untitled';
+}
+
+function getFallbackMeta(data) {
+  if (data.slug === 'curatorial-statement') return '';
+  if (data.slug === 'random') return '';
+  return [data.artist, data.medium, data.year].filter(Boolean).join(', ');
+}
+
+function buildFallbackList() {
+  if (!fallbackList || fallbackList.dataset.built === 'true') return;
+
+  const fragment = document.createDocumentFragment();
+
+  cubbyData.forEach((data) => {
+    if (!data?.slug) return;
+
+    const item = document.createElement('li');
+    const link = document.createElement('a');
+    const title = document.createElement('span');
+    const meta = document.createElement('span');
+
+    link.href = `?${encodeURIComponent(data.slug)}`;
+    link.dataset.slug = data.slug;
+    title.className = 'fallback-title';
+    title.textContent = getFallbackLabel(data);
+    meta.className = 'fallback-meta';
+    meta.textContent = getFallbackMeta(data);
+
+    link.append(title, meta);
+    item.appendChild(link);
+    fragment.appendChild(item);
+  });
+
+  fallbackList.appendChild(fragment);
+  fallbackList.dataset.built = 'true';
+}
+
+function setInteractiveElementsHidden(isHidden) {
+  scene.hidden = isHidden;
+  canvas.hidden = isHidden;
+  if (helperText) helperText.hidden = isHidden;
+}
+
+function showListView() {
+  buildFallbackList();
+  isListViewActive = true;
+  document.documentElement.classList.add('list-view');
+  fallbackLinks.hidden = false;
+  setInteractiveElementsHidden(true);
+  stopTurbulence();
+  fx?.stop?.();
+  setScrollLocked(false);
+  if (viewAsListBtn) {
+    viewAsListBtn.setAttribute('aria-pressed', 'true');
+    viewAsListBtn.textContent = 'Return to shelf view';
+  }
+}
+
+function showInteractiveView() {
+  isListViewActive = false;
+  document.documentElement.classList.remove('list-view');
+  fallbackLinks.hidden = true;
+  setInteractiveElementsHidden(false);
+  if (viewAsListBtn) {
+    viewAsListBtn.setAttribute('aria-pressed', 'false');
+    viewAsListBtn.textContent = 'View as list';
+  }
+  cacheCubbyRects();
+  startTurbulence();
+}
+
+function handleFallbackLinkClick(event) {
+  const link = event.target.closest('a[data-slug]');
+  if (!link || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+
+  event.preventDefault();
+  history.pushState(null, '', link.getAttribute('href'));
+  handleGlobalAppRouting(false);
+}
 
 function rotateShelf(x, y) {
   rotY += (x - startX) * 0.4;
@@ -150,128 +491,207 @@ function rotateShelf(x, y) {
   const shelfAngleY = rotY; // Replace with your exact shelf angle variable name
 }
 
-let mouseX = 0, mouseY = 0;
+const allCubbies = Array.from(document.querySelectorAll('.cubby'));
+let cachedCubbyRects = [];
+let pointerX = 0, pointerY = 0;
+let pointerStartX = 0, pointerStartY = 0;
+let pointerFrameId = null;
+let pointerDownCubby = null;
+let currentHoveredCubby = null;
 
-let currentHoveredCubby = null; // Track the currently hovered cubby globally
+function cacheCubbyRects() {
+  cachedCubbyRects = allCubbies.map((el) => ({
+    el,
+    rect: el.getBoundingClientRect(),
+  }));
+}
 
-canvas.addEventListener('mousemove', (e) => {
-  mouseX = e.clientX;
-  mouseY = e.clientY;
+function findCubbyAtPoint(x, y) {
+  return cachedCubbyRects.find(({ rect }) =>
+    x >= rect.left &&
+    x <= rect.right &&
+    y >= rect.top &&
+    y <= rect.bottom
+  )?.el ?? null;
+}
 
-  requestAnimationFrame(() => {
-    erase(mouseX, mouseY);
-  });
+function setHoveredCubby(cubby) {
+  if (cubby === currentHoveredCubby) return;
+  currentHoveredCubby?.classList.remove('hovered');
+  cubby?.classList.add('hovered');
+  currentHoveredCubby = cubby;
+}
+
+function openCubby(cubby, pushToHistory = true) {
+  if (!cubby) return;
+
+  const index = Number.parseInt(cubby.dataset.index, 10);
+  const data = cubbyData[index];
+  if (!data) return;
+
+  if (data.slug === 'random') {
+    openEightBallOracle(pushToHistory);
+  } else if (data.slug === 'curatorial-statement') {
+    openCuratorialPanel(pushToHistory);
+  } else {
+    openProjectOverlay(index, pushToHistory);
+  }
+}
+
+function handlePointerFrame() {
+  pointerFrameId = null;
+  erase(pointerX, pointerY);
 
   if (isMouseDown) {
-    rotateShelf(mouseX, mouseY);
+    rotateShelf(pointerX, pointerY);
   } else {
-    // --- HOVER LOGIC START ---
-    canvas.style.pointerEvents = 'none';
-    const elementUnderMouse = document.elementFromPoint(mouseX, mouseY);
-    canvas.style.pointerEvents = 'auto';
-
-    let cubby = null;
-    if (elementUnderMouse) {
-      cubby = elementUnderMouse.closest('.cubby');
-    }
-
-    // FALLBACK GEOMETRY SCAN: If elementFromPoint misses due to 3D matrix depth distortions
-    if (!cubby) {
-      const allCubbies = document.querySelectorAll('.cubby');
-      for (let c of allCubbies) {
-        const rect = c.getBoundingClientRect();
-        if (
-          mouseX >= rect.left &&
-          mouseX <= rect.right &&
-          mouseY >= rect.top &&
-          mouseY <= rect.bottom
-        ) {
-          cubby = c;
-          break;
-        }
-      }
-    }
-
-    if (cubby !== currentHoveredCubby) {
-      if (currentHoveredCubby) {
-        currentHoveredCubby.classList.remove('hovered');
-      }
-
-      if (cubby) {
-        cubby.classList.add('hovered');
-      }
-
-      currentHoveredCubby = cubby;
-    }
-    // --- HOVER LOGIC END ---
+    setHoveredCubby(findCubbyAtPoint(pointerX, pointerY));
   }
-});
-canvas.addEventListener('mouseleave', () => {
-  if (currentHoveredCubby) {
-    currentHoveredCubby.classList.remove('hovered');
-    currentHoveredCubby = null;
-  }
-});
-// Interactive Clicking Logic via Canvas Projection
-canvas.addEventListener('mousedown', (e) => {
-  isMouseDown = true;
-  startX = e.clientX;
-  startY = e.clientY;
-  lastPoint = { x: e.clientX, y: e.clientY };
+}
 
-  canvas.style.pointerEvents = 'none';
-  const clickedElement = document.elementFromPoint(e.clientX, e.clientY);
-  canvas.style.pointerEvents = 'auto';
+function schedulePointerFrame() {
+  if (pointerFrameId) return;
+  pointerFrameId = requestAnimationFrame(handlePointerFrame);
+}
 
-  // Safely look up the tree even if they click structural decoration fragments
-  let cubby = clickedElement ? clickedElement.closest('.cubby') : null;
-  if (!cubby) {
-    const allCubbies = document.querySelectorAll('.cubby');
-    for (let c of allCubbies) {
-      const rect = c.getBoundingClientRect();
-      if (
-        e.clientX >= rect.left &&
-        e.clientX <= rect.right &&
-        e.clientY >= rect.top &&
-        e.clientY <= rect.bottom
-      ) {
-        cubby = c;
-        break;
-      }
-    }
-  }
+cacheCubbyRects();
+window.addEventListener('scroll', cacheCubbyRects, { passive: true });
 
-  if (cubby) {
-    const index = parseInt(cubby.dataset.index, 10);
-
-    if (index === 15) {
-      openEightBallOracle();
-    } else if (index === 14) {
-      curatorialPanel.classList.add('open');
-      curatorialPanel.classList.remove('hidden');
-    } else {
-      openProjectOverlay(index);
-    }
-  }
+canvas.addEventListener('pointermove', (e) => {
+  const points = e.getCoalescedEvents?.() ?? [e];
+  const latest = points[points.length - 1];
+  pointerX = latest.clientX;
+  pointerY = latest.clientY;
+  schedulePointerFrame();
 });
 
-window.addEventListener('mouseup', () => {
-  isMouseDown = false;
+canvas.addEventListener('pointerleave', () => {
+  setHoveredCubby(null);
   lastPoint = null;
 });
 
-// Touch Support
-canvas.addEventListener('touchstart', (e) => {
-  const t = e.touches[0];
-  lastPoint = { x: t.clientX, y: t.clientY };
+canvas.addEventListener('pointerdown', (e) => {
+  isMouseDown = true;
+  pointerX = e.clientX;
+  pointerY = e.clientY;
+  pointerStartX = e.clientX;
+  pointerStartY = e.clientY;
+  startX = e.clientX;
+  startY = e.clientY;
+  lastPoint = { x: e.clientX, y: e.clientY };
+  pointerDownCubby = findCubbyAtPoint(e.clientX, e.clientY);
+  canvas.setPointerCapture?.(e.pointerId);
 });
 
-canvas.addEventListener('touchmove', (e) => {
-  const t = e.touches[0];
-  erase(t.clientX, t.clientY);
-}, { passive: false });
+canvas.addEventListener('pointerup', (e) => {
+  const moved = Math.hypot(e.clientX - pointerStartX, e.clientY - pointerStartY);
+  const cubby = findCubbyAtPoint(e.clientX, e.clientY);
 
-canvas.addEventListener('touchend', () => lastPoint = null);
+  isMouseDown = false;
+  lastPoint = null;
+  canvas.releasePointerCapture?.(e.pointerId);
+
+  if (moved < 10 && cubby && cubby === pointerDownCubby) {
+    openCubby(cubby);
+  }
+
+  pointerDownCubby = null;
+});
+
+canvas.addEventListener('pointercancel', () => {
+  isMouseDown = false;
+  lastPoint = null;
+  pointerDownCubby = null;
+});
+
+function createVideoEmbed(data, className = '') {
+  const container = document.createElement('div');
+  container.className = `vid-container proj-expand${className ? ` ${className}` : ''}`;
+  container.style.backgroundImage = cssUrl(data.image);
+
+  const iframe = document.createElement('iframe');
+  iframe.src = safeUrl(data.vimeo, 'about:blank');
+  iframe.allow = 'autoplay; fullscreen';
+  iframe.allowFullscreen = true;
+  iframe.loading = 'lazy';
+  iframe.style.border = '0';
+  container.appendChild(iframe);
+
+  return container;
+}
+
+function createWorkLink(data) {
+  const link = document.createElement('a');
+  link.className = 'work-link';
+  link.href = safeUrl(data.worklink);
+  link.target = '_blank';
+  link.rel = 'noopener noreferrer';
+
+  const container = document.createElement('div');
+  container.className = 'link-container proj-expand';
+  container.style.backgroundImage = cssUrl(data.image);
+
+  const highlight = document.createElement('span');
+  highlight.className = 'highlight';
+  highlight.textContent = 'Click to visit the work';
+
+  const note = document.createElement('span');
+  note.className = 'link-note';
+  note.textContent = 'Opens in new tab';
+
+  container.append(highlight, document.createElement('br'), note);
+  link.appendChild(container);
+  return link;
+}
+
+function renderProjectBody(modalBody, data) {
+  if (data.slug !== 'memorial-for-bad-jokes') {
+    stopGifBg();
+  }
+
+  const fragment = document.createDocumentFragment();
+
+  if (data.worklink) {
+    fragment.appendChild(createWorkLink(data));
+  } else if (data.slug === 'memorial-for-bad-jokes') {
+    const grid = document.createElement('div');
+    grid.id = 'bg-grid';
+    grid.className = 'gif-bg-grid';
+    fragment.appendChild(grid);
+    fragment.appendChild(createVideoEmbed(data, 'mem-vid'));
+  } else if (data.slug === 'photo-news') {
+    fragment.appendChild(createVideoEmbed(data, 'vid-4-5'));
+
+    const instagram = document.createElement('iframe');
+    instagram.className = 'instagram-media instagram-media-rendered';
+    instagram.id = 'instagram-embed-0';
+    instagram.src = 'https://www.instagram.com/photonews5/embed/';
+    instagram.allowFullscreen = true;
+    instagram.height = '500';
+    instagram.dataset.instgrmPayloadId = 'instagram-media-payload-0';
+    instagram.scrolling = 'no';
+    instagram.loading = 'lazy';
+    instagram.style.border = '0';
+    fragment.appendChild(instagram);
+  } else {
+    fragment.appendChild(createVideoEmbed(data));
+  }
+
+  appendRichSection(fragment, 'modal-desc', 'About the work', data.description || '');
+  appendRichSection(fragment, 'modal-bio', 'Artist Bio', data.bio || '');
+
+  const socials = document.createElement('div');
+  socials.id = 'socials';
+  if (data.website) appendSocialLink(socials, 'website', data.website, 'Website');
+  if (data.ig) appendSocialLink(socials, 'ig', data.ig, 'Instagram');
+  fragment.appendChild(socials);
+
+  modalBody.replaceChildren(fragment);
+
+  if (data.slug === 'memorial-for-bad-jokes') {
+    startGifBg();
+  }
+}
 
 function openProjectOverlay(index,
 
@@ -280,13 +700,15 @@ function openProjectOverlay(index,
   if (isReduced) {
     useTransition = false;
   }
-  const data = cubbyData[index] || { title: `Project ${index + 1}`, description: "Details about this project...", image: "" };
+  const data = cubbyData[index];
+  if (!data || data.slug === 'curatorial-statement' || data.slug === 'random') {
+    return;
+  }
+
   const cubby = document.querySelector(`.cubby[data-index="${index}"]`);
   const contentDiv = cubby ? cubby.querySelector('.content') : null;
 
-  document.querySelectorAll('#eight-ball-overlay').forEach(el => {
-    el.style.viewTransitionName = '';
-  });
+  if (eBallOverlay) eBallOverlay.style.viewTransitionName = '';
 
   const updateDOM = () => {
 
@@ -296,98 +718,22 @@ function openProjectOverlay(index,
     const projInfo = document.getElementById('proj-info');
     const modalBody = document.getElementById('modal-body');
 
-    if (modalTitle) modalTitle.textContent = data.title;
-    if (projArtist) projArtist.innerHTML = `${data.artist}`;
-    if (projInfo) projInfo.innerHTML = `${data.medium}, ${data.year}`;
+    if (modalTitle) modalTitle.textContent = data.title || '';
+    if (projArtist) projArtist.textContent = data.artist || '';
+    if (projInfo) projInfo.textContent = [data.medium, data.year].filter(Boolean).join(', ');
 
-    if (data.worklink && modalBody) {
-      modalBody.innerHTML = `
-        <a class="work-link" target="_blank" href="${data.worklink}"><div class="link-container proj-expand" style="background-image: url('${data.image}')"> <span class="highlight">Click to visit the work</span><br><span class="link-note">Opens in new tab</span>
-        </div></a>
-        <div class="modal-desc">
-        <h3>About the work</h3>
-          ${data.description.replace(/\n/g, '<br>')}
-        </div>
-        <div class="modal-bio">
-          <h3>Artist Bio</h3>
-          ${data.bio.replace(/\n/g, '<br>')}
-        </div>
-        <div id="socials"></div>
-      `;
-    }
-    else if (data.slug === "memorial-for-bad-jokes" && modalBody) {
-      modalBody.innerHTML = `
-      <div id="bg-grid" class="gif-bg-grid"></div>
-      <div class="vid-container proj-expand mem-vid" style="background-image: url('${data.image}');">
-        <iframe src="${data.vimeo}"
-          frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe></div>
+    if (modalBody) {
+      renderProjectBody(modalBody, data);
 
-        <div class="modal-desc">
-        <h3>About the work</h3>
-          ${data.description.replace(/\n/g, '<br>')}
-        </div>
-        <div class="modal-bio">
-          <h3>Artist Bio</h3>
-          ${data.bio.replace(/\n/g, '<br>')}
-        </div>
-        <div id="socials"></div>
-      `;
-      startGifBg();
-    } else if (data.slug === "photo-news" && modalBody) {
-      modalBody.innerHTML = `
-        <div class="vid-container proj-expand vid-4-5" style="background-image: url('${data.image}')">
-        <iframe src="${data.vimeo}"
-          frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe></div>
-        <iframe class="instagram-media instagram-media-rendered" id="instagram-embed-0" src="https://www.instagram.com/photonews5/embed/" allowtransparency="true" allowfullscreen="true" frameborder="0" height="500" data-instgrm-payload-id="instagram-media-payload-0" scrolling="no"></iframe>
-        <div class="modal-desc">
-        <h3>About the work</h3>
-          ${data.description.replace(/\n/g, '<br>')}
-        </div>
-        <div class="modal-bio">
-          <h3>Artist Bio</h3>
-          ${data.bio.replace(/\n/g, '<br>')}
-        </div>
-        <div id="socials"></div>
-      `;
-    }
-    else if (modalBody) {
-      modalBody.innerHTML = `
-        <div class="vid-container proj-expand" style="background-image: url('${data.image}')">
-        <iframe src="${data.vimeo}"
-          frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe></div>
-        <div class="modal-desc">
-        <h3>About the work</h3>
-          ${data.description.replace(/\n/g, '<br>')}
-        </div>
-        <div class="modal-bio">
-          <h3>Artist Bio</h3>
-          ${data.bio.replace(/\n/g, '<br>')}
-        </div>
-        <div id="socials"></div>
-      `;
-    }
-
-    const modalSocials = document.getElementById('socials');
-
-    if (data.website) {
-      const website = `<a class="social website" href="${data.website}">Website</a>`;
-      modalSocials.insertAdjacentHTML('beforeend', website);
-    }
-
-    if (data.ig) {
-      const ig = `<a class="social ig" href="${data.ig}">Instagram</a>`;
-      modalSocials.insertAdjacentHTML('beforeend', ig);
-    }
-    const hero =
-      modalBody.querySelector('.vid-container') ||
-      modalBody.querySelector('.link-container');
-    if (!isReduced) {
-      if (hero) {
+      const hero =
+        modalBody.querySelector('.vid-container') ||
+        modalBody.querySelector('.link-container');
+      if (!isReduced && hero) {
         hero.style.viewTransitionName = 'proj-expand';
       }
     }
     if (overlay) overlay.classList.add('active');
-    document.body.classList.add('no-scroll');
+    setScrollLocked(true);
 
     if (overlay) overlay.offsetHeight;
   };
@@ -397,13 +743,11 @@ function openProjectOverlay(index,
     document.visibilityState === 'visible' &&
     document.startViewTransition
   ) {
-    console.log('before transition',
-      [...document.querySelectorAll('*')]
-        .filter(el => getComputedStyle(el).viewTransitionName === 'proj-expand')
-    );
     const transition = document.startViewTransition(updateDOM);
-    transition.finished.finally(() => {
-    });
+    transition.finished
+      .catch((error) => {
+        if (error?.name !== 'AbortError') console.error('View transition failed', error);
+      });
   } else {
     updateDOM();
   }
@@ -441,11 +785,11 @@ function closeProjectOverlay(pushToHistory = true,
       overlay.classList.remove('active');
     }
 
-    document.body.classList.remove('no-scroll');
+    setScrollLocked(false);
 
     const modalBody = document.getElementById('modal-body');
     if (modalBody) {
-      modalBody.innerHTML = '';
+      modalBody.replaceChildren();
     }
     if (!isReduced) {
       if (contentDiv) {
@@ -487,20 +831,26 @@ function handleGlobalAppRouting(pushToHistory = false) {
   // Wrap the state switches inside a view transition frame block
   const updateDOM = () => {
     if (eBallOverlay) eBallOverlay.classList.add('hidden');
-    document.documentElement.classList.remove('no-scroll');
+    fx?.stop?.();
+    setScrollLocked(false);
     if (!queryParam) {
-      closeProjectOverlay(false);
+      closeProjectOverlay(false, false);
+      closeCuratorialPanel(false);
       return;
     }
-    if (queryParam === "random") {
+    if (queryParam === 'curatorial-statement') {
+      closeProjectOverlay(false, false);
+      openCuratorialPanel(pushToHistory);
+    } else if (queryParam === "random") {
       if (eBallOverlay) {
         eBallOverlay.style.viewTransitionName = 'oracle-expand';
         eBallOverlay.classList.remove('hidden');
       }
       openEightBallOracle(pushToHistory);
     } else if (queryParam) {
+      closeCuratorialPanel(false);
       const index = cubbyData.findIndex(item => item.slug === queryParam);
-      if (index >= 0 && index < 15) {
+      if (index >= 0 && cubbyData[index]?.slug !== 'curatorial-statement' && cubbyData[index]?.slug !== 'random') {
         openProjectOverlay(index, pushToHistory, false);
       } else {
         closeProjectOverlay(pushToHistory, false);
@@ -513,15 +863,38 @@ function handleGlobalAppRouting(pushToHistory = false) {
     document.startViewTransition
   ) {
     const transition = document.startViewTransition(updateDOM);
-    transition.finished.then(() => {
-      if (eBallOverlay) eBallOverlay.style.viewTransitionName = '';
-    });
+    transition.finished
+      .catch((error) => {
+        if (error?.name !== 'AbortError') console.error('Route transition failed', error);
+      })
+      .finally(() => {
+        if (eBallOverlay) eBallOverlay.style.viewTransitionName = '';
+      });
   } else {
     updateDOM();
   }
 }
 
 window.addEventListener('DOMContentLoaded', () => {
+  document.documentElement.classList.add('interactive-ready');
+  buildFallbackList();
+
+  viewAsListBtn?.addEventListener('click', () => {
+    if (isListViewActive) {
+      showInteractiveView();
+    } else {
+      showListView();
+    }
+  });
+
+  interactiveViewBtn?.addEventListener('click', () => {
+    showInteractiveView();
+  });
+
+  fallbackList?.addEventListener('click', handleFallbackLinkClick);
+
+  showInteractiveView();
+
   setTimeout(() => handleGlobalAppRouting(false), 150);
 
   const closeBtn = document.getElementById('close-btn');
@@ -541,50 +914,97 @@ const curatorialPanel = document.getElementById('curatorial-panel');
 const curatorialCloseBtn = document.getElementById('curatorial-close-btn');
 const projectOverlay = document.getElementById('overlay');
 
+function openCuratorialPanel(pushToHistory = true) {
+  if (!curatorialPanel) return;
+
+  curatorialPanel.style.transform = '';
+  curatorialPanel.classList.remove('hidden');
+  curatorialPanel.classList.add('open');
+  setScrollLocked(true);
+
+  if (pushToHistory) {
+    history.pushState({ type: 'curatorial' }, '', '?curatorial-statement');
+  }
+}
+
+function closeCuratorialPanel(pushToHistory = false) {
+  if (!curatorialPanel) return;
+
+  curatorialPanel.style.transform = '';
+  curatorialPanel.classList.add('hidden');
+  curatorialPanel.classList.remove('open', 'peek');
+  setScrollLocked(false);
+
+  if (pushToHistory) {
+    history.pushState(null, '', window.location.pathname);
+  }
+}
+
 if (curatorialCloseBtn) {
   curatorialCloseBtn.addEventListener('click', (e) => {
     e.preventDefault();
     e.stopPropagation();
 
-    curatorialPanel.style.transform = ''; // clear drag transform
-    curatorialPanel.classList.add('hidden');
-
-    curatorialPanel.classList.remove('open', 'peek');
-
-    document.documentElement.classList.remove('no-scroll');
+    closeCuratorialPanel(true);
   });
 }
 
 // --- MAGIC 8-BALL OVERLAY ROUTING & SELECTION ENGINE ---
-// --- UPDATED MAGIC 8-BALL OVERLAY ROUTING & SELECTION ENGINE ---
 const eBallOverlay = document.getElementById('eight-ball-overlay');
 const eBallClose = document.getElementById('eight-ball-close');
 const interactiveBall = document.getElementById('overlay-eight-ball');
 const oracleAnswer = document.getElementById('oracle-answer');
 
 let isOracleShaking = false;
+let shakeRevealTimer = null;
+let shakeOpenTimer = null;
+
+function setOraclePrompt() {
+  if (!oracleAnswer) return;
+
+  oracleAnswer.replaceChildren('CLICK', document.createElement('br'), 'TO SHAKE');
+  oracleAnswer.style.opacity = '1';
+  oracleAnswer.style.transform = 'scale(1)';
+}
+
+function clearShakeTimers() {
+  clearTimeout(shakeRevealTimer);
+  clearTimeout(shakeOpenTimer);
+  shakeRevealTimer = null;
+  shakeOpenTimer = null;
+  isOracleShaking = false;
+  interactiveBall?.classList.remove('shaking');
+}
 
 
-const fx = willOWisps('#eight-ball-overlay', { count: 14, palette: 'marsh' });
+const fx = willOWisps('#eight-ball-overlay', { count: 14 });
+
+// Same adaptive pattern as the spray filter: start at full density if the
+// coarse heuristic passes, verify against real frame timings once the
+// wisps are actually animating (overlay open), then cache the verdict.
+const initWispQualityGate = createFxGate({
+  cacheKey: 'wisp-quality-ok',
+  heuristicOk: canUseHeavyFx,
+  isActive: () => fx.isRunning(),
+  onEnable: () => fx.setQuality('high'),
+  onDisable: () => fx.setQuality('low'),
+});
+
+initWispQualityGate();
 
 function openEightBallOracle(pushToHistory = true) {
   if (!eBallOverlay) return;
 
-  if (oracleAnswer) {
-    oracleAnswer.innerHTML = "CLICK<br>TO SHAKE";
-    oracleAnswer.style.opacity = '1';
-    oracleAnswer.style.transform = 'scale(1)';
-  }
-
-  const eBallCubbyContent = document.querySelector('.cubby[data-index="15"] .content');
+  setOraclePrompt();
 
   const updateDOM = () => {
     eBallOverlay.classList.remove('hidden');
-    document.documentElement.classList.add('no-scroll');
+    setScrollLocked(true);
   };
 
   if (document.visibilityState === 'visible') {
     updateDOM();
+    fx?.start?.();
   }
 
   if (pushToHistory) {
@@ -595,7 +1015,7 @@ function openEightBallOracle(pushToHistory = true) {
 // Update the close handler to also utilize the smooth view transition morph engine
 if (eBallClose) {
   eBallClose.addEventListener('click', () => {
-    if (isOracleShaking) return;
+    clearShakeTimers();
     const eBallCubbyContent = document.querySelector('.cubby[data-index="15"] .content');
 
     eBallOverlay.style.viewTransitionName = 'oracle-expand';
@@ -607,14 +1027,17 @@ if (eBallClose) {
       if (eBallCubbyContent) eBallCubbyContent.style.viewTransitionName = 'oracle-expand';
 
       eBallOverlay.classList.add('hidden');
-      document.documentElement.classList.remove('no-scroll');
+      fx?.stop?.();
+      setScrollLocked(false);
     };
 
     if (document.visibilityState === 'visible' && document.startViewTransition) {
       const transition = document.startViewTransition(updateDOM);
 
       transition.finished
-        .catch(() => { })
+        .catch((error) => {
+          if (error?.name !== 'AbortError') console.error('Oracle transition failed', error);
+        })
         .finally(() => {
           // 3. Total Cleanup
           if (eBallCubbyContent) eBallCubbyContent.style.viewTransitionName = 'none';
@@ -640,34 +1063,35 @@ if (interactiveBall) {
       oracleAnswer.style.transform = 'scale(0.7)';
     }
 
-    setTimeout(() => {
+    shakeRevealTimer = setTimeout(() => {
       interactiveBall.classList.remove('shaking');
 
-      const validProjects = cubbyData.filter(project => project.slug !== "random" && project.slug !== "curatorial-statement");
-      console.log(validProjects);
+      const validProjects = cubbyData
+        .map((project, index) => ({ project, index }))
+        .filter(({ project }) => project.slug !== "random" && project.slug !== "curatorial-statement");
       if (validProjects.length === 0) {
-        if (oracleAnswer) oracleAnswer.innerHTML = "ERROR:<br>NO PROJ";
+        if (oracleAnswer) {
+          oracleAnswer.replaceChildren('ERROR:', document.createElement('br'), 'NO PROJ');
+        }
         isOracleShaking = false;
         return;
       }
 
       const randomIndex = Math.floor(Math.random() * validProjects.length);
-      const chosenProject = validProjects[randomIndex];
-
-
-      const originalProjectIndex = cubbyData.findIndex(item => item.title === chosenProject.title);
+      const { project: chosenProject, index: originalProjectIndex } = validProjects[randomIndex];
 
       if (oracleAnswer) {
-        oracleAnswer.innerHTML = chosenProject.title;
+        oracleAnswer.textContent = chosenProject.title;
         oracleAnswer.style.opacity = '1';
         oracleAnswer.style.transform = 'scale(1)';
       }
 
-      setTimeout(() => {
+      shakeOpenTimer = setTimeout(() => {
         isOracleShaking = false;
 
         if (eBallOverlay) eBallOverlay.classList.add('hidden');
-        document.documentElement.classList.remove('no-scroll');
+        fx?.stop?.();
+        setScrollLocked(false);
 
         if (originalProjectIndex !== -1) {
           openProjectOverlay(originalProjectIndex, true);
@@ -691,9 +1115,24 @@ function willOWisps(target, {
     light: [[245, 245, 255], [255, 253, 216], [30, 80, 180]],
   };
 
-  const pal = PALS[palette] ?? PALS.light;
+  const pal = PALS[palette];
   const el = typeof target === 'string' ? document.querySelector(target) : target;
   const rnd = (a, b) => a + Math.random() * (b - a);
+
+  if (!pal) {
+    throw new Error(`Unknown wisp palette: ${palette}`);
+  }
+
+  if (!el) {
+    return {
+      start() { },
+      stop() { },
+      gather() { },
+      destroy() { },
+      isRunning() { return false; },
+      setQuality() { },
+    };
+  }
 
   if (getComputedStyle(el).position === 'static') el.style.position = 'relative';
 
@@ -709,16 +1148,34 @@ function willOWisps(target, {
 
   let wisps = [], sparks = [];
   let gatherPt = null;
+  let rafId = null;
+  let isRunning = false;
+
+  // Quality tier controls particle density and trail length so a demoted
+  // device still gets the effect, just cheaper — not an all-or-nothing cut.
+  let quality = 'high';
+  let activeCount = count;
+  let trailScale = 1;
 
   function init() {
     canvas.width = el.offsetWidth;
     canvas.height = el.offsetHeight;
-    wisps = Array.from({ length: count }, makeWisp);
+    wisps = Array.from({ length: activeCount }, makeWisp);
     sparks = [];
     gatherPt = null;
   }
-  new ResizeObserver(init).observe(el);
-  init();
+  const resizeObserver = new ResizeObserver(init);
+  resizeObserver.observe(el);
+
+  function setQuality(level) {
+    if (level === quality) return;
+    quality = level;
+    activeCount = level === 'low' ? Math.max(4, Math.round(count * 0.45)) : count;
+    trailScale = level === 'low' ? 0.5 : 1;
+    // Re-seed live at the new density if the effect is currently visible,
+    // otherwise the next init() (start/resize) will pick it up naturally.
+    if (isRunning) init();
+  }
 
   function makeWisp() {
     const w = {
@@ -810,7 +1267,7 @@ function willOWisps(target, {
     w.x += w.vx; w.y += w.vy;
 
     w.trail.push({ x: w.x, y: w.y });
-    const maxTrail = Math.max(Math.floor(w.trailLen * (trail / 5)), 1);
+    const maxTrail = Math.max(Math.floor(w.trailLen * (trail / 5) * trailScale), 1);
     if (w.trail.length > maxTrail) w.trail.shift();
 
     if (++w.flickTimer >= w.flickPeriod) {
@@ -851,7 +1308,7 @@ function willOWisps(target, {
     w.y += w.vy;
 
     w.trail.push({ x: w.x, y: w.y });
-    const maxTrail = Math.max(Math.floor(w.trailLen * (trail / 5)), 1);
+    const maxTrail = Math.max(Math.floor(w.trailLen * (trail / 5) * trailScale), 1);
     if (w.trail.length > maxTrail) w.trail.shift();
 
     const fadeStart = 200;
@@ -879,7 +1336,12 @@ function willOWisps(target, {
     ctx.globalAlpha = 1;
   }
 
-  (function loop() {
+  function loop() {
+    if (!isRunning || isReduced || document.visibilityState !== 'visible') {
+      rafId = null;
+      return;
+    }
+
     const W = canvas.width, H = canvas.height;
 
     ctx.clearRect(0, 0, W, H);
@@ -898,11 +1360,53 @@ function willOWisps(target, {
       return true;
     });
 
-    requestAnimationFrame(loop);
-  })();
+    rafId = requestAnimationFrame(loop);
+  }
+
+  function start() {
+    if (isReduced || isRunning) return;
+    isRunning = true;
+
+    if (!wisps.length) {
+      init();
+    }
+
+    if (!rafId) {
+      rafId = requestAnimationFrame(loop);
+    }
+  }
+
+  function stop() {
+    isRunning = false;
+    if (rafId) {
+      cancelAnimationFrame(rafId);
+      rafId = null;
+    }
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
+
+  function handleWispVisibilityChange() {
+    if (document.visibilityState === 'visible' && !el.classList.contains('hidden')) {
+      start();
+    } else {
+      stop();
+    }
+  }
+
+  document.addEventListener('visibilitychange', handleWispVisibilityChange);
 
   // ── Public API ────────────────────────────────────────────────────────────
   return {
+    start,
+    stop,
+    isRunning() { return isRunning; },
+    setQuality,
+    destroy() {
+      stop();
+      resizeObserver.disconnect();
+      document.removeEventListener('visibilitychange', handleWispVisibilityChange);
+      canvas.remove();
+    },
     /**
      * Send all wisps toward (x, y) — element-relative coords — then vanish them.
      * Typically called from a click handler on another element:
@@ -920,18 +1424,20 @@ function willOWisps(target, {
     gather(x, y) {
       gatherPt = { x, y };
       wisps.forEach(w => { w.gatherAlpha = 1; w.dead = false; });
+      start();
     },
   };
 }
 
 
 // Gather to wherever the user clicked (coords relative to the host element)
-document.querySelector('#eight-ball-overlay').addEventListener('click', e => {
+eBallOverlay?.addEventListener('click', e => {
   const r = e.currentTarget.getBoundingClientRect();
   fx.gather(e.clientX - r.left, e.clientY - r.top);
 });
 
 let resizeHandler = null;
+let gifResizeRafId = null;
 let isGifBgRunning = false;
 
 function startGifBg() {
@@ -939,8 +1445,6 @@ function startGifBg() {
   if (!grid) return;
 
   const generateTiles = () => {
-    grid.innerHTML = '';
-
     // getBoundingClientRect ensures pixel-perfect calculation of the active container boundaries
     const gridWidth = grid.getBoundingClientRect().width;
     const computedStyles = window.getComputedStyle(grid);
@@ -958,6 +1462,8 @@ function startGifBg() {
 
     grid.style.gridAutoRows = `${tileHeight}px`;
 
+    const fragment = document.createDocumentFragment();
+
     for (let i = 0; i < totalTiles; i++) {
       const tile = document.createElement('div');
 
@@ -965,15 +1471,28 @@ function startGifBg() {
       const tileNumber = ((i + currentRow) % 3) + 1;
 
       tile.classList.add('gif-tile', `tile-${tileNumber}`);
-      grid.appendChild(tile);
+      fragment.appendChild(tile);
     }
+
+    grid.replaceChildren(fragment);
+  };
+
+  const scheduleGenerateTiles = () => {
+    if (gifResizeRafId) {
+      cancelAnimationFrame(gifResizeRafId);
+    }
+
+    gifResizeRafId = requestAnimationFrame(() => {
+      gifResizeRafId = null;
+      generateTiles();
+    });
   };
 
   generateTiles();
   isGifBgRunning = true;
 
   window.removeEventListener('resize', resizeHandler);
-  resizeHandler = generateTiles;
+  resizeHandler = scheduleGenerateTiles;
   window.addEventListener('resize', resizeHandler);
 };
 
@@ -982,7 +1501,11 @@ function stopGifBg() {
   if (!isGifBgRunning) return;
 
   const grid = document.getElementById('bg-grid');
-  if (grid) grid.innerHTML = '';
+  if (grid) grid.replaceChildren();
+  if (gifResizeRafId) {
+    cancelAnimationFrame(gifResizeRafId);
+    gifResizeRafId = null;
+  }
   window.removeEventListener('resize', resizeHandler);
 
   isGifBgRunning = false;
