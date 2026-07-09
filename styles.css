@@ -177,6 +177,7 @@ nav ul {
   width: 100%;
   list-style: "";
   list-style-type: "";
+  gap: 1em;
 }
 
 nav ul li::marker {
